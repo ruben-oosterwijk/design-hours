@@ -1,0 +1,1473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cutr · Corpus Cheatsheet</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cutr-amber-100: #FFF8EC;
+  --cutr-amber-300: #FFD98A;
+  --cutr-amber-600: #C06500;
+  --cutr-amber-700: #994E00;
+  --cutr-n-100: #FAFAFA;
+  --cutr-n-200: #F5F5F5;
+  --cutr-n-400: #D9D9D9;
+  --cutr-n-600: #8C8C8C;
+  --cutr-n-700: #595959;
+  --cutr-n-800: #434343;
+  --cutr-n-900: #262626;
+  --cutr-success: #38A106;
+  --cutr-error: #F52228;
+  --cutr-warning: #D48806;
+  --cutr-info: #096DD9;
+  --cutr-bg: #FFFFFF;
+  --cutr-text: var(--cutr-n-900);
+  --cutr-text-secondary: var(--cutr-n-600);
+  --cutr-border: var(--cutr-n-200);
+  --cutr-rule: var(--cutr-n-400);
+  --cutr-brand: var(--cutr-amber-600);
+  --cutr-font-primary: 'Averta Std', system-ui, -apple-system, "Segoe UI", sans-serif;
+  --cutr-font-mono: 'DM Mono', 'Courier New', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  font-family: var(--cutr-font-primary);
+  color: var(--cutr-text);
+  background: var(--cutr-bg);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+body { min-height: 100vh; }
+button { font-family: inherit; }
+
+/* ===== Header ===== */
+.header {
+  border-bottom: 1px solid var(--cutr-rule);
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: white;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.header-left { display: flex; align-items: center; gap: 24px; }
+.brand { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+.brand .dot { color: var(--cutr-brand); }
+.header-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--cutr-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+.mode-toggle {
+  display: flex;
+  border: 1px solid var(--cutr-rule);
+  border-radius: 2px;
+}
+.mode-toggle button {
+  padding: 8px 18px;
+  background: transparent;
+  border: none;
+  font-size: 13px;
+  color: var(--cutr-text);
+  cursor: pointer;
+  font-weight: 500;
+}
+.mode-toggle button.active {
+  background: var(--cutr-n-900);
+  color: white;
+}
+
+/* ===== User mode layout ===== */
+.layout-user {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 40px;
+  align-items: start;
+}
+.sidebar h3 {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--cutr-text-secondary);
+  margin-bottom: 12px;
+  padding-left: 14px;
+}
+.scenario-list { list-style: none; }
+.scenario-item {
+  padding: 10px 14px;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+  font-size: 14px;
+  color: var(--cutr-text);
+  margin-bottom: 2px;
+  transition: background 0.1s;
+}
+.scenario-item:hover { background: var(--cutr-n-100); }
+.scenario-item.active {
+  border-left-color: var(--cutr-brand);
+  background: var(--cutr-amber-100);
+  font-weight: 600;
+}
+.scenario-item .type-hint {
+  font-size: 11px;
+  color: var(--cutr-text-secondary);
+  font-weight: 400;
+  margin-top: 2px;
+  display: block;
+  text-transform: lowercase;
+}
+
+/* Working area */
+.work-header {
+  border-left: 4px solid var(--cutr-brand);
+  padding: 4px 0 4px 20px;
+  margin-bottom: 28px;
+}
+.work-header h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  letter-spacing: -0.01em;
+}
+.work-header p {
+  font-size: 14px;
+  color: var(--cutr-text-secondary);
+  line-height: 1.55;
+}
+
+.inputs-section { margin-bottom: 24px; }
+.input-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--cutr-border);
+}
+.input-row:last-child { border-bottom: none; }
+.input-label { flex: 1; }
+.input-label .main { font-size: 15px; font-weight: 500; }
+.input-label .hint {
+  font-size: 12px;
+  color: var(--cutr-text-secondary);
+  margin-top: 3px;
+  font-family: var(--cutr-font-mono);
+}
+.input-row input[type="number"] {
+  width: 110px;
+  font-family: var(--cutr-font-mono);
+  font-size: 16px;
+  padding: 8px 12px;
+  border: 1px solid var(--cutr-rule);
+  border-radius: 2px;
+  text-align: right;
+  background: white;
+  color: var(--cutr-text);
+}
+.input-row input[type="number"]:focus {
+  outline: none;
+  border-color: var(--cutr-brand);
+  box-shadow: 0 0 0 3px var(--cutr-amber-100);
+}
+.input-row .unit {
+  min-width: 64px;
+  font-size: 13px;
+  color: var(--cutr-text-secondary);
+  font-family: var(--cutr-font-mono);
+}
+
+/* Addon section */
+.addon-section {
+  margin: 24px 0;
+  padding: 18px 20px;
+  background: var(--cutr-n-100);
+  border-left: 2px dashed var(--cutr-n-400);
+}
+.addon-section-header {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--cutr-text-secondary);
+  margin-bottom: 10px;
+}
+.addon-picker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.addon-picker select {
+  flex: 1;
+  font: inherit;
+  font-size: 14px;
+  padding: 8px 12px;
+  border: 1px solid var(--cutr-rule);
+  background: white;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.addon-picker select:focus {
+  outline: none;
+  border-color: var(--cutr-brand);
+}
+.addon-help {
+  font-size: 12px;
+  color: var(--cutr-text-secondary);
+  margin-top: 8px;
+  font-style: italic;
+}
+
+.addon-card {
+  margin-top: 16px;
+  background: white;
+  border: 1px solid var(--cutr-border);
+  padding: 16px 20px;
+  position: relative;
+}
+.addon-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px solid var(--cutr-border);
+}
+.addon-card-header h4 {
+  font-size: 14px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.addon-card-header h4::before {
+  content: '+';
+  color: var(--cutr-brand);
+  font-weight: 700;
+  font-size: 16px;
+}
+.addon-type-tag {
+  font-size: 11px;
+  color: var(--cutr-text-secondary);
+  font-weight: 400;
+  text-transform: lowercase;
+  margin-left: 4px;
+}
+.addon-remove {
+  background: transparent;
+  border: none;
+  color: var(--cutr-text-secondary);
+  cursor: pointer;
+  font-size: 18px;
+  padding: 4px 8px;
+  border-radius: 2px;
+}
+.addon-remove:hover {
+  background: var(--cutr-n-200);
+  color: var(--cutr-error);
+}
+.addon-card .input-row { padding: 8px 0; }
+
+/* Result panel */
+.result {
+  padding: 28px;
+  background: var(--cutr-n-100);
+  border-left: 4px solid var(--cutr-brand);
+}
+.result-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1.2fr;
+  gap: 32px;
+}
+.result-block .label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--cutr-text-secondary);
+  margin-bottom: 10px;
+}
+.result-corpus {
+  font-family: var(--cutr-font-mono);
+  font-size: 56px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--cutr-text);
+}
+.type-pill {
+  display: inline-block;
+  padding: 6px 14px;
+  background: var(--cutr-n-900);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.result-hours {
+  font-family: var(--cutr-font-mono);
+  font-size: 28px;
+  font-weight: 500;
+}
+.result-hours-detail {
+  font-size: 12px;
+  color: var(--cutr-text-secondary);
+  margin-top: 6px;
+  font-family: var(--cutr-font-mono);
+  line-height: 1.5;
+}
+
+.breakdown {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--cutr-rule);
+}
+.breakdown-label {
+  font-size: 10px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--cutr-text-secondary);
+  margin-bottom: 10px;
+}
+.breakdown-table {
+  width: 100%;
+  font-family: var(--cutr-font-mono);
+  font-size: 13px;
+}
+.breakdown-table td { padding: 5px 0; }
+.breakdown-table td.name {
+  color: var(--cutr-n-700);
+}
+.breakdown-table td.num {
+  text-align: right;
+  width: 80px;
+  color: var(--cutr-text);
+}
+.breakdown-table tr.total td {
+  padding-top: 10px;
+  border-top: 1px solid var(--cutr-rule);
+  font-weight: 600;
+  color: var(--cutr-text);
+}
+
+.type-warning {
+  margin-top: 18px;
+  padding: 12px 14px;
+  background: #FFF7E0;
+  border-left: 3px solid var(--cutr-warning);
+  font-size: 13px;
+  color: var(--cutr-n-800);
+  line-height: 1.5;
+}
+
+.floor-control {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--cutr-rule);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 13px;
+  color: var(--cutr-text-secondary);
+}
+.floor-control input {
+  width: 64px;
+  font-family: var(--cutr-font-mono);
+  font-size: 14px;
+  padding: 6px 8px;
+  border: 1px solid var(--cutr-rule);
+  border-radius: 2px;
+  text-align: right;
+}
+.usage-note {
+  margin-top: 16px;
+  font-size: 12px;
+  color: var(--cutr-text-secondary);
+  font-style: italic;
+}
+
+/* Empty state */
+.empty-state {
+  padding: 64px 32px;
+  text-align: center;
+  color: var(--cutr-text-secondary);
+  background: var(--cutr-n-100);
+  border-left: 4px solid var(--cutr-rule);
+  font-size: 14px;
+}
+
+/* ===== Admin mode ===== */
+.layout-admin {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 32px;
+}
+.admin-intro {
+  background: var(--cutr-amber-100);
+  border-left: 4px solid var(--cutr-brand);
+  padding: 16px 20px;
+  margin-bottom: 32px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--cutr-n-800);
+}
+.admin-intro strong { color: var(--cutr-amber-700); }
+.admin-section { margin-bottom: 40px; }
+.admin-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--cutr-rule);
+  margin-bottom: 20px;
+}
+.admin-section-header h2 {
+  font-size: 18px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.amber-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--cutr-brand);
+  border-radius: 50%;
+  display: inline-block;
+}
+.section-desc {
+  font-size: 13px;
+  color: var(--cutr-text-secondary);
+  margin-bottom: 16px;
+  line-height: 1.6;
+}
+
+.constants-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+.constant-card {
+  background: var(--cutr-n-100);
+  padding: 14px 16px;
+}
+.constant-card label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cutr-text-secondary);
+  margin-bottom: 8px;
+}
+.constant-card input {
+  width: 100%;
+  font-family: var(--cutr-font-mono);
+  font-size: 17px;
+  font-weight: 500;
+  padding: 6px 10px;
+  border: 1px solid var(--cutr-rule);
+  border-radius: 2px;
+  background: white;
+}
+.constant-card .unit {
+  font-size: 11px;
+  color: var(--cutr-text-secondary);
+  margin-top: 4px;
+  font-family: var(--cutr-font-mono);
+}
+.formula-note {
+  margin-top: 18px;
+  padding: 14px 16px;
+  background: var(--cutr-n-100);
+  font-size: 12px;
+  color: var(--cutr-n-700);
+  font-family: var(--cutr-font-mono);
+  line-height: 1.6;
+  border-left: 2px solid var(--cutr-rule);
+}
+
+.scenario-admin-card {
+  border: 1px solid var(--cutr-border);
+  padding: 14px 18px;
+  margin-bottom: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+}
+.scenario-admin-card-info h4 {
+  font-size: 15px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+.scenario-admin-card-info .meta {
+  font-size: 12px;
+  color: var(--cutr-text-secondary);
+  font-weight: 400;
+  font-family: var(--cutr-font-mono);
+}
+.scenario-admin-actions { display: flex; gap: 8px; }
+
+.admin-footer {
+  margin-top: 40px;
+  padding-top: 24px;
+  border-top: 1px solid var(--cutr-rule);
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* ===== Buttons ===== */
+.btn {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border: 1px solid var(--cutr-rule);
+  background: white;
+  color: var(--cutr-text);
+  border-radius: 2px;
+  transition: all 0.1s;
+}
+.btn:hover { background: var(--cutr-n-100); }
+.btn-primary {
+  background: var(--cutr-brand);
+  color: white;
+  border-color: var(--cutr-brand);
+}
+.btn-primary:hover {
+  background: var(--cutr-amber-700);
+  border-color: var(--cutr-amber-700);
+}
+.btn-danger {
+  color: var(--cutr-error);
+  border-color: var(--cutr-error);
+}
+.btn-danger:hover {
+  background: var(--cutr-error);
+  color: white;
+}
+.btn-sm { padding: 5px 11px; font-size: 12px; }
+
+/* ===== Modal ===== */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(38, 38, 38, 0.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 32px;
+}
+.modal {
+  background: white;
+  padding: 32px;
+  width: 100%;
+  max-width: 680px;
+  max-height: 90vh;
+  overflow-y: auto;
+  border-left: 4px solid var(--cutr-brand);
+}
+.modal h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.field { display: flex; flex-direction: column; }
+.field label {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cutr-text-secondary);
+  margin-bottom: 6px;
+}
+.field input, .field textarea, .field select {
+  font-family: var(--cutr-font-primary);
+  font-size: 14px;
+  padding: 8px 12px;
+  border: 1px solid var(--cutr-rule);
+  border-radius: 2px;
+  background: white;
+  color: var(--cutr-text);
+}
+.field input:focus, .field textarea:focus, .field select:focus {
+  outline: none;
+  border-color: var(--cutr-brand);
+}
+.field textarea {
+  min-height: 80px;
+  resize: vertical;
+  font-family: var(--cutr-font-primary);
+  line-height: 1.5;
+}
+
+.inputs-editor {
+  border: 1px solid var(--cutr-border);
+  padding: 16px;
+  background: var(--cutr-n-100);
+}
+.inputs-editor h3 {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cutr-text-secondary);
+  margin-bottom: 12px;
+}
+.inputs-editor-headers {
+  display: grid;
+  grid-template-columns: 1fr 110px 110px 32px;
+  gap: 8px;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--cutr-text-secondary);
+  margin-bottom: 6px;
+  padding: 0 2px;
+}
+.input-editor-row {
+  display: grid;
+  grid-template-columns: 1fr 110px 110px 32px;
+  gap: 8px;
+  margin-bottom: 8px;
+  align-items: center;
+}
+.input-editor-row input {
+  font-family: var(--cutr-font-primary);
+  font-size: 13px;
+  padding: 6px 8px;
+  border: 1px solid var(--cutr-rule);
+  border-radius: 2px;
+  background: white;
+}
+.input-editor-row input.mono { font-family: var(--cutr-font-mono); }
+.input-editor-row button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  background: transparent;
+  color: var(--cutr-text-secondary);
+  cursor: pointer;
+  font-size: 20px;
+  border-radius: 2px;
+}
+.input-editor-row button:hover {
+  background: var(--cutr-n-200);
+  color: var(--cutr-error);
+}
+.editor-help {
+  font-size: 11px;
+  color: var(--cutr-text-secondary);
+  margin-top: 10px;
+  line-height: 1.5;
+  font-family: var(--cutr-font-mono);
+}
+
+.modal-footer {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--cutr-rule);
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+/* Saved indicator */
+.saved-indicator {
+  font-size: 12px;
+  color: var(--cutr-success);
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.2s;
+  margin-right: auto;
+}
+.saved-indicator.show { opacity: 1; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .layout-user {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    gap: 24px;
+  }
+  .result-grid { grid-template-columns: 1fr; gap: 20px; }
+  .constants-grid { grid-template-columns: 1fr; }
+  .header { padding: 14px 20px; flex-wrap: wrap; gap: 12px; }
+  .header-left { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-left">
+    <div class="brand">cutr<span class="dot">.</span></div>
+    <div class="header-title">Corpus Cheatsheet · Installation Time</div>
+  </div>
+  <div class="mode-toggle" id="modeToggle">
+    <button data-mode="user" class="active">User</button>
+    <button data-mode="admin">Admin</button>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<script>
+'use strict';
+
+const STORAGE_KEY = 'cutr-corpus-config-v3';
+
+const DEFAULT_CONFIG = {
+  constants: {
+    unloadingMin: 7.5,
+    movingMin: 15,
+    installFreestandingMin: 30,
+    installBuiltInMin: 60,
+    floorMinPerCorpus: 15
+  },
+  scenarios: [
+    {
+      id: 'cabinets',
+      name: 'Standard cabinets',
+      description: 'Cabinet corpuses plus any loose panels and doors/fronts. Module size: up to ~1200×2400×600 mm and one-person lift; oversized = count as 2. A double-door corpus = 1 corpus + 2 loose doors if the doors are fitted on site. Add "Worktop (nested)" as a layer when Cutr is also quoting the countertop.',
+      type: 'built-in',
+      inputs: [
+        { id: 'corpuses', label: 'Cabinet corpuses (preassembled)', unit: 'corpuses', perCorpus: 1 },
+        { id: 'panels', label: 'Loose panels (end / cover / infill)', unit: 'panels', perCorpus: 3 },
+        { id: 'doors', label: 'Loose doors / drawer fronts (fitted on site)', unit: 'pieces', perCorpus: 4 }
+      ]
+    },
+    {
+      id: 'benches',
+      name: 'Benches',
+      description: 'Bench modules plus loose panels and upholstery. Module size: up to ~1200×800×600 mm. Upholstery piece = single cushion / section up to ~800 mm length; longer continuous upholstery = count by section.',
+      type: 'built-in',
+      inputs: [
+        { id: 'modules', label: 'Bench modules (preassembled)', unit: 'modules', perCorpus: 1 },
+        { id: 'panels', label: 'Loose panels', unit: 'panels', perCorpus: 3 },
+        { id: 'upholstery', label: 'Upholstery pieces (cushions / sections)', unit: 'pieces', perCorpus: 4 }
+      ]
+    },
+    {
+      id: 'counters',
+      name: 'Counters / reception desks',
+      description: 'Built-up counter (bar or reception desk / cash wrap) with structural framing, cladding panels around it, bar appliances or corpuses inside, and optionally wall modules behind. For a nested top, add "Worktop (nested)" as a layer. Stone tops are handled by the separate countertop calculator.',
+      type: 'built-in',
+      inputs: [
+        { id: 'inside', label: 'Bar appliances / corpuses inside', unit: 'units', perCorpus: 1 },
+        { id: 'wall_modules', label: 'Wall modules (preassembled)', unit: 'modules', perCorpus: 1 },
+        { id: 'cladding', label: 'Cladding panels', unit: 'panels', perCorpus: 3 }
+      ]
+    },
+    {
+      id: 'worktop_nested',
+      name: 'Worktop (nested)',
+      description: 'ONLY when Cutr is quoting the countertop through nesting (ply/MDF + HPL, or solid wood). Stone tops are handled by the separate countertop calculator. Use as a layer on cabinets / counters via "+ Add element", or as a stand-alone element.',
+      type: 'built-in',
+      inputs: [
+        { id: 'pieces', label: 'Worktop pieces / sections', unit: 'pieces', perCorpus: 1 },
+        { id: 'cutouts', label: 'Cutouts (sink / hob / fitting)', unit: 'cutouts', perCorpus: 1 }
+      ]
+    },
+    {
+      id: 'wall_paneling',
+      name: 'Wall paneling',
+      description: 'Loose panels fixed to walls. Standard panel size: up to ~1200×2400 mm; larger = count as 2. Glass and mirror panes have a separate input (~50% more handling time than wood panels).',
+      type: 'freestanding',
+      inputs: [
+        { id: 'panels', label: 'Wood / standard panels', unit: 'panels', perCorpus: 3 },
+        { id: 'glass', label: 'Glass / mirror panes', unit: 'panes', perCorpus: 2 }
+      ]
+    },
+    {
+      id: 'planters',
+      name: 'Planters',
+      description: 'Pre-assembled planters. Standard = single-person lift; oversized or 2-person lift = count as 2.',
+      type: 'freestanding',
+      inputs: [
+        { id: 'count', label: 'Number of planters', unit: 'planters', perCorpus: 1 }
+      ]
+    },
+    {
+      id: 'wall_dividers_mod',
+      name: 'Wall dividers (modules)',
+      description: 'Pre-assembled divider modules placed on the floor. Standard module size: up to ~1200×2400×400 mm.',
+      type: 'freestanding',
+      inputs: [
+        { id: 'modules', label: 'Number of modules', unit: 'modules', perCorpus: 1 }
+      ]
+    },
+    {
+      id: 'wall_dividers_panel',
+      name: 'Wall dividers (panel-built)',
+      description: 'Dividers built on-site from loose panels, anchored to floor / ceiling.',
+      type: 'built-in',
+      inputs: [
+        { id: 'panels', label: 'Number of panels', unit: 'panels', perCorpus: 3 }
+      ]
+    },
+    {
+      id: 'floating_shelves',
+      name: 'Floating shelves',
+      description: 'Wall-mounted shelves with concealed brackets. Can be a stand-alone element or added as a layer on cabinets / counters / benches.',
+      type: 'freestanding',
+      inputs: [
+        { id: 'count', label: 'Number of shelves', unit: 'shelves', perCorpus: 2.5 }
+      ]
+    },
+    {
+      id: 'hanging_racks',
+      name: 'Hanging racks / ceiling-suspended',
+      description: 'Metal racks or other items suspended from the ceiling. Working at height + structural anchoring + leveling — each rack contributes 2 corpuses to account for the premium. Often added as a layer on cabinets / counters.',
+      type: 'built-in',
+      inputs: [
+        { id: 'racks', label: 'Number of racks / suspended items', unit: 'racks', perCorpus: 0.5 },
+        { id: 'panels', label: 'Shelves / panels attached', unit: 'pieces', perCorpus: 3 }
+      ]
+    }
+  ]
+};
+
+// ===== State =====
+let config = loadConfig();
+let state = {
+  mode: 'user',
+  selectedScenarioId: config.scenarios[0]?.id || null,
+  inputValues: {},
+  addons: [],
+  floor: 0,
+  editingScenario: null,
+  isNewScenario: false
+};
+
+// ===== Persistence =====
+function loadConfig() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw);
+      if (parsed.scenarios && parsed.constants) return parsed;
+    }
+  } catch (e) { console.warn('Storage load failed:', e); }
+  return JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+}
+
+function saveConfig() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
+    flashSaved();
+  } catch (e) { console.warn('Storage save failed:', e); }
+}
+
+function flashSaved() {
+  const el = document.getElementById('savedIndicator');
+  if (!el) return;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 1800);
+}
+
+function resetConfig() {
+  if (!confirm('Reset all scenarios and constants to defaults? Custom changes will be lost.')) return;
+  config = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+  state.selectedScenarioId = config.scenarios[0]?.id || null;
+  state.inputValues = {};
+  state.addons = [];
+  saveConfig();
+  render();
+}
+
+function exportConfig() {
+  const data = JSON.stringify(config, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const date = new Date().toISOString().split('T')[0];
+  a.download = `cutr-corpus-config-${date}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function importConfig() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'application/json';
+  input.onchange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      try {
+        const parsed = JSON.parse(ev.target.result);
+        if (!parsed.scenarios || !parsed.constants || !Array.isArray(parsed.scenarios)) {
+          throw new Error('Missing scenarios or constants');
+        }
+        config = parsed;
+        state.selectedScenarioId = config.scenarios[0]?.id || null;
+        state.inputValues = {};
+        state.addons = [];
+        saveConfig();
+        render();
+      } catch (err) { alert('Invalid config file: ' + err.message); }
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+// ===== Computation =====
+function computeRaw(scenario, values) {
+  let total = 0;
+  for (const input of scenario.inputs) {
+    const v = parseFloat(values[input.id]) || 0;
+    if (v > 0 && input.perCorpus > 0) total += v / input.perCorpus;
+  }
+  return total;
+}
+
+function computeBreakdown() {
+  const main = config.scenarios.find(s => s.id === state.selectedScenarioId);
+  if (!main) return null;
+  const parts = [];
+  const mainRaw = computeRaw(main, state.inputValues);
+  parts.push({ id: 'main', name: main.name, raw: mainRaw, type: main.type, isMain: true });
+  for (const addon of state.addons) {
+    const sc = config.scenarios.find(s => s.id === addon.scenarioId);
+    if (!sc) continue;
+    parts.push({
+      id: addon.instanceId,
+      name: sc.name,
+      raw: computeRaw(sc, addon.inputValues),
+      type: sc.type,
+      isMain: false
+    });
+  }
+  const rawTotal = parts.reduce((s, p) => s + p.raw, 0);
+  const total = Math.ceil(rawTotal);
+  const typeMismatch = parts.some(p => p.type !== main.type);
+  const mismatchedTypes = [...new Set(parts.filter(p => p.type !== main.type).map(p => p.type))];
+  return { main, total, rawTotal, parts, type: main.type, typeMismatch, mismatchedTypes };
+}
+
+function computeInstallMin(corpusN, type, floor) {
+  const c = config.constants;
+  const installMin = type === 'built-in' ? c.installBuiltInMin : c.installFreestandingMin;
+  return corpusN * (c.unloadingMin + c.movingMin + installMin + floor * c.floorMinPerCorpus);
+}
+
+function fmtHr(min) { return (min / 60).toFixed(2); }
+
+// ===== Rendering =====
+function render() {
+  document.getElementById('app').innerHTML = state.mode === 'user' ? renderUserMode() : renderAdminMode();
+  attachListeners();
+}
+
+function renderUserMode() {
+  if (!config.scenarios.length) {
+    return `<div class="layout-user"><div></div><div class="empty-state">No scenarios configured. Switch to Admin mode to add scenarios.</div></div>`;
+  }
+  const scenario = config.scenarios.find(s => s.id === state.selectedScenarioId) || config.scenarios[0];
+  if (state.selectedScenarioId !== scenario.id) state.selectedScenarioId = scenario.id;
+
+  return `
+    <div class="layout-user">
+      <div class="sidebar">
+        <h3>Scenarios</h3>
+        <ul class="scenario-list">
+          ${config.scenarios.map(s => `
+            <li class="scenario-item ${s.id === scenario.id ? 'active' : ''}" data-scenario-id="${s.id}">
+              <div>${escapeHtml(s.name)}</div>
+              <span class="type-hint">${s.type}</span>
+            </li>
+          `).join('')}
+        </ul>
+      </div>
+      <div>
+        <div class="work-header">
+          <h2>${escapeHtml(scenario.name)}</h2>
+          <p>${escapeHtml(scenario.description)}</p>
+        </div>
+        <div class="inputs-section">
+          ${renderInputRows(scenario, state.inputValues, null)}
+        </div>
+        ${renderAddonSection()}
+        ${renderResultPanel()}
+        <div class="usage-note">
+          ↑ Enter the corpus number and type in the platform's element settings. Floor goes in the platform's floor field — the floor here is just for previewing the install hours.
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderInputRows(scenario, values, addonInstanceId) {
+  return scenario.inputs.map(input => {
+    const attr = addonInstanceId
+      ? `data-addon-input="${addonInstanceId}|${input.id}"`
+      : `data-input-id="${input.id}"`;
+    return `
+      <div class="input-row">
+        <div class="input-label">
+          <div class="main">${escapeHtml(input.label)}</div>
+          <div class="hint">1 corpus per ${input.perCorpus} ${escapeHtml(input.unit)}</div>
+        </div>
+        <input type="number" min="0" step="0.5" ${attr} value="${values[input.id] ?? ''}" placeholder="0">
+        <div class="unit">${escapeHtml(input.unit)}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderAddonSection() {
+  const usedIds = new Set([state.selectedScenarioId, ...state.addons.map(a => a.scenarioId)]);
+  const available = config.scenarios.filter(s => !usedIds.has(s.id));
+
+  return `
+    <div class="addon-section">
+      <div class="addon-section-header">Combined element</div>
+      <div class="addon-picker">
+        <select id="addonPicker" ${available.length === 0 ? 'disabled' : ''}>
+          <option value="">+ Add another element to this quote...</option>
+          ${available.map(s => `<option value="${s.id}">${escapeHtml(s.name)} (${s.type})</option>`).join('')}
+        </select>
+      </div>
+      <div class="addon-help">Use this when one quoted element on the platform combines multiple things — e.g. cabinets with a nested worktop, or counters with floating shelves.</div>
+      ${state.addons.map(addon => renderAddonCard(addon)).join('')}
+    </div>
+  `;
+}
+
+function renderAddonCard(addon) {
+  const scenario = config.scenarios.find(s => s.id === addon.scenarioId);
+  if (!scenario) return '';
+  return `
+    <div class="addon-card">
+      <div class="addon-card-header">
+        <h4>${escapeHtml(scenario.name)}<span class="addon-type-tag">${scenario.type}</span></h4>
+        <button class="addon-remove" data-remove-addon="${addon.instanceId}" title="Remove">× Remove</button>
+      </div>
+      <div>${renderInputRows(scenario, addon.inputValues, addon.instanceId)}</div>
+    </div>
+  `;
+}
+
+function renderResultPanel() {
+  const bd = computeBreakdown();
+  if (!bd) return '';
+  const corpus = bd.total;
+  const floorMin = computeInstallMin(corpus, bd.type, state.floor);
+  const baseMin = computeInstallMin(corpus, bd.type, 0);
+  const perFloorHr = (config.constants.floorMinPerCorpus * corpus / 60).toFixed(2);
+  const showBreakdown = bd.parts.length > 1;
+
+  return `
+    <div class="result">
+      <div class="result-grid">
+        <div class="result-block">
+          <div class="label">Corpus nr</div>
+          <div class="result-corpus" id="resultCorpus">${corpus}</div>
+        </div>
+        <div class="result-block">
+          <div class="label">Installation type</div>
+          <div><span class="type-pill">${bd.type}</span></div>
+        </div>
+        <div class="result-block">
+          <div class="label">Estimated install</div>
+          <div class="result-hours" id="resultHours">${fmtHr(floorMin)} hr</div>
+          <div class="result-hours-detail" id="resultDetail">${baseMin.toFixed(1)} min @ ground · +${perFloorHr} hr per floor</div>
+        </div>
+      </div>
+      ${showBreakdown ? `
+        <div class="breakdown">
+          <div class="breakdown-label">Corpus breakdown</div>
+          <table class="breakdown-table">
+            ${bd.parts.map(p => `
+              <tr>
+                <td class="name">${escapeHtml(p.name)}${p.isMain ? ' <small style="color:var(--cutr-text-secondary);">(main)</small>' : ''}</td>
+                <td class="num" id="bd-${p.id}">${p.raw.toFixed(2)}</td>
+              </tr>
+            `).join('')}
+            <tr class="total">
+              <td>Total (rounded up)</td>
+              <td class="num"><span id="bd-rawTotal">${bd.rawTotal.toFixed(2)}</span> → <span id="bd-total">${bd.total}</span></td>
+            </tr>
+          </table>
+        </div>
+      ` : ''}
+      ${bd.typeMismatch ? `
+        <div class="type-warning" id="typeWarning">
+          ⚠ Type mismatch: ${bd.mismatchedTypes.join(' and ')} sub-element(s) will be installed at <strong>${bd.type}</strong> rates. Consider splitting them into separate elements on the platform if the difference matters.
+        </div>
+      ` : ''}
+      <div class="floor-control">
+        <span>Preview at floor</span>
+        <input type="number" min="0" step="1" id="floorInput" value="${state.floor}">
+        <span>(corpus stays the same; only preview hours change)</span>
+      </div>
+    </div>
+  `;
+}
+
+function renderAdminMode() {
+  return `
+    <div class="layout-admin">
+      <div class="admin-intro">
+        <strong>Admin mode.</strong> Tweak the corpus logic here — changes save automatically to this browser. Use <strong>Export JSON</strong> to share a config with the team, or <strong>Import JSON</strong> to load one.
+      </div>
+      <div class="admin-section">
+        <div class="admin-section-header">
+          <h2><span class="amber-dot"></span> Calculation constants</h2>
+        </div>
+        <p class="section-desc">These mirror the platform's installation formula. Edit only if the platform-side logic changes.</p>
+        <div class="constants-grid">
+          ${renderConstantCard('unloadingMin', 'Unloading per corpus', 'min')}
+          ${renderConstantCard('movingMin', 'Moving per corpus', 'min')}
+          ${renderConstantCard('installFreestandingMin', 'Install — freestanding', 'min')}
+          ${renderConstantCard('installBuiltInMin', 'Install — built-in', 'min')}
+          ${renderConstantCard('floorMinPerCorpus', 'Per floor, per corpus', 'min')}
+        </div>
+        <div class="formula-note">install_min = corpus × (unloading + moving + install_by_type + floor × floor_per_corpus)</div>
+      </div>
+      <div class="admin-section">
+        <div class="admin-section-header">
+          <h2><span class="amber-dot"></span> Scenarios</h2>
+          <button class="btn btn-primary" id="addScenarioBtn">+ Add scenario</button>
+        </div>
+        <p class="section-desc">
+          Each scenario maps user inputs to a corpus contribution. Formula: <code style="font-family:var(--cutr-font-mono);background:var(--cutr-n-100);padding:2px 6px;">corpus = ceil(Σ input_value ÷ per_corpus)</code>. Type is fixed per scenario. Any scenario can be added as a layer to any other on the user side.
+        </p>
+        ${config.scenarios.length === 0
+          ? `<div class="empty-state">No scenarios yet. Add one to get started.</div>`
+          : config.scenarios.map(s => renderScenarioAdminCard(s)).join('')
+        }
+      </div>
+      <div class="admin-footer">
+        <span class="saved-indicator" id="savedIndicator">✓ Saved</span>
+        <button class="btn" id="importBtn">Import JSON</button>
+        <button class="btn" id="exportBtn">Export JSON</button>
+        <button class="btn btn-danger" id="resetBtn">Reset to defaults</button>
+      </div>
+      ${state.editingScenario ? renderEditModal() : ''}
+    </div>
+  `;
+}
+
+function renderConstantCard(key, label, unit) {
+  return `
+    <div class="constant-card">
+      <label>${label}</label>
+      <input type="number" min="0" step="0.5" data-constant="${key}" value="${config.constants[key]}">
+      <div class="unit">${unit}</div>
+    </div>
+  `;
+}
+
+function renderScenarioAdminCard(s) {
+  const inputSummary = s.inputs.map(i => `${i.label} (1/${i.perCorpus} ${i.unit})`).join(' · ');
+  return `
+    <div class="scenario-admin-card">
+      <div class="scenario-admin-card-info">
+        <h4>${escapeHtml(s.name)} <span class="meta">— ${s.type}</span></h4>
+        <div class="meta">${escapeHtml(inputSummary)}</div>
+      </div>
+      <div class="scenario-admin-actions">
+        <button class="btn btn-sm" data-edit-id="${s.id}">Edit</button>
+        <button class="btn btn-sm btn-danger" data-delete-id="${s.id}">Delete</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderEditModal() {
+  const s = state.editingScenario;
+  return `
+    <div class="modal-backdrop" id="modalBackdrop">
+      <div class="modal" id="modalContent">
+        <h2><span class="amber-dot"></span> ${state.isNewScenario ? 'Add scenario' : 'Edit scenario'}</h2>
+        <div class="modal-form">
+          <div class="field">
+            <label>Name</label>
+            <input type="text" data-edit-field="name" value="${escapeHtml(s.name)}" placeholder="e.g., Standard cabinets">
+          </div>
+          <div class="field">
+            <label>Description (include size boundaries / guidance)</label>
+            <textarea data-edit-field="description" placeholder="When to use this scenario, size definitions, exceptions...">${escapeHtml(s.description)}</textarea>
+          </div>
+          <div class="field">
+            <label>Installation type</label>
+            <select data-edit-field="type">
+              <option value="freestanding" ${s.type === 'freestanding' ? 'selected' : ''}>Freestanding</option>
+              <option value="built-in" ${s.type === 'built-in' ? 'selected' : ''}>Built-in</option>
+            </select>
+          </div>
+          <div class="inputs-editor">
+            <h3>Inputs (sum to corpus count)</h3>
+            <div class="inputs-editor-headers">
+              <span>Label</span><span>Unit</span><span>Per corpus</span><span></span>
+            </div>
+            ${s.inputs.map((inp, i) => `
+              <div class="input-editor-row">
+                <input type="text" placeholder="e.g., Cabinet corpuses" data-input-edit="${i}-label" value="${escapeHtml(inp.label)}">
+                <input type="text" placeholder="e.g., corpuses" data-input-edit="${i}-unit" value="${escapeHtml(inp.unit)}" class="mono">
+                <input type="number" min="0.1" step="0.1" placeholder="1" data-input-edit="${i}-perCorpus" value="${inp.perCorpus}" class="mono">
+                <button data-remove-input="${i}" title="Remove input">×</button>
+              </div>
+            `).join('')}
+            <button class="btn btn-sm" id="addInputBtn" style="margin-top:10px;">+ Add input</button>
+            <div class="editor-help">"Per corpus" is the divisor — 0.5 means 1 unit = 2 corpus (use for premium items like hanging racks). 1 = 1:1. 3 = 1 corpus per 3 units (for cheaper-to-install items like loose panels).</div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button class="btn" id="cancelEditBtn">Cancel</button>
+          <button class="btn btn-primary" id="saveEditBtn">Save scenario</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ===== Listeners =====
+function attachListeners() {
+  document.querySelectorAll('#modeToggle button').forEach(btn => {
+    btn.onclick = () => {
+      state.mode = btn.dataset.mode;
+      document.querySelectorAll('#modeToggle button').forEach(b => b.classList.toggle('active', b.dataset.mode === state.mode));
+      render();
+    };
+  });
+  if (state.mode === 'user') attachUserListeners();
+  else attachAdminListeners();
+}
+
+function attachUserListeners() {
+  document.querySelectorAll('.scenario-item').forEach(item => {
+    item.onclick = () => {
+      state.selectedScenarioId = item.dataset.scenarioId;
+      state.inputValues = {};
+      state.addons = [];
+      render();
+    };
+  });
+  document.querySelectorAll('[data-input-id]').forEach(input => {
+    input.oninput = () => {
+      state.inputValues[input.dataset.inputId] = input.value;
+      updateResultLive();
+    };
+  });
+  document.querySelectorAll('[data-addon-input]').forEach(input => {
+    input.oninput = () => {
+      const [instanceId, inputId] = input.dataset.addonInput.split('|');
+      const addon = state.addons.find(a => a.instanceId === instanceId);
+      if (addon) {
+        addon.inputValues[inputId] = input.value;
+        updateResultLive();
+      }
+    };
+  });
+  const picker = document.getElementById('addonPicker');
+  if (picker) {
+    picker.onchange = () => {
+      const scenarioId = picker.value;
+      if (!scenarioId) return;
+      state.addons.push({
+        instanceId: 'a_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+        scenarioId,
+        inputValues: {}
+      });
+      picker.value = '';
+      render();
+    };
+  }
+  document.querySelectorAll('[data-remove-addon]').forEach(btn => {
+    btn.onclick = () => {
+      state.addons = state.addons.filter(a => a.instanceId !== btn.dataset.removeAddon);
+      render();
+    };
+  });
+  const floorInput = document.getElementById('floorInput');
+  if (floorInput) {
+    floorInput.oninput = () => {
+      state.floor = parseInt(floorInput.value) || 0;
+      updateResultLive();
+    };
+  }
+}
+
+function updateResultLive() {
+  const bd = computeBreakdown();
+  if (!bd) return;
+  const corpus = bd.total;
+  const floorMin = computeInstallMin(corpus, bd.type, state.floor);
+  const baseMin = computeInstallMin(corpus, bd.type, 0);
+  const perFloorHr = (config.constants.floorMinPerCorpus * corpus / 60).toFixed(2);
+
+  setText('resultCorpus', corpus);
+  setText('resultHours', fmtHr(floorMin) + ' hr');
+  setText('resultDetail', `${baseMin.toFixed(1)} min @ ground · +${perFloorHr} hr per floor`);
+  setText('bd-rawTotal', bd.rawTotal.toFixed(2));
+  setText('bd-total', bd.total);
+  for (const p of bd.parts) setText('bd-' + p.id, p.raw.toFixed(2));
+}
+
+function setText(id, text) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = text;
+}
+
+function attachAdminListeners() {
+  document.querySelectorAll('[data-constant]').forEach(input => {
+    input.onchange = () => {
+      const val = parseFloat(input.value);
+      if (!isNaN(val) && val >= 0) {
+        config.constants[input.dataset.constant] = val;
+        saveConfig();
+      } else {
+        input.value = config.constants[input.dataset.constant];
+      }
+    };
+  });
+  document.querySelectorAll('[data-edit-id]').forEach(btn => {
+    btn.onclick = () => {
+      const s = config.scenarios.find(x => x.id === btn.dataset.editId);
+      if (!s) return;
+      state.editingScenario = JSON.parse(JSON.stringify(s));
+      state.isNewScenario = false;
+      render();
+    };
+  });
+  document.querySelectorAll('[data-delete-id]').forEach(btn => {
+    btn.onclick = () => {
+      const s = config.scenarios.find(x => x.id === btn.dataset.deleteId);
+      if (!s) return;
+      if (!confirm(`Delete scenario "${s.name}"?`)) return;
+      config.scenarios = config.scenarios.filter(x => x.id !== s.id);
+      if (state.selectedScenarioId === s.id) state.selectedScenarioId = config.scenarios[0]?.id || null;
+      saveConfig();
+      render();
+    };
+  });
+  const addBtn = document.getElementById('addScenarioBtn');
+  if (addBtn) addBtn.onclick = () => {
+    state.editingScenario = {
+      id: 'new_' + Date.now(),
+      name: '',
+      description: '',
+      type: 'built-in',
+      inputs: [{ id: 'count', label: '', unit: 'units', perCorpus: 1 }]
+    };
+    state.isNewScenario = true;
+    render();
+  };
+  const resetBtn = document.getElementById('resetBtn');
+  if (resetBtn) resetBtn.onclick = resetConfig;
+  const exportBtn = document.getElementById('exportBtn');
+  if (exportBtn) exportBtn.onclick = exportConfig;
+  const importBtn = document.getElementById('importBtn');
+  if (importBtn) importBtn.onclick = importConfig;
+  if (state.editingScenario) attachModalListeners();
+}
+
+function attachModalListeners() {
+  const s = state.editingScenario;
+  document.querySelectorAll('[data-edit-field]').forEach(el => {
+    el.oninput = () => { s[el.dataset.editField] = el.value; };
+    el.onchange = () => { s[el.dataset.editField] = el.value; };
+  });
+  document.querySelectorAll('[data-input-edit]').forEach(el => {
+    el.oninput = () => {
+      const dash = el.dataset.inputEdit.indexOf('-');
+      const idx = parseInt(el.dataset.inputEdit.substring(0, dash));
+      const field = el.dataset.inputEdit.substring(dash + 1);
+      if (!s.inputs[idx]) return;
+      if (field === 'perCorpus') s.inputs[idx][field] = parseFloat(el.value) || 1;
+      else s.inputs[idx][field] = el.value;
+    };
+  });
+  document.querySelectorAll('[data-remove-input]').forEach(btn => {
+    btn.onclick = () => {
+      const i = parseInt(btn.dataset.removeInput);
+      if (s.inputs.length <= 1) { alert('A scenario needs at least one input.'); return; }
+      s.inputs.splice(i, 1);
+      render();
+    };
+  });
+  const addInputBtn = document.getElementById('addInputBtn');
+  if (addInputBtn) addInputBtn.onclick = () => {
+    s.inputs.push({ id: 'input_' + Date.now(), label: '', unit: 'units', perCorpus: 1 });
+    render();
+  };
+  document.getElementById('cancelEditBtn').onclick = () => {
+    state.editingScenario = null;
+    state.isNewScenario = false;
+    render();
+  };
+  document.getElementById('saveEditBtn').onclick = () => {
+    if (!s.name.trim()) { alert('Name is required.'); return; }
+    if (s.inputs.length === 0) { alert('At least one input is required.'); return; }
+    for (const inp of s.inputs) {
+      if (!inp.label.trim()) { alert('Every input needs a label.'); return; }
+      if (!inp.perCorpus || inp.perCorpus <= 0) { alert('Per-corpus value must be greater than 0.'); return; }
+      if (!inp.id) inp.id = inp.label.toLowerCase().replace(/[^a-z0-9]+/g, '_') || 'input_' + Date.now();
+    }
+    if (state.isNewScenario) {
+      s.id = s.name.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '') || 'scenario_' + Date.now();
+      let baseId = s.id, counter = 1;
+      while (config.scenarios.some(x => x.id === s.id)) s.id = baseId + '_' + counter++;
+      config.scenarios.push(s);
+    } else {
+      const idx = config.scenarios.findIndex(x => x.id === s.id);
+      if (idx !== -1) config.scenarios[idx] = s;
+    }
+    state.editingScenario = null;
+    state.isNewScenario = false;
+    saveConfig();
+    render();
+  };
+  document.getElementById('modalBackdrop').onclick = (e) => {
+    if (e.target.id === 'modalBackdrop') {
+      state.editingScenario = null;
+      state.isNewScenario = false;
+      render();
+    }
+  };
+}
+
+function escapeHtml(str) {
+  if (str == null) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+render();
+</script>
+</body>
+</html>

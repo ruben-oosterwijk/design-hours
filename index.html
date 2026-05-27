@@ -361,11 +361,19 @@ input, select, textarea { font-family: inherit; }
 }
 .panel-count-row .small-label.warn { color: var(--cutr-warning); font-weight: 600; }
 
-/* Result panel */
-.result-section { border: 2px solid var(--cutr-brand); background: var(--cutr-amber-100); margin-top: 24px; }
+/* Result panel — Step 4 */
+.result-section { border: 2px solid var(--cutr-brand); margin-top: 24px; }
+.result-section .section-header {
+  background: var(--cutr-amber-700); border-bottom: 1px solid var(--cutr-amber-700);
+}
+.result-section .section-header h2 { color: white; }
+.result-section .section-header h2 .step-num {
+  background: white; color: var(--cutr-amber-700);
+}
 .result-grid {
   display: grid; grid-template-columns: 1fr 1.4fr;
   gap: 24px; padding: 24px 28px;
+  background: var(--cutr-amber-100);
 }
 .result-big-label {
   font-size: 10px; font-weight: 600; text-transform: uppercase;
@@ -543,18 +551,127 @@ input, select, textarea { font-family: inherit; }
 
 .hidden { display: none !important; }
 .empty-state { text-align: center; padding: 32px 20px; color: var(--cutr-text-secondary); font-size: 13px; font-style: italic; }
+
+/* How-to button in header */
+.how-to-btn {
+  font-size: 12px; font-weight: 500; color: var(--cutr-text-secondary);
+  background: transparent; border: 1px solid var(--cutr-rule);
+  padding: 6px 12px; border-radius: 2px; cursor: pointer; margin-right: 12px;
+}
+.how-to-btn:hover { background: var(--cutr-n-100); color: var(--cutr-text); }
+
+/* Onboarding overlay */
+.onboarding-overlay {
+  position: fixed; inset: 0; background: rgba(38,38,38,0.6);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 200; padding: 20px;
+}
+.onboarding-panel {
+  background: white; width: 100%; max-width: 720px;
+  max-height: 92vh; overflow-y: auto; border-radius: 2px;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.25);
+}
+.onboarding-hero {
+  background: var(--cutr-n-900); color: white;
+  padding: 32px 36px 28px;
+}
+.onboarding-hero .brand { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 8px; }
+.onboarding-hero .brand .dot { color: var(--cutr-brand); }
+.onboarding-hero h2 { font-size: 20px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.01em; }
+.onboarding-hero p { font-size: 14px; color: #a8a8a8; line-height: 1.6; max-width: 520px; }
+.onboarding-steps { padding: 28px 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.onboarding-step {
+  border: 1px solid var(--cutr-border); border-radius: 2px;
+  padding: 16px 18px;
+}
+.onboarding-step .step-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.onboarding-step .num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--cutr-n-900); color: white;
+  font-size: 11px; font-weight: 600; flex-shrink: 0;
+}
+.onboarding-step .step-title { font-size: 13px; font-weight: 600; color: var(--cutr-text); }
+.onboarding-step p { font-size: 12.5px; color: var(--cutr-text-secondary); line-height: 1.6; }
+.onboarding-step.step-4 { border-color: var(--cutr-amber-300); background: var(--cutr-amber-100); }
+.onboarding-step.step-4 .num { background: var(--cutr-amber-700); }
+.onboarding-step.step-4 .step-title { color: var(--cutr-amber-700); }
+.onboarding-note {
+  margin: 0 36px 8px;
+  background: var(--cutr-n-100); border-left: 3px solid var(--cutr-rule);
+  padding: 12px 14px; font-size: 12.5px; color: var(--cutr-text-secondary); line-height: 1.6;
+}
+.onboarding-footer {
+  padding: 20px 36px 28px;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.onboarding-footer .secondary-link {
+  font-size: 12px; color: var(--cutr-text-secondary); cursor: pointer;
+  background: none; border: none; text-decoration: underline;
+}
 </style>
 </head>
 <body>
+
+<!-- ==================== ONBOARDING OVERLAY ==================== -->
+<div class="onboarding-overlay" id="onboarding-overlay">
+  <div class="onboarding-panel">
+    <div class="onboarding-hero">
+      <div class="brand">cutr<span class="dot">.</span></div>
+      <h2>Corpus Calculator</h2>
+      <p>Use this tool to score a production file before quoting. It tells you the corpus number to enter in the platform and the correct installation time setting — in four steps.</p>
+    </div>
+    <div class="onboarding-steps">
+      <div class="onboarding-step">
+        <div class="step-header">
+          <span class="num">1</span>
+          <span class="step-title">File settings</span>
+        </div>
+        <p>Give the file a name and set the floor level. Floor adds 15 min per corpus for every level above ground — this applies across the whole file.</p>
+      </div>
+      <div class="onboarding-step">
+        <div class="step-header">
+          <span class="num">2</span>
+          <span class="step-title">What's in this file?</span>
+        </div>
+        <p>Pick every product type the file contains — cabinets, benches, counters, planters, and so on. Each selection adds a card you fill in separately.</p>
+      </div>
+      <div class="onboarding-step">
+        <div class="step-header">
+          <span class="num">3</span>
+          <span class="step-title">Fill in each product</span>
+        </div>
+        <p>On each card: enter the number of modules per size (S / M / L / Oversize), choose the install type, and mark unknown modules as on-site or unknown if the split isn't decided yet.</p>
+      </div>
+      <div class="onboarding-step step-4">
+        <div class="step-header">
+          <span class="num">4</span>
+          <span class="step-title">Set in platform</span>
+        </div>
+        <p>The calculator shows the total corpus number and the recommended installation type. Copy the backtrace block and paste it into the quote comment for a full audit trail.</p>
+      </div>
+    </div>
+    <div class="onboarding-note">
+      <strong>Admin mode</strong> (top-right toggle) lets you adjust product types, size buckets, time constants, and images. Changes are saved in your browser.
+    </div>
+    <div class="onboarding-footer">
+      <button class="secondary-link" onclick="closeOnboarding()">Don't show this again</button>
+      <button class="btn btn-primary" onclick="closeOnboarding()">Start scoring →</button>
+    </div>
+  </div>
+</div>
 
 <header class="header">
   <div class="header-left">
     <div class="brand">cutr<span class="dot">.</span></div>
     <div class="header-title">Corpus Calculator <span class="version-pill">V2 PROTOTYPE</span></div>
   </div>
-  <div class="mode-toggle">
-    <button id="mode-user" class="active" onclick="setMode('user')">User</button>
-    <button id="mode-admin" onclick="setMode('admin')">Admin</button>
+  <div style="display:flex; align-items:center;">
+    <button class="how-to-btn" onclick="openOnboarding()">How it works</button>
+    <div class="mode-toggle">
+      <button id="mode-user" class="active" onclick="setMode('user')">User</button>
+      <button id="mode-admin" onclick="setMode('admin')">Admin</button>
+    </div>
   </div>
 </header>
 
@@ -614,8 +731,11 @@ input, select, textarea { font-family: inherit; }
     </div>
   </section>
 
-  <!-- Result -->
-  <section class="result-section" id="result-section">
+  <!-- Step 4: Set in platform -->
+  <section class="result-section section" id="result-section">
+    <div class="section-header">
+      <h2><span class="step-num">4</span>Set in platform</h2>
+    </div>
     <div class="result-grid">
       <div>
         <div class="result-big-label">Corpus number for this file</div>
@@ -1406,6 +1526,20 @@ function setMode(mode) {
   document.getElementById('mode-admin').classList.toggle('active', mode === 'admin');
   if (mode === 'admin') renderAdmin();
 }
+
+// ── Onboarding overlay ──
+const ONBOARDING_KEY = 'cutr_cc_onboarding_seen';
+function openOnboarding() {
+  document.getElementById('onboarding-overlay').classList.remove('hidden');
+}
+function closeOnboarding(permanent) {
+  document.getElementById('onboarding-overlay').classList.add('hidden');
+  localStorage.setItem(ONBOARDING_KEY, '1');
+}
+// Show on first visit
+(function() {
+  if (!localStorage.getItem(ONBOARDING_KEY)) openOnboarding();
+})();
 
 function renderInstallCards() {
   // File-level install type removed — each product card has its own install type selector.

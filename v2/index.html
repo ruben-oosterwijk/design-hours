@@ -1,0 +1,2571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cutr · Corpus Calculator V2</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cutr-amber-100: #FFF8EC;
+  --cutr-amber-300: #FFD98A;
+  --cutr-amber-600: #C06500;
+  --cutr-amber-700: #994E00;
+  --cutr-n-100: #FAFAFA;
+  --cutr-n-200: #F5F5F5;
+  --cutr-n-400: #D9D9D9;
+  --cutr-n-600: #8C8C8C;
+  --cutr-n-700: #595959;
+  --cutr-n-800: #434343;
+  --cutr-n-900: #262626;
+  --cutr-success: #38A106;
+  --cutr-error: #F52228;
+  --cutr-warning: #D48806;
+  --cutr-info: #096DD9;
+  --cutr-bg: #FFFFFF;
+  --cutr-text: var(--cutr-n-900);
+  --cutr-text-secondary: var(--cutr-n-600);
+  --cutr-border: var(--cutr-n-200);
+  --cutr-rule: var(--cutr-n-400);
+  --cutr-brand: var(--cutr-amber-600);
+  --cutr-font-primary: 'Averta Std', system-ui, -apple-system, "Segoe UI", sans-serif;
+  --cutr-font-mono: 'DM Mono', 'Courier New', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  font-family: var(--cutr-font-primary);
+  color: var(--cutr-text);
+  background: var(--cutr-bg);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+body { min-height: 100vh; padding-bottom: 90px; }
+button { font-family: inherit; }
+input, select, textarea { font-family: inherit; }
+
+/* Header */
+.header {
+  border-bottom: 1px solid var(--cutr-rule);
+  padding: 16px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: white; position: sticky; top: 0; z-index: 10;
+}
+.header-left { display: flex; align-items: center; gap: 24px; }
+.brand { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+.brand .dot { color: var(--cutr-brand); }
+.header-title {
+  font-size: 11px; font-weight: 600; color: var(--cutr-text-secondary);
+  text-transform: uppercase; letter-spacing: 0.12em;
+}
+.version-pill {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+  background: var(--cutr-amber-100); color: var(--cutr-amber-700);
+  padding: 4px 8px; border-radius: 2px; margin-left: 8px;
+}
+.mode-toggle { display: flex; border: 1px solid var(--cutr-rule); border-radius: 2px; }
+.mode-toggle button {
+  padding: 8px 18px; background: transparent; border: none;
+  font-size: 13px; color: var(--cutr-text); cursor: pointer; font-weight: 500;
+}
+.mode-toggle button.active { background: var(--cutr-n-900); color: white; }
+
+/* Page */
+.page { max-width: 1100px; margin: 0 auto; padding: 28px 32px; }
+.page h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 6px; }
+.page > .subtitle { font-size: 14px; color: var(--cutr-text-secondary); margin-bottom: 24px; }
+
+/* Section */
+.section { border: 1px solid var(--cutr-border); background: white; margin-bottom: 18px; }
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px; border-bottom: 1px solid var(--cutr-border);
+}
+.section-header h2 {
+  font-size: 13px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--cutr-text-secondary);
+}
+.section-header h2 .step-num {
+  display: inline-block; width: 22px; height: 22px;
+  background: var(--cutr-n-900); color: white; border-radius: 50%;
+  text-align: center; line-height: 22px; font-size: 11px;
+  margin-right: 8px; vertical-align: middle;
+}
+.section-body { padding: 18px 20px; }
+.section-body > .help {
+  font-size: 12px; color: var(--cutr-text-secondary);
+  margin-bottom: 14px; line-height: 1.55;
+}
+
+/* File settings */
+.file-settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.file-settings-grid .full { grid-column: span 2; }
+.field-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--cutr-text-secondary); margin-bottom: 6px;
+}
+.text-input {
+  width: 100%; font-size: 15px; padding: 8px 12px;
+  border: 1px solid var(--cutr-rule); border-radius: 2px; background: white;
+}
+.text-input:focus { outline: none; border-color: var(--cutr-brand); box-shadow: 0 0 0 3px var(--cutr-amber-100); }
+.num-input {
+  width: 90px; font-family: var(--cutr-font-mono); font-size: 15px;
+  padding: 6px 10px; border: 1px solid var(--cutr-rule);
+  border-radius: 2px; text-align: right; background: white;
+}
+.num-input:focus { outline: none; border-color: var(--cutr-brand); box-shadow: 0 0 0 3px var(--cutr-amber-100); }
+
+/* Install type cards */
+.install-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.install-card {
+  border: 1px solid var(--cutr-rule); padding: 10px 12px; cursor: pointer;
+  border-radius: 2px; background: white; font-size: 13px; user-select: none;
+}
+.install-card:hover { border-color: var(--cutr-brand); background: var(--cutr-amber-100); }
+.install-card.active { border-color: var(--cutr-brand); background: var(--cutr-amber-100); }
+.install-card .name { font-weight: 600; display: block; }
+.install-card .mins { font-family: var(--cutr-font-mono); font-size: 11px; color: var(--cutr-text-secondary); margin-top: 2px; }
+
+/* Product type picker */
+.type-picker { display: flex; flex-wrap: wrap; gap: 8px; }
+.type-chip {
+  padding: 9px 14px; border: 1px solid var(--cutr-rule); background: white;
+  cursor: pointer; font-size: 13px; border-radius: 2px; color: var(--cutr-text);
+}
+.type-chip:hover { border-color: var(--cutr-brand); background: var(--cutr-amber-100); }
+
+/* Card */
+.product-card { border: 1px solid var(--cutr-border); background: white; margin-bottom: 16px; }
+.card-header {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 20px; background: var(--cutr-n-100);
+  border-bottom: 1px solid var(--cutr-border);
+}
+.card-header .badge {
+  display: inline-block; width: 28px; height: 28px;
+  background: var(--cutr-brand); color: white; text-align: center;
+  line-height: 28px; font-size: 14px; border-radius: 4px;
+}
+.card-header .name-input {
+  flex: 1; border: 1px solid transparent; background: transparent;
+  font-size: 16px; font-weight: 600; padding: 5px 8px; border-radius: 2px;
+}
+.card-header .name-input:hover { background: white; border-color: var(--cutr-border); }
+.card-header .name-input:focus { background: white; border-color: var(--cutr-brand); outline: none; }
+.card-header .type-tag {
+  font-size: 11px; color: var(--cutr-text-secondary);
+  font-family: var(--cutr-font-mono); text-transform: lowercase;
+}
+.card-header .live-corpus {
+  font-family: var(--cutr-font-mono); font-size: 13px;
+  background: white; border: 1px solid var(--cutr-rule);
+  padding: 5px 10px; border-radius: 2px;
+}
+.card-header .live-corpus .num { font-weight: 600; }
+.card-remove {
+  background: transparent; border: none; cursor: pointer;
+  color: var(--cutr-text-secondary); font-size: 20px;
+  padding: 4px 8px; border-radius: 2px;
+}
+.card-remove:hover { background: var(--cutr-n-200); color: var(--cutr-error); }
+
+/* Card collapse */
+.card-toggle {
+  background: transparent; border: none; cursor: pointer;
+  color: var(--cutr-text-secondary); font-size: 18px;
+  padding: 2px 6px; border-radius: 2px; line-height: 1; flex-shrink: 0;
+  transition: transform 0.15s;
+}
+.card-toggle:hover { background: var(--cutr-n-200); }
+.product-card.collapsed .card-toggle { transform: rotate(-90deg); }
+.product-card.collapsed .card-body { display: none; }
+.card-summary {
+  display: none; padding: 7px 20px 9px;
+  font-family: var(--cutr-font-mono); font-size: 12px;
+  color: var(--cutr-text-secondary); background: var(--cutr-n-100);
+  border-bottom: 1px solid var(--cutr-border);
+}
+.product-card.collapsed .card-summary { display: block; }
+
+/* Collapse/expand all */
+.cards-actions { display: flex; gap: 6px; }
+.sm-btn {
+  padding: 4px 10px; background: white; border: 1px solid var(--cutr-rule);
+  font-size: 11px; cursor: pointer; border-radius: 2px; color: var(--cutr-text-secondary);
+  font-family: inherit;
+}
+.sm-btn:hover { background: var(--cutr-n-200); }
+
+/* Admin section collapse */
+.admin-section-header { cursor: pointer; user-select: none; }
+.admin-section-header:hover { background: var(--cutr-n-200); }
+
+/* Card-level install type selector */
+.card-install-type { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 4px; }
+.card-install-card {
+  flex: 1; min-width: 120px; border: 1px solid var(--cutr-rule); padding: 8px 10px;
+  cursor: pointer; border-radius: 2px; background: white;
+  user-select: none; text-align: left; font-family: inherit;
+}
+.card-install-card:hover { border-color: var(--cutr-brand); background: var(--cutr-amber-100); }
+.card-install-card.active { border-color: var(--cutr-brand); background: var(--cutr-amber-100); }
+.card-install-card .name { font-weight: 600; display: block; font-size: 13px; }
+.card-install-card .mins { font-family: var(--cutr-font-mono); font-size: 10px; color: var(--cutr-text-secondary); display: block; margin-top: 2px; }
+.install-required-note {
+  font-size: 12px; color: var(--cutr-warning); font-weight: 500;
+  padding: 6px 10px; background: #FFF7E0; border-left: 3px solid var(--cutr-warning); margin-top: 6px;
+}
+.install-type-note { font-size: 11px; color: var(--cutr-text-secondary); margin-top: 6px; line-height: 1.5; }
+
+.card-body { padding: 18px 20px; }
+
+/* Intro / exclusion */
+.intro-block {
+  background: var(--cutr-n-100); padding: 12px 16px;
+  border-left: 3px solid var(--cutr-brand); font-size: 13px;
+  line-height: 1.6; white-space: pre-wrap; margin-bottom: 12px;
+}
+.exclusion-banner {
+  background: #FFF7E0; border-left: 3px solid var(--cutr-warning);
+  padding: 10px 14px; margin-bottom: 12px; font-size: 13px;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+.exclusion-banner .label { flex: 1; }
+.exclusion-banner .label strong { color: var(--cutr-amber-700); }
+.exclusion-banner .seg {
+  display: flex; border: 1px solid var(--cutr-rule);
+  background: white; border-radius: 2px;
+}
+.exclusion-banner .seg button {
+  padding: 6px 12px; background: white; border: none;
+  font-size: 12px; cursor: pointer; color: var(--cutr-text);
+}
+.exclusion-banner .seg button.active { background: var(--cutr-n-900); color: white; }
+
+/* Card toolbar */
+.card-toolbar {
+  display: flex; gap: 8px; margin-bottom: 14px; font-size: 12px;
+}
+.toolbar-btn {
+  padding: 6px 10px; background: white; border: 1px solid var(--cutr-rule);
+  cursor: pointer; font-size: 12px; border-radius: 2px; color: var(--cutr-text);
+}
+.toolbar-btn:hover { background: var(--cutr-n-100); }
+.toolbar-btn.experimental {
+  border-style: dashed; color: var(--cutr-amber-700); border-color: var(--cutr-amber-300);
+}
+.toolbar-btn.experimental:hover { background: var(--cutr-amber-100); }
+
+.import-banner {
+  background: var(--cutr-amber-100); border: 1px solid var(--cutr-amber-300);
+  padding: 8px 12px; font-size: 11px; margin-bottom: 12px;
+  display: flex; justify-content: space-between; align-items: center;
+  font-family: var(--cutr-font-mono);
+}
+.import-banner .reset-link {
+  color: var(--cutr-amber-700); text-decoration: underline; cursor: pointer;
+  background: none; border: none; font-family: inherit; font-size: 11px;
+}
+
+/* Subsections inside cards */
+.subsection { margin-bottom: 20px; }
+.subsection:last-child { margin-bottom: 0; }
+.subsection-label {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--cutr-text-secondary);
+  margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+}
+.subsection-label .normal {
+  font-weight: 400; text-transform: none; letter-spacing: 0;
+  font-size: 12px; color: var(--cutr-text-secondary);
+}
+
+/* Bucket rows */
+.bucket-row {
+  display: grid; grid-template-columns: 96px 1fr 100px 100px;
+  align-items: center; gap: 14px; padding: 12px 0;
+  border-bottom: 1px solid var(--cutr-border);
+}
+.bucket-row:last-child { border-bottom: none; }
+.bucket-row .images { display: flex; gap: 4px; height: 64px; overflow: hidden; }
+.bucket-row .images img {
+  width: 64px; height: 64px; object-fit: cover;
+  border: 1px solid var(--cutr-border); border-radius: 2px; cursor: zoom-in;
+}
+.bucket-row .images .ph {
+  width: 64px; height: 64px; background: var(--cutr-n-200);
+  border: 1px dashed var(--cutr-rule); border-radius: 2px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; color: var(--cutr-text-secondary); text-align: center; padding: 4px;
+}
+.bucket-info .name { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+.bucket-info .range { font-size: 11px; color: var(--cutr-text-secondary); font-family: var(--cutr-font-mono); }
+.bucket-info .example { font-size: 11px; color: var(--cutr-text-secondary); font-style: italic; margin-top: 2px; }
+.bucket-row .contrib {
+  font-family: var(--cutr-font-mono); font-size: 11px;
+  color: var(--cutr-amber-700); text-align: center;
+  background: var(--cutr-amber-100); padding: 4px 6px;
+  border-radius: 2px; white-space: nowrap; line-height: 1.3;
+}
+.bucket-row .input-box {
+  display: flex; align-items: center; gap: 6px; justify-content: flex-end;
+}
+.bucket-row .input-box .unit { font-size: 11px; color: var(--cutr-text-secondary); font-family: var(--cutr-font-mono); }
+
+/* Panel mode toggle */
+.panel-mode-toggle {
+  display: flex; border: 1px solid var(--cutr-rule);
+  border-radius: 2px; margin-bottom: 12px; width: fit-content;
+}
+.panel-mode-toggle button {
+  padding: 7px 14px; background: white; border: none;
+  font-size: 12px; cursor: pointer; color: var(--cutr-text);
+}
+.panel-mode-toggle button.active { background: var(--cutr-n-900); color: white; }
+
+.panel-note {
+  background: var(--cutr-n-100); border-left: 3px solid var(--cutr-n-400);
+  padding: 10px 12px; font-size: 12px; margin-bottom: 12px;
+  color: var(--cutr-n-700); line-height: 1.55;
+}
+
+/* Panel rows m² */
+.panel-row-m2 {
+  display: grid; grid-template-columns: 1fr 100px 100px;
+  align-items: center; gap: 14px; padding: 12px 0;
+  border-bottom: 1px solid var(--cutr-border);
+}
+.panel-row-m2:last-child { border-bottom: none; }
+.panel-row-m2.provisional {
+  background: #FFF7E0; border-left: 3px solid var(--cutr-warning);
+  margin: 0 -10px; padding-left: 10px; padding-right: 10px;
+}
+.panel-row-m2 .label .main { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+.panel-row-m2 .label .desc { font-size: 11px; color: var(--cutr-text-secondary); }
+
+/* Panel count rows */
+.panel-count-row {
+  display: grid; grid-template-columns: 1fr 100px 110px 110px 60px;
+  align-items: center; gap: 12px; padding: 12px 0;
+  border-bottom: 1px solid var(--cutr-border);
+}
+.panel-count-row:last-child { border-bottom: none; }
+.panel-count-row .input-pair { display: flex; align-items: center; gap: 6px; }
+.panel-count-row .small-label {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.06em;
+  color: var(--cutr-text-secondary);
+}
+.panel-count-row .small-label.warn { color: var(--cutr-warning); font-weight: 600; }
+
+/* Result panel */
+.result-section { border: 2px solid var(--cutr-brand); background: var(--cutr-amber-100); margin-top: 24px; }
+.result-grid {
+  display: grid; grid-template-columns: 1fr 1.4fr;
+  gap: 24px; padding: 24px 28px;
+}
+.result-big-label {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--cutr-amber-700); margin-bottom: 8px;
+}
+.result-big-num {
+  font-family: var(--cutr-font-mono); font-size: 72px; font-weight: 500;
+  line-height: 1; color: var(--cutr-text);
+}
+.result-big-sub { margin-top: 6px; font-size: 12px; color: var(--cutr-text-secondary); font-family: var(--cutr-font-mono); }
+.card-breakdown { margin-top: 14px; font-family: var(--cutr-font-mono); font-size: 12px; }
+.card-breakdown .row { display: flex; justify-content: space-between; padding: 3px 0; color: var(--cutr-n-700); }
+.card-breakdown .row .num { color: var(--cutr-text); font-weight: 500; }
+.card-breakdown .row.total {
+  border-top: 1px solid var(--cutr-amber-300); margin-top: 6px;
+  padding-top: 6px; font-weight: 600; color: var(--cutr-text);
+}
+
+.platform-interp { background: white; padding: 18px 20px; border-radius: 2px; border: 1px solid var(--cutr-amber-300); }
+.platform-interp .pi-label {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--cutr-text-secondary); margin-bottom: 8px;
+}
+.platform-interp .pi-row { display: flex; justify-content: space-between; font-family: var(--cutr-font-mono); font-size: 13px; padding: 4px 0; }
+.platform-interp .pi-row .k { color: var(--cutr-n-700); }
+.platform-interp .pi-row .v { color: var(--cutr-text); }
+.platform-interp .pi-formula {
+  margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid var(--cutr-border);
+  font-family: var(--cutr-font-mono); font-size: 11px;
+  color: var(--cutr-text-secondary);
+}
+.platform-interp .pi-total {
+  margin-top: 10px; padding-top: 10px;
+  border-top: 1px solid var(--cutr-amber-300);
+  font-family: var(--cutr-font-mono); font-size: 14px; font-weight: 600;
+}
+.platform-interp .pi-total .num { color: var(--cutr-amber-700); font-size: 18px; }
+
+.backtrace-block { margin: 0 28px 24px; padding: 18px 20px; background: white; border: 1px solid var(--cutr-border); }
+.backtrace-block .label-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.backtrace-block .label-row .label {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.12em; color: var(--cutr-text-secondary);
+}
+.copy-btn {
+  padding: 6px 12px; background: var(--cutr-n-900); color: white;
+  border: none; cursor: pointer; font-size: 12px; border-radius: 2px; font-weight: 500;
+}
+.copy-btn:hover { background: var(--cutr-amber-700); }
+.copy-btn.copied { background: var(--cutr-success); }
+.backtrace-pre {
+  font-family: var(--cutr-font-mono); font-size: 12px; white-space: pre-wrap;
+  color: var(--cutr-n-800); line-height: 1.55; max-height: 420px;
+  overflow-y: auto; background: var(--cutr-n-100); padding: 14px;
+  border: 1px solid var(--cutr-border);
+}
+.provisional-flag {
+  margin-top: 12px; padding: 10px 12px;
+  background: #FFF7E0; border-left: 3px solid var(--cutr-warning);
+  font-size: 12px; color: var(--cutr-n-800);
+}
+
+/* Modal */
+.modal-backdrop {
+  position: fixed; inset: 0; background: rgba(38,38,38,0.45);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100; padding: 20px;
+}
+.modal {
+  background: white; width: 100%; max-width: 760px; max-height: 90vh;
+  display: flex; flex-direction: column; border-radius: 2px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+}
+.modal-header { padding: 16px 22px; border-bottom: 1px solid var(--cutr-border); display: flex; justify-content: space-between; align-items: center; }
+.modal-header h3 { font-size: 16px; font-weight: 600; }
+.modal-header .experimental-tag {
+  display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; background: var(--cutr-amber-100); color: var(--cutr-amber-700);
+  padding: 3px 8px; border-radius: 2px; margin-left: 8px;
+}
+.modal-body { padding: 18px 22px; overflow-y: auto; flex: 1; }
+.modal-footer { padding: 12px 22px; border-top: 1px solid var(--cutr-border); display: flex; justify-content: flex-end; gap: 10px; }
+.modal-close-x { background: transparent; border: none; cursor: pointer; color: var(--cutr-text-secondary); font-size: 22px; padding: 4px 8px; }
+.btn { padding: 8px 16px; font-size: 13px; border: 1px solid var(--cutr-rule); background: white; cursor: pointer; border-radius: 2px; font-weight: 500; }
+.btn:hover { background: var(--cutr-n-100); }
+.btn-primary { background: var(--cutr-n-900); color: white; border-color: var(--cutr-n-900); }
+.btn-primary:hover { background: var(--cutr-amber-700); border-color: var(--cutr-amber-700); }
+.btn-primary:disabled { background: var(--cutr-n-400); border-color: var(--cutr-n-400); cursor: not-allowed; }
+
+.paste-area {
+  width: 100%; min-height: 220px; font-family: var(--cutr-font-mono);
+  font-size: 12px; padding: 12px; border: 1px solid var(--cutr-rule);
+  border-radius: 2px; resize: vertical;
+}
+.paste-area:focus { outline: none; border-color: var(--cutr-brand); }
+.instruction-block {
+  background: var(--cutr-amber-100); border-left: 3px solid var(--cutr-brand);
+  padding: 12px 14px; font-size: 12.5px; margin-bottom: 14px; line-height: 1.6;
+}
+.instruction-block strong { color: var(--cutr-amber-700); }
+.instruction-block .template {
+  font-family: var(--cutr-font-mono); font-size: 11px; display: block;
+  margin-top: 6px; color: var(--cutr-n-700); white-space: pre-wrap;
+}
+.parse-result {
+  background: var(--cutr-n-100); padding: 12px 14px;
+  border-left: 3px solid var(--cutr-success); font-size: 13px;
+  font-family: var(--cutr-font-mono); margin-top: 12px; line-height: 1.6;
+}
+.parse-result strong { font-family: var(--cutr-font-primary); }
+
+/* Lightbox */
+.lightbox-backdrop {
+  position: fixed; inset: 0; background: rgba(38,38,38,0.85);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 200; padding: 40px; cursor: zoom-out;
+}
+.lightbox-backdrop img { max-width: 90vw; max-height: 90vh; border-radius: 4px; }
+
+/* Sticky total */
+.sticky-total {
+  position: fixed; bottom: 0; left: 0; right: 0; background: white;
+  border-top: 1px solid var(--cutr-rule); padding: 12px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  z-index: 5; gap: 20px;
+}
+.sticky-total .left, .sticky-total .right { display: flex; align-items: center; gap: 16px; }
+.sticky-total .sleep-label {
+  font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em;
+  font-weight: 600; color: var(--cutr-text-secondary);
+}
+.sticky-total .total-num { font-family: var(--cutr-font-mono); font-size: 24px; font-weight: 600; }
+.sticky-total .install-summary { font-family: var(--cutr-font-mono); font-size: 12px; color: var(--cutr-text-secondary); }
+
+/* Admin */
+.admin-tabs { display: flex; border-bottom: 1px solid var(--cutr-border); margin-bottom: 18px; }
+.admin-tab {
+  padding: 10px 16px; background: transparent; border: none; cursor: pointer;
+  font-size: 13px; color: var(--cutr-text-secondary);
+  border-bottom: 2px solid transparent; margin-bottom: -1px; font-weight: 500;
+}
+.admin-tab.active { color: var(--cutr-text); border-bottom-color: var(--cutr-brand); }
+.admin-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.admin-table th, .admin-table td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--cutr-border); vertical-align: top; }
+.admin-table th {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--cutr-text-secondary); background: var(--cutr-n-100);
+}
+.admin-table input, .admin-table textarea, .admin-table select {
+  font-family: var(--cutr-font-mono); font-size: 12px;
+  padding: 4px 8px; border: 1px solid var(--cutr-rule);
+  border-radius: 2px; background: white;
+}
+.admin-table input[type="number"] { width: 70px; text-align: right; }
+.admin-table input[type="text"] { width: 100%; min-width: 100px; }
+.admin-table textarea { width: 100%; min-height: 36px; resize: vertical; }
+.admin-section { border: 1px solid var(--cutr-border); margin-bottom: 16px; }
+.admin-section-header {
+  padding: 10px 14px; background: var(--cutr-n-100);
+  font-weight: 600; font-size: 13px;
+  border-bottom: 1px solid var(--cutr-border);
+  display: flex; justify-content: space-between; align-items: center;
+}
+.admin-section-header .meta { font-weight: 400; color: var(--cutr-text-secondary); font-size: 11px; font-family: var(--cutr-font-mono); }
+.admin-section-body { padding: 14px; }
+.admin-row { display: flex; gap: 24px; align-items: center; margin-bottom: 10px; font-size: 13px; flex-wrap: wrap; }
+.admin-row label { display: flex; align-items: center; gap: 6px; }
+.synonym-tag {
+  display: inline-block; padding: 3px 8px;
+  background: var(--cutr-amber-100); color: var(--cutr-amber-700);
+  font-size: 11px; font-family: var(--cutr-font-mono);
+  border-radius: 2px; margin: 2px 4px 2px 0;
+}
+
+.hidden { display: none !important; }
+.empty-state { text-align: center; padding: 32px 20px; color: var(--cutr-text-secondary); font-size: 13px; font-style: italic; }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-left">
+    <div class="brand">cutr<span class="dot">.</span></div>
+    <div class="header-title">Corpus Calculator <span class="version-pill">V2 PROTOTYPE</span></div>
+  </div>
+  <div class="mode-toggle">
+    <button id="mode-user" class="active" onclick="setMode('user')">User</button>
+    <button id="mode-admin" onclick="setMode('admin')">Admin</button>
+  </div>
+</header>
+
+<!-- ==================== USER MODE ==================== -->
+<main id="user-mode" class="page">
+  <h1>Score one file</h1>
+  <p class="subtitle">A file can contain one or more product types — add a card for each. Total corpus updates live. Copy the backtrace into the quote when done.</p>
+
+  <!-- Step 1: File settings -->
+  <section class="section">
+    <div class="section-header"><h2><span class="step-num">1</span>File settings</h2></div>
+    <div class="section-body">
+      <div class="file-settings-grid">
+        <div class="full">
+          <div class="field-label">File name</div>
+          <input class="text-input" id="file-name" type="text" placeholder="e.g., Project X — common room" />
+        </div>
+        <div>
+          <div class="field-label">Floor <span style="font-weight:400; color:var(--cutr-text-secondary); text-transform:none; font-size:11px;">(applies to the whole file)</span></div>
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <input class="num-input" id="floor-input" type="number" min="0" step="1" value="0" />
+            <span style="font-size: 12px; color: var(--cutr-text-secondary); font-family: var(--cutr-font-mono);">
+              ground = 0 · +15 min/corpus per floor
+            </span>
+          </div>
+        </div>
+        <div>
+          <div class="field-label" style="color:var(--cutr-text-secondary);">Installation type</div>
+          <div style="font-size:12px; color:var(--cutr-text-secondary); margin-top:4px; line-height:1.5;">
+            Set per product card in Step 3 — the calculator derives the recommended file setting from your cards.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Step 2: What's in this file? (product types) -->
+  <section class="section">
+    <div class="section-header"><h2><span class="step-num">2</span>What's in this file?</h2></div>
+    <div class="section-body">
+      <p class="help">Pick one or more product types — each becomes a card you can fill in. A file can hold any combination (e.g., one bench + two wall paneling cards).</p>
+      <div class="type-picker" id="type-picker"></div>
+    </div>
+  </section>
+
+  <!-- Step 3: Cards stack -->
+  <section class="section">
+    <div class="section-header">
+      <h2><span class="step-num">3</span>Fill in each product</h2>
+      <div class="cards-actions">
+        <button class="sm-btn" onclick="collapseAllCards()">Collapse all</button>
+        <button class="sm-btn" onclick="expandAllCards()">Expand all</button>
+      </div>
+    </div>
+    <div class="section-body" id="cards-container">
+      <div class="empty-state" id="cards-empty">No product types added yet — pick from the chips above.</div>
+    </div>
+  </section>
+
+  <!-- Result -->
+  <section class="result-section" id="result-section">
+    <div class="result-grid">
+      <div>
+        <div class="result-big-label">Corpus number for this file</div>
+        <div class="result-big-num" id="total-corpus">0</div>
+        <div class="result-big-sub" id="total-raw">raw 0.00 → ceil 0</div>
+        <div class="card-breakdown" id="card-breakdown"></div>
+      </div>
+      <div class="platform-interp">
+        <div class="pi-label">Platform interpretation — installation time</div>
+        <div id="platform-interp-body"></div>
+      </div>
+    </div>
+    <div class="backtrace-block">
+      <div class="label-row">
+        <div class="label">Backtrace — paste this into the quote comment</div>
+        <button class="copy-btn" id="copy-backtrace" onclick="copyBacktrace()">📋 Copy block</button>
+      </div>
+      <pre class="backtrace-pre" id="backtrace-text"></pre>
+      <div class="provisional-flag hidden" id="provisional-flag"></div>
+    </div>
+  </section>
+</main>
+
+<!-- ==================== ADMIN MODE ==================== -->
+<main id="admin-mode" class="page hidden">
+  <h1>Admin</h1>
+  <p class="subtitle">Configure product types, size buckets, ratios, examples, intro text, images, parser synonyms, and install constants. Changes persist to localStorage.</p>
+
+  <div class="admin-tabs">
+    <button class="admin-tab active" data-tab="types" onclick="setAdminTab('types')">Product types</button>
+    <button class="admin-tab" data-tab="parser" onclick="setAdminTab('parser')">Parser</button>
+    <button class="admin-tab" data-tab="install" onclick="setAdminTab('install')">Install constants</button>
+    <button class="admin-tab" data-tab="json" onclick="setAdminTab('json')">Import / export</button>
+  </div>
+
+  <div id="admin-tab-types"></div>
+  <div id="admin-tab-parser" class="hidden"></div>
+  <div id="admin-tab-install" class="hidden"></div>
+  <div id="admin-tab-json" class="hidden">
+    <div class="admin-section">
+      <div class="admin-section-header">Config JSON</div>
+      <div class="admin-section-body">
+        <textarea id="config-json" style="width:100%; height:300px; font-family:var(--cutr-font-mono); font-size:12px; padding:10px; border:1px solid var(--cutr-rule); border-radius:2px;"></textarea>
+        <div style="margin-top:12px; display:flex; gap:8px;">
+          <button class="btn" onclick="loadConfigToJson()">Refresh from current config</button>
+          <button class="btn btn-primary" onclick="applyJsonConfig()">Apply JSON</button>
+          <button class="btn" onclick="resetConfig()">Reset to defaults</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- Sticky total -->
+<div class="sticky-total" id="sticky-total">
+  <div class="left">
+    <div>
+      <div class="sleep-label">Corpus number</div>
+      <span class="total-num" id="sticky-total-num">0</span>
+    </div>
+    <div class="install-summary" id="sticky-install"></div>
+  </div>
+  <div class="right">
+    <button class="btn" onclick="resetJob()">Reset file</button>
+  </div>
+</div>
+
+<!-- Partlist modal -->
+<div class="modal-backdrop hidden" id="partlist-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <h3 style="display:inline-block;">Paste partlist <span class="experimental-tag">Experimental</span></h3>
+      </div>
+      <button class="modal-close-x" onclick="closePartlistModal()">×</button>
+    </div>
+    <div class="modal-body" id="partlist-modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closePartlistModal()">Cancel</button>
+      <button class="btn btn-primary" id="apply-partlist-btn" disabled onclick="applyPartlist()">Apply to card</button>
+    </div>
+  </div>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox-backdrop hidden" id="lightbox" onclick="closeLightbox()">
+  <img id="lightbox-img" src="" alt="" />
+</div>
+
+<script>
+// ============================================================================
+// CONFIG (placeholders until contractor validation)
+// ============================================================================
+
+const STORAGE_KEY = 'cutr-corpus-v2-config';
+
+function svgPh(label, color) {
+  const c = color || '#FFD98A';
+  const svg = `<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 150'><rect width='200' height='150' fill='${c}'/><text x='100' y='80' text-anchor='middle' font-family='sans-serif' font-size='16' fill='%23262626'>${label}</text></svg>`;
+  return 'data:image/svg+xml;utf8,' + svg.replace(/#/g, '%23').replace(/'/g, '%22');
+}
+
+// Generates a product-type-specific line-art SVG sketch for each size bucket.
+// Front-elevation style, consistent amber+grey palette. Fallbacks to svgPh().
+function bucketSvg(typeId, bucketId) {
+  const BG='#F5F5F5', F='#FFF8EC', S='#595959', A='#C06500', FL='#D9D9D9';
+  const attr = `xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150"`;
+  const bg   = `<rect width="200" height="150" fill="${BG}"/>`;
+
+  const svgs = {
+    cabinets: {
+      // Small base unit — low and wide
+      S: `<svg ${attr}>${bg}
+        <rect x="55" y="60" width="90" height="66" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="100" y1="60" x2="100" y2="126" stroke="${S}" stroke-width="1"/>
+        <circle cx="92" cy="92" r="2.5" fill="${A}"/>
+        <circle cx="108" cy="92" r="2.5" fill="${A}"/>
+        <line x1="35" y1="126" x2="165" y2="126" stroke="${FL}" stroke-width="1"/>
+      </svg>`,
+      // Tall single wardrobe / larder
+      M: `<svg ${attr}>${bg}
+        <rect x="72" y="12" width="56" height="126" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="72" y1="52" x2="128" y2="52" stroke="${S}" stroke-width="1"/>
+        <circle cx="97" cy="90" r="2.5" fill="${A}"/>
+        <line x1="35" y1="138" x2="165" y2="138" stroke="${FL}" stroke-width="1"/>
+      </svg>`,
+      // Full-height pantry — wider, two doors
+      L: `<svg ${attr}>${bg}
+        <rect x="38" y="8" width="124" height="132" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="100" y1="8" x2="100" y2="140" stroke="${S}" stroke-width="1"/>
+        <line x1="38" y1="48" x2="162" y2="48" stroke="${S}" stroke-width="1"/>
+        <circle cx="88" cy="96" r="2.5" fill="${A}"/>
+        <circle cx="112" cy="96" r="2.5" fill="${A}"/>
+        <line x1="18" y1="140" x2="182" y2="140" stroke="${FL}" stroke-width="1"/>
+      </svg>`,
+      // Oversized run — three sections
+      Os: `<svg ${attr}>${bg}
+        <rect x="10" y="8" width="180" height="132" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="70" y1="8" x2="70" y2="140" stroke="${S}" stroke-width="1"/>
+        <line x1="130" y1="8" x2="130" y2="140" stroke="${S}" stroke-width="1"/>
+        <line x1="10" y1="48" x2="190" y2="48" stroke="${S}" stroke-width="1"/>
+        <circle cx="40" cy="96" r="2.5" fill="${A}"/>
+        <circle cx="100" cy="96" r="2.5" fill="${A}"/>
+        <circle cx="160" cy="96" r="2.5" fill="${A}"/>
+        <line x1="4" y1="140" x2="196" y2="140" stroke="${FL}" stroke-width="1"/>
+      </svg>`
+    },
+    benches: {
+      // Single stool / short bench
+      S: `<svg ${attr}>${bg}
+        <rect x="65" y="76" width="70" height="12" rx="2" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="68" y="88" width="8" height="30" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="124" y="88" width="8" height="30" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="35" y1="118" x2="165" y2="118" stroke="${FL}" stroke-width="1"/>
+      </svg>`,
+      // 2-seater bench
+      M: `<svg ${attr}>${bg}
+        <rect x="22" y="74" width="156" height="14" rx="2" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="25" y="88" width="8" height="30" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="167" y="88" width="8" height="30" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="33" y1="102" x2="167" y2="102" stroke="${S}" stroke-width="1"/>
+        <line x1="8" y1="118" x2="192" y2="118" stroke="${FL}" stroke-width="1"/>
+      </svg>`,
+      // Banquette run — back + seat + base
+      L: `<svg ${attr}>${bg}
+        <rect x="10" y="46" width="180" height="28" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="10" y="74" width="180" height="14" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="70" y1="46" x2="70" y2="88" stroke="${S}" stroke-width="0.75"/>
+        <line x1="130" y1="46" x2="130" y2="88" stroke="${S}" stroke-width="0.75"/>
+        <rect x="10" y="88" width="180" height="10" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="4" y1="98" x2="196" y2="98" stroke="${FL}" stroke-width="1"/>
+      </svg>`,
+      // Multi-section banquette — 4 bays
+      Os: `<svg ${attr}>${bg}
+        <rect x="6" y="42" width="188" height="30" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="6" y="72" width="188" height="15" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="53" y1="42" x2="53" y2="87" stroke="${S}" stroke-width="0.75"/>
+        <line x1="100" y1="42" x2="100" y2="87" stroke="${S}" stroke-width="0.75"/>
+        <line x1="147" y1="42" x2="147" y2="87" stroke="${S}" stroke-width="0.75"/>
+        <rect x="6" y="87" width="188" height="10" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="2" y1="97" x2="198" y2="97" stroke="${FL}" stroke-width="1"/>
+      </svg>`
+    },
+    counters: {
+      // Small front desk
+      S: `<svg ${attr}>${bg}
+        <rect x="50" y="50" width="100" height="68" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="42" y="44" width="116" height="10" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="50" y1="96" x2="150" y2="96" stroke="${S}" stroke-width="0.75"/>
+        <line x1="30" y1="118" x2="170" y2="118" stroke="${FL}" stroke-width="1"/>
+      </svg>`,
+      // Standard reception desk
+      M: `<svg ${attr}>${bg}
+        <rect x="18" y="46" width="164" height="70" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="10" y="40" width="180" height="10" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="18" y1="94" x2="182" y2="94" stroke="${S}" stroke-width="0.75"/>
+        <line x1="100" y1="46" x2="100" y2="116" stroke="${S}" stroke-width="0.75"/>
+        <line x1="6" y1="116" x2="194" y2="116" stroke="${FL}" stroke-width="1"/>
+      </svg>`,
+      // Lobby reception run — three sections
+      L: `<svg ${attr}>${bg}
+        <rect x="6" y="42" width="188" height="74" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="2" y="36" width="196" height="10" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="6" y1="92" x2="194" y2="92" stroke="${S}" stroke-width="0.75"/>
+        <line x1="72" y1="42" x2="72" y2="116" stroke="${S}" stroke-width="0.75"/>
+        <line x1="132" y1="42" x2="132" y2="116" stroke="${S}" stroke-width="0.75"/>
+        <line x1="2" y1="116" x2="198" y2="116" stroke="${FL}" stroke-width="1"/>
+      </svg>`,
+      // Wrap-around counter — L-shape suggestion
+      Os: `<svg ${attr}>${bg}
+        <rect x="4" y="40" width="148" height="76" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="2" y="34" width="156" height="10" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="4" y="76" width="24" height="40" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="4" y1="92" x2="152" y2="92" stroke="${S}" stroke-width="0.75"/>
+        <line x1="2" y1="116" x2="198" y2="116" stroke="${FL}" stroke-width="1"/>
+      </svg>`
+    },
+    planters: {
+      // Small tabletop pot + leaf
+      S: `<svg ${attr}>${bg}
+        <path d="M78,118 L84,80 L116,80 L122,118 Z" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="84" y1="90" x2="116" y2="90" stroke="${S}" stroke-width="1"/>
+        <line x1="100" y1="90" x2="93" y2="58" stroke="${S}" stroke-width="1"/>
+        <line x1="100" y1="90" x2="107" y2="52" stroke="${S}" stroke-width="1"/>
+        <ellipse cx="92" cy="55" rx="10" ry="5" fill="${F}" stroke="${S}" stroke-width="1" transform="rotate(-20 92 55)"/>
+        <ellipse cx="108" cy="49" rx="10" ry="5" fill="${F}" stroke="${S}" stroke-width="1" transform="rotate(15 108 49)"/>
+        <line x1="45" y1="118" x2="155" y2="118" stroke="${FL}" stroke-width="1"/>
+      </svg>`,
+      // Floor planter — taller pot
+      M: `<svg ${attr}>${bg}
+        <path d="M62,132 L70,54 L130,54 L138,132 Z" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="70" y1="66" x2="130" y2="66" stroke="${S}" stroke-width="1"/>
+        <line x1="100" y1="66" x2="88" y2="28" stroke="${S}" stroke-width="1"/>
+        <line x1="100" y1="66" x2="100" y2="20" stroke="${S}" stroke-width="1"/>
+        <line x1="100" y1="66" x2="114" y2="30" stroke="${S}" stroke-width="1"/>
+        <ellipse cx="87" cy="24" rx="11" ry="6" fill="${F}" stroke="${S}" stroke-width="1" transform="rotate(-15 87 24)"/>
+        <ellipse cx="100" cy="16" rx="11" ry="6" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <ellipse cx="115" cy="26" rx="11" ry="6" fill="${F}" stroke="${S}" stroke-width="1" transform="rotate(20 115 26)"/>
+        <line x1="30" y1="132" x2="170" y2="132" stroke="${FL}" stroke-width="1"/>
+      </svg>`,
+      // Long divider trough — three plants
+      L: `<svg ${attr}>${bg}
+        <path d="M12,122 L20,78 L180,78 L188,122 Z" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="20" y1="90" x2="180" y2="90" stroke="${S}" stroke-width="1"/>
+        <line x1="50" y1="90" x2="43" y2="54" stroke="${S}" stroke-width="1"/>
+        <line x1="50" y1="90" x2="57" y2="47" stroke="${S}" stroke-width="1"/>
+        <ellipse cx="43" cy="50" rx="9" ry="5" fill="${F}" stroke="${S}" stroke-width="1" transform="rotate(-20 43 50)"/>
+        <ellipse cx="58" cy="43" rx="9" ry="5" fill="${F}" stroke="${S}" stroke-width="1" transform="rotate(15 58 43)"/>
+        <line x1="100" y1="90" x2="95" y2="48" stroke="${S}" stroke-width="1"/>
+        <line x1="100" y1="90" x2="106" y2="42" stroke="${S}" stroke-width="1"/>
+        <ellipse cx="95" cy="44" rx="9" ry="5" fill="${F}" stroke="${S}" stroke-width="1" transform="rotate(-10 95 44)"/>
+        <ellipse cx="107" cy="38" rx="9" ry="5" fill="${F}" stroke="${S}" stroke-width="1" transform="rotate(10 107 38)"/>
+        <line x1="155" y1="90" x2="149" y2="54" stroke="${S}" stroke-width="1"/>
+        <line x1="155" y1="90" x2="160" y2="48" stroke="${S}" stroke-width="1"/>
+        <ellipse cx="149" cy="50" rx="9" ry="5" fill="${F}" stroke="${S}" stroke-width="1" transform="rotate(-15 149 50)"/>
+        <ellipse cx="161" cy="44" rx="9" ry="5" fill="${F}" stroke="${S}" stroke-width="1" transform="rotate(10 161 44)"/>
+        <line x1="6" y1="122" x2="194" y2="122" stroke="${FL}" stroke-width="1"/>
+      </svg>`,
+      // Oversized run — four plants
+      Os: `<svg ${attr}>${bg}
+        <path d="M6,122 L14,75 L186,75 L194,122 Z" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="14" y1="88" x2="186" y2="88" stroke="${S}" stroke-width="1"/>
+        <line x1="36" y1="88" x2="30" y2="52" stroke="${S}" stroke-width="1"/>
+        <line x1="36" y1="88" x2="42" y2="46" stroke="${S}" stroke-width="1"/>
+        <ellipse cx="30" cy="48" rx="9" ry="5" fill="${F}" stroke="${S}" stroke-width="1" transform="rotate(-20 30 48)"/>
+        <ellipse cx="43" cy="42" rx="9" ry="5" fill="${F}" stroke="${S}" stroke-width="1" transform="rotate(15 43 42)"/>
+        <line x1="84" y1="88" x2="79" y2="50" stroke="${S}" stroke-width="1"/>
+        <line x1="84" y1="88" x2="89" y2="44" stroke="${S}" stroke-width="1"/>
+        <ellipse cx="79" cy="46" rx="9" ry="5" fill="${F}" stroke="${S}" stroke-width="1" transform="rotate(-10 79 46)"/>
+        <ellipse cx="90" cy="40" rx="9" ry="5" fill="${F}" stroke="${S}" stroke-width="1" transform="rotate(10 90 40)"/>
+        <line x1="130" y1="88" x2="125" y2="50" stroke="${S}" stroke-width="1"/>
+        <line x1="130" y1="88" x2="135" y2="44" stroke="${S}" stroke-width="1"/>
+        <ellipse cx="125" cy="46" rx="9" ry="5" fill="${F}" stroke="${S}" stroke-width="1" transform="rotate(-10 125 46)"/>
+        <ellipse cx="136" cy="40" rx="9" ry="5" fill="${F}" stroke="${S}" stroke-width="1" transform="rotate(10 136 40)"/>
+        <line x1="170" y1="88" x2="165" y2="52" stroke="${S}" stroke-width="1"/>
+        <line x1="170" y1="88" x2="174" y2="46" stroke="${S}" stroke-width="1"/>
+        <ellipse cx="165" cy="48" rx="9" ry="5" fill="${F}" stroke="${S}" stroke-width="1" transform="rotate(-15 165 48)"/>
+        <ellipse cx="175" cy="42" rx="9" ry="5" fill="${F}" stroke="${S}" stroke-width="1" transform="rotate(10 175 42)"/>
+        <line x1="2" y1="122" x2="198" y2="122" stroke="${FL}" stroke-width="1"/>
+      </svg>`
+    },
+    'wall-dividers': {
+      // Half-height panel + feet
+      S: `<svg ${attr}>${bg}
+        <rect x="75" y="72" width="50" height="58" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="80" y="128" width="12" height="10" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="108" y="128" width="12" height="10" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="25" y1="138" x2="175" y2="138" stroke="${FL}" stroke-width="1"/>
+      </svg>`,
+      // Full-height panel + base
+      M: `<svg ${attr}>${bg}
+        <rect x="75" y="8" width="50" height="122" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="77" y="128" width="46" height="8" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="25" y1="136" x2="175" y2="136" stroke="${FL}" stroke-width="1"/>
+      </svg>`,
+      // Extended panel with storage cubbies one side
+      L: `<svg ${attr}>${bg}
+        <rect x="22" y="8" width="156" height="122" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="100" y1="8" x2="100" y2="130" stroke="${S}" stroke-width="1"/>
+        <line x1="100" y1="50" x2="178" y2="50" stroke="${S}" stroke-width="0.75"/>
+        <line x1="100" y1="90" x2="178" y2="90" stroke="${S}" stroke-width="0.75"/>
+        <rect x="22" y="128" width="156" height="8" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="8" y1="136" x2="192" y2="136" stroke="${FL}" stroke-width="1"/>
+      </svg>`,
+      // Room-spanning panel — three bays
+      Os: `<svg ${attr}>${bg}
+        <rect x="6" y="8" width="188" height="122" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="70" y1="8" x2="70" y2="130" stroke="${S}" stroke-width="1"/>
+        <line x1="130" y1="8" x2="130" y2="130" stroke="${S}" stroke-width="1"/>
+        <line x1="6" y1="55" x2="70" y2="55" stroke="${S}" stroke-width="0.75"/>
+        <line x1="130" y1="55" x2="194" y2="55" stroke="${S}" stroke-width="0.75"/>
+        <rect x="6" y="128" width="188" height="8" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="2" y1="136" x2="198" y2="136" stroke="${FL}" stroke-width="1"/>
+      </svg>`
+    },
+    'floating-shelves': {
+      // Short shelf + 2 brackets + items
+      S: `<svg ${attr}>${bg}
+        <line x1="16" y1="14" x2="16" y2="138" stroke="${FL}" stroke-width="2"/>
+        <rect x="16" y="80" width="90" height="9" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <path d="M30,80 L30,92 L16,92" fill="none" stroke="${S}" stroke-width="1.5"/>
+        <path d="M94,80 L94,92 L80,92" fill="none" stroke="${S}" stroke-width="1.5"/>
+        <rect x="36" y="65" width="12" height="15" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="54" y="62" width="10" height="18" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <circle cx="76" cy="72" r="7" fill="${F}" stroke="${S}" stroke-width="1"/>
+      </svg>`,
+      // Standard shelf + 3 brackets + more items
+      M: `<svg ${attr}>${bg}
+        <line x1="12" y1="14" x2="12" y2="138" stroke="${FL}" stroke-width="2"/>
+        <rect x="12" y="78" width="148" height="9" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <path d="M26,78 L26,90 L12,90" fill="none" stroke="${S}" stroke-width="1.5"/>
+        <path d="M98,78 L98,90 L84,90" fill="none" stroke="${S}" stroke-width="1.5"/>
+        <path d="M148,78 L148,90 L134,90" fill="none" stroke="${S}" stroke-width="1.5"/>
+        <rect x="30" y="62" width="12" height="16" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="48" y="59" width="10" height="19" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="64" y="64" width="10" height="14" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <circle cx="90" cy="70" r="7" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="108" y="61" width="12" height="17" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <circle cx="132" cy="69" r="7" fill="${F}" stroke="${S}" stroke-width="1"/>
+      </svg>`,
+      // Long shelf + 4 brackets + full row of items
+      L: `<svg ${attr}>${bg}
+        <line x1="8" y1="14" x2="8" y2="138" stroke="${FL}" stroke-width="2"/>
+        <rect x="8" y="78" width="186" height="9" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <path d="M22,78 L22,90 L8,90" fill="none" stroke="${S}" stroke-width="1.5"/>
+        <path d="M74,78 L74,90 L60,90" fill="none" stroke="${S}" stroke-width="1.5"/>
+        <path d="M134,78 L134,90 L120,90" fill="none" stroke="${S}" stroke-width="1.5"/>
+        <path d="M184,78 L184,90 L170,90" fill="none" stroke="${S}" stroke-width="1.5"/>
+        <rect x="26" y="62" width="10" height="16" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="41" y="58" width="10" height="20" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <circle cx="60" cy="69" r="7" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="80" y="63" width="10" height="15" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <circle cx="104" cy="68" r="7" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="118" y="60" width="10" height="18" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="140" y="63" width="10" height="15" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <circle cx="160" cy="68" r="7" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="170" y="62" width="10" height="16" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+      </svg>`,
+      // Structural — two shelves stacked
+      Os: `<svg ${attr}>${bg}
+        <line x1="8" y1="12" x2="8" y2="140" stroke="${FL}" stroke-width="2"/>
+        <rect x="8" y="46" width="186" height="9" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="8" y="96" width="186" height="9" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <path d="M26,46 L26,58 L12,58" fill="none" stroke="${S}" stroke-width="1.5"/>
+        <path d="M100,46 L100,58 L86,58" fill="none" stroke="${S}" stroke-width="1.5"/>
+        <path d="M184,46 L184,58 L170,58" fill="none" stroke="${S}" stroke-width="1.5"/>
+        <path d="M26,96 L26,108 L12,108" fill="none" stroke="${S}" stroke-width="1.5"/>
+        <path d="M100,96 L100,108 L86,108" fill="none" stroke="${S}" stroke-width="1.5"/>
+        <path d="M184,96 L184,108 L170,108" fill="none" stroke="${S}" stroke-width="1.5"/>
+        <rect x="30" y="33" width="10" height="13" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <circle cx="56" cy="40" r="5" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="70" y="31" width="10" height="15" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="120" y="33" width="10" height="13" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="30" y="82" width="10" height="14" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <circle cx="56" cy="88" r="5" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="108" y="80" width="10" height="16" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="150" y="82" width="10" height="14" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+      </svg>`
+    },
+    'hanging-racks': {
+      // Short rack — 3 garments
+      S: `<svg ${attr}>${bg}
+        <line x1="30" y1="18" x2="170" y2="18" stroke="${FL}" stroke-width="2"/>
+        <line x1="82" y1="18" x2="82" y2="40" stroke="${S}" stroke-width="1.5"/>
+        <line x1="118" y1="18" x2="118" y2="40" stroke="${S}" stroke-width="1.5"/>
+        <rect x="64" y="38" width="72" height="7" rx="3" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="82" y1="45" x2="82" y2="41" stroke="${A}" stroke-width="2"/>
+        <line x1="100" y1="45" x2="100" y2="41" stroke="${A}" stroke-width="2"/>
+        <line x1="118" y1="45" x2="118" y2="41" stroke="${A}" stroke-width="2"/>
+        <rect x="77" y="45" width="10" height="32" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="95" y="45" width="10" height="36" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="113" y="45" width="10" height="29" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+      </svg>`,
+      // Standard rack — 6 garments
+      M: `<svg ${attr}>${bg}
+        <line x1="14" y1="18" x2="186" y2="18" stroke="${FL}" stroke-width="2"/>
+        <line x1="50" y1="18" x2="50" y2="40" stroke="${S}" stroke-width="1.5"/>
+        <line x1="150" y1="18" x2="150" y2="40" stroke="${S}" stroke-width="1.5"/>
+        <rect x="34" y="38" width="132" height="7" rx="3" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="50" y1="45" x2="50" y2="41" stroke="${A}" stroke-width="2"/>
+        <line x1="68" y1="45" x2="68" y2="41" stroke="${A}" stroke-width="2"/>
+        <line x1="86" y1="45" x2="86" y2="41" stroke="${A}" stroke-width="2"/>
+        <line x1="114" y1="45" x2="114" y2="41" stroke="${A}" stroke-width="2"/>
+        <line x1="132" y1="45" x2="132" y2="41" stroke="${A}" stroke-width="2"/>
+        <line x1="150" y1="45" x2="150" y2="41" stroke="${A}" stroke-width="2"/>
+        <rect x="45" y="45" width="10" height="33" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="63" y="45" width="10" height="29" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="81" y="45" width="10" height="36" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="109" y="45" width="10" height="30" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="127" y="45" width="10" height="34" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="145" y="45" width="10" height="29" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+      </svg>`,
+      // Long rack — 10 garments
+      L: `<svg ${attr}>${bg}
+        <line x1="6" y1="18" x2="194" y2="18" stroke="${FL}" stroke-width="2"/>
+        <line x1="30" y1="18" x2="30" y2="38" stroke="${S}" stroke-width="1.5"/>
+        <line x1="100" y1="18" x2="100" y2="38" stroke="${S}" stroke-width="1.5"/>
+        <line x1="170" y1="18" x2="170" y2="38" stroke="${S}" stroke-width="1.5"/>
+        <rect x="8" y="36" width="184" height="7" rx="3" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="20" y1="43" x2="20" y2="39" stroke="${A}" stroke-width="2"/>
+        <line x1="38" y1="43" x2="38" y2="39" stroke="${A}" stroke-width="2"/>
+        <line x1="56" y1="43" x2="56" y2="39" stroke="${A}" stroke-width="2"/>
+        <line x1="74" y1="43" x2="74" y2="39" stroke="${A}" stroke-width="2"/>
+        <line x1="92" y1="43" x2="92" y2="39" stroke="${A}" stroke-width="2"/>
+        <line x1="110" y1="43" x2="110" y2="39" stroke="${A}" stroke-width="2"/>
+        <line x1="128" y1="43" x2="128" y2="39" stroke="${A}" stroke-width="2"/>
+        <line x1="146" y1="43" x2="146" y2="39" stroke="${A}" stroke-width="2"/>
+        <line x1="164" y1="43" x2="164" y2="39" stroke="${A}" stroke-width="2"/>
+        <line x1="180" y1="43" x2="180" y2="39" stroke="${A}" stroke-width="2"/>
+        <rect x="15" y="43" width="10" height="31" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="33" y="43" width="10" height="35" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="51" y="43" width="10" height="29" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="69" y="43" width="10" height="33" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="87" y="43" width="10" height="30" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="105" y="43" width="10" height="35" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="123" y="43" width="10" height="28" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="141" y="43" width="10" height="32" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="159" y="43" width="10" height="36" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="175" y="43" width="10" height="30" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+      </svg>`,
+      // Multi-section — two runs side by side
+      Os: `<svg ${attr}>${bg}
+        <line x1="6" y1="16" x2="194" y2="16" stroke="${FL}" stroke-width="2"/>
+        <line x1="28" y1="16" x2="28" y2="36" stroke="${S}" stroke-width="1.5"/>
+        <line x1="97" y1="16" x2="97" y2="36" stroke="${S}" stroke-width="1.5"/>
+        <line x1="103" y1="16" x2="103" y2="36" stroke="${S}" stroke-width="1.5"/>
+        <line x1="172" y1="16" x2="172" y2="36" stroke="${S}" stroke-width="1.5"/>
+        <rect x="8" y="34" width="86" height="6" rx="3" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="106" y="34" width="86" height="6" rx="3" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="18" y1="40" x2="18" y2="36" stroke="${A}" stroke-width="2"/>
+        <line x1="34" y1="40" x2="34" y2="36" stroke="${A}" stroke-width="2"/>
+        <line x1="50" y1="40" x2="50" y2="36" stroke="${A}" stroke-width="2"/>
+        <line x1="66" y1="40" x2="66" y2="36" stroke="${A}" stroke-width="2"/>
+        <line x1="82" y1="40" x2="82" y2="36" stroke="${A}" stroke-width="2"/>
+        <line x1="116" y1="40" x2="116" y2="36" stroke="${A}" stroke-width="2"/>
+        <line x1="132" y1="40" x2="132" y2="36" stroke="${A}" stroke-width="2"/>
+        <line x1="148" y1="40" x2="148" y2="36" stroke="${A}" stroke-width="2"/>
+        <line x1="164" y1="40" x2="164" y2="36" stroke="${A}" stroke-width="2"/>
+        <line x1="180" y1="40" x2="180" y2="36" stroke="${A}" stroke-width="2"/>
+        <rect x="13" y="40" width="10" height="32" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="29" y="40" width="10" height="28" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="45" y="40" width="10" height="34" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="61" y="40" width="10" height="30" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="77" y="40" width="10" height="36" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="111" y="40" width="10" height="30" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="127" y="40" width="10" height="34" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="143" y="40" width="10" height="28" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="159" y="40" width="10" height="32" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+        <rect x="175" y="40" width="10" height="36" rx="1" fill="${F}" stroke="${S}" stroke-width="1"/>
+      </svg>`
+    },
+    headboards: {
+      // Single bed — narrow with inset panel
+      S: `<svg ${attr}>${bg}
+        <rect x="55" y="22" width="90" height="88" rx="3" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="65" y="32" width="70" height="68" rx="2" fill="none" stroke="${A}" stroke-width="0.75"/>
+        <rect x="65" y="108" width="10" height="22" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="125" y="108" width="10" height="22" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="25" y1="130" x2="175" y2="130" stroke="${FL}" stroke-width="1"/>
+      </svg>`,
+      // Double/queen — wider single inset
+      M: `<svg ${attr}>${bg}
+        <rect x="18" y="22" width="164" height="85" rx="3" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="28" y="32" width="144" height="65" rx="2" fill="none" stroke="${A}" stroke-width="0.75"/>
+        <rect x="28" y="105" width="10" height="22" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="162" y="105" width="10" height="22" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="8" y1="127" x2="192" y2="127" stroke="${FL}" stroke-width="1"/>
+      </svg>`,
+      // King — two inset panels
+      L: `<svg ${attr}>${bg}
+        <rect x="8" y="18" width="184" height="88" rx="3" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="18" y="28" width="76" height="68" rx="2" fill="none" stroke="${A}" stroke-width="0.75"/>
+        <rect x="106" y="28" width="76" height="68" rx="2" fill="none" stroke="${A}" stroke-width="0.75"/>
+        <rect x="18" y="104" width="10" height="22" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="172" y="104" width="10" height="22" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="4" y1="126" x2="196" y2="126" stroke="${FL}" stroke-width="1"/>
+      </svg>`,
+      // Multi-panel custom — three inset panels
+      Os: `<svg ${attr}>${bg}
+        <rect x="4" y="14" width="192" height="90" rx="3" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="12" y="22" width="52" height="74" rx="2" fill="none" stroke="${A}" stroke-width="0.75"/>
+        <rect x="74" y="22" width="52" height="74" rx="2" fill="none" stroke="${A}" stroke-width="0.75"/>
+        <rect x="136" y="22" width="52" height="74" rx="2" fill="none" stroke="${A}" stroke-width="0.75"/>
+        <rect x="12" y="102" width="10" height="22" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <rect x="178" y="102" width="10" height="22" rx="1" fill="${F}" stroke="${S}" stroke-width="1.5"/>
+        <line x1="2" y1="124" x2="198" y2="124" stroke="${FL}" stroke-width="1"/>
+      </svg>`
+    }
+  };
+  const svg = (svgs[typeId] && svgs[typeId][bucketId]) || svgPh(typeId + ' ' + bucketId);
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
+const DEFAULT_CONFIG = {
+  installation: {
+    UNLOADING_MIN: 7.5,
+    MOVING_MIN: 15,
+    FLOOR_MIN: 15,
+    types: {
+      'freestanding':  { name: 'Freestanding', installMin: 30 },
+      'built-in':      { name: 'Built-in',     installMin: 60 }
+    }
+    // Note: Water / electric outlet install time is excluded from corpus scoring.
+    // Appliance, tap, and sink installation time is captured via the platform's
+    // hardware inclusion feature — not via corpus settings.
+  },
+  productTypes: [
+    {
+      id: 'cabinets', name: 'Cabinets', icon: '📦',
+      defaultInstallType: 'built-in',
+      hasCountertops: true, hasUpholstery: false,
+      hasModules: true, hasPanels: true,
+      intro: "Use for cabinet runs — base units, wall units, tall units. Score the carcasses here; doors and drawer fronts are excluded (they don't drive install time meaningfully).\n\nIf this card includes a countertop, score the countertop separately in the countertop calculator — the toggle below excludes its install time here.",
+      moduleBuckets: [
+        { id: 'S',  name: 'Small',     wMax: 60,  hMax: 80,  dMax: 60, ratio: 0.6, example: '600 base unit, nightstand-sized', images: [bucketSvg('cabinets','S')] },
+        { id: 'M',  name: 'Medium',    wMax: 90,  hMax: 200, dMax: 70, ratio: 1.0, example: 'standard tall larder, 900 base',   images: [bucketSvg('cabinets','M')] },
+        { id: 'L',  name: 'Large',     wMax: 120, hMax: 240, dMax: 80, ratio: 1.4, example: 'full-height pantry, 1200 wide',   images: [bucketSvg('cabinets','L')] },
+        { id: 'Os', name: 'Oversized', wMax: null,hMax: null,dMax: null,ratio: 2.0, example: "won't fit a standard van",         images: [bucketSvg('cabinets','Os')] }
+      ],
+      panelDefaultMode: 'm2',
+      panelBuckets: [
+        { id: 'S', name: 'Small sheet',  avgM2: 0.8, example: 'half-sheet end panel' },
+        { id: 'M', name: 'Medium sheet', avgM2: 2.0, example: 'standard end panel'   },
+        { id: 'L', name: 'Large sheet',  avgM2: 4.0, example: 'oversized panel'      }
+      ],
+      panelRatioOnSite: 0.35
+    },
+    {
+      id: 'benches', name: 'Benches', icon: '🪑',
+      defaultInstallType: 'freestanding',
+      hasCountertops: false, hasUpholstery: true,
+      hasModules: true, hasPanels: true,
+      intro: "Use for benches — single seats, banquettes, banquette runs.\n\nIf upholstered, upholstery is scored separately in the upholstery calculator.",
+      moduleBuckets: [
+        { id: 'S', name: 'Small',     wMax: 80,  hMax: 50, dMax: 45, ratio: 0.5, example: 'single-seat stool / short bench', images: [bucketSvg('benches','S')] },
+        { id: 'M', name: 'Medium',    wMax: 160, hMax: 50, dMax: 45, ratio: 0.9, example: '2-seater bench',                  images: [bucketSvg('benches','M')] },
+        { id: 'L', name: 'Large',     wMax: 240, hMax: 50, dMax: 45, ratio: 1.3, example: 'banquette run',                   images: [bucketSvg('benches','L')] },
+        { id: 'Os', name: 'Oversized',                              ratio: 1.8, example: 'multi-section banquette',         images: [bucketSvg('benches','Os')] }
+      ],
+      panelDefaultMode: 'm2',
+      panelBuckets: [
+        { id: 'S', name: 'Small sheet',  avgM2: 0.8 },
+        { id: 'M', name: 'Medium sheet', avgM2: 2.0 },
+        { id: 'L', name: 'Large sheet',  avgM2: 4.0 }
+      ],
+      panelRatioOnSite: 0.30
+    },
+    {
+      id: 'counters', name: 'Counters / reception desks', icon: '🏢',
+      defaultInstallType: 'built-in',
+      hasCountertops: true, hasUpholstery: false,
+      hasModules: true, hasPanels: true,
+      intro: "Use for reception / front-of-house counters and runs. Countertop install is owned by the countertop calculator when used.",
+      moduleBuckets: [
+        { id: 'S', name: 'Small',     wMax: 120, hMax: 110, dMax: 60, ratio: 0.8, example: 'small front desk',           images: [bucketSvg('counters','S')] },
+        { id: 'M', name: 'Medium',    wMax: 220, hMax: 110, dMax: 70, ratio: 1.4, example: 'standard reception desk',    images: [bucketSvg('counters','M')] },
+        { id: 'L', name: 'Large',     wMax: 320, hMax: 120, dMax: 80, ratio: 2.0, example: 'lobby reception run',        images: [bucketSvg('counters','L')] },
+        { id: 'Os', name: 'Oversized',                              ratio: 2.8, example: 'wrap-around / multi-module', images: [bucketSvg('counters','Os')] }
+      ],
+      panelDefaultMode: 'm2',
+      panelBuckets: [
+        { id: 'S', name: 'Small sheet',  avgM2: 0.8 },
+        { id: 'M', name: 'Medium sheet', avgM2: 2.0 },
+        { id: 'L', name: 'Large sheet',  avgM2: 4.0 }
+      ],
+      panelRatioOnSite: 0.35
+    },
+    {
+      id: 'wall-paneling', name: 'Wall paneling', icon: '🧱',
+      defaultInstallType: 'built-in',
+      hasCountertops: false, hasUpholstery: false,
+      hasModules: false, hasPanels: true,
+      intro: "Use for wall paneling — flat sheets installed on a wall surface. Pick m² (raw coverage) or count (panel buckets) — both produce the same corpus number for the same total coverage.",
+      moduleBuckets: [],
+      panelDefaultMode: 'm2',
+      panelBuckets: [
+        { id: 'S', name: 'Small sheet',  avgM2: 0.8, example: 'half-sheet panel' },
+        { id: 'M', name: 'Medium sheet', avgM2: 2.0, example: 'standard sheet'   },
+        { id: 'L', name: 'Large sheet',  avgM2: 4.0, example: 'oversized sheet'  }
+      ],
+      panelRatioOnSite: 0.25
+    },
+    {
+      id: 'planters', name: 'Planters', icon: '🌿',
+      defaultInstallType: 'freestanding',
+      hasCountertops: false, hasUpholstery: false,
+      hasModules: true, hasPanels: false,
+      intro: "Use for planters — typically fully preassembled units that need placement only.",
+      moduleBuckets: [
+        { id: 'S', name: 'Small',  wMax: 60,  hMax: 60,  dMax: 40, ratio: 0.5, example: 'desktop / tabletop planter',  images: [bucketSvg('planters','S')] },
+        { id: 'M', name: 'Medium', wMax: 120, hMax: 100, dMax: 60, ratio: 0.9, example: 'floor planter, single',       images: [bucketSvg('planters','M')] },
+        { id: 'L', name: 'Large',  wMax: 200, hMax: 120, dMax: 60, ratio: 1.4, example: 'long divider planter',        images: [bucketSvg('planters','L')] },
+        { id: 'Os', name: 'Oversized',                          ratio: 2.0, example: 'multi-section planter > 2 m', images: [bucketSvg('planters','Os')] }
+      ],
+      panelDefaultMode: 'm2', panelBuckets: [], panelRatioOnSite: 0
+    },
+    {
+      id: 'wall-dividers', name: 'Wall dividers', icon: '🚪',
+      defaultInstallType: 'freestanding',
+      hasCountertops: false, hasUpholstery: false,
+      hasModules: true, hasPanels: true,
+      intro: "Use for room dividers — freestanding or anchored. Score frame as modules and any external cladding as panels.",
+      moduleBuckets: [
+        { id: 'S', name: 'Small',  wMax: 120, hMax: 200, dMax: 30, ratio: 0.7, example: 'half-height divider',          images: [bucketSvg('wall-dividers','S')] },
+        { id: 'M', name: 'Medium', wMax: 200, hMax: 240, dMax: 40, ratio: 1.2, example: 'full-height divider',          images: [bucketSvg('wall-dividers','M')] },
+        { id: 'L', name: 'Large',  wMax: 300, hMax: 280, dMax: 50, ratio: 1.8, example: 'extended divider with storage',images: [bucketSvg('wall-dividers','L')] },
+        { id: 'Os', name: 'Oversized',                          ratio: 2.5, example: 'room-spanning divider',         images: [bucketSvg('wall-dividers','Os')] }
+      ],
+      panelDefaultMode: 'm2',
+      panelBuckets: [
+        { id: 'S', name: 'Small sheet',  avgM2: 0.8 },
+        { id: 'M', name: 'Medium sheet', avgM2: 2.0 },
+        { id: 'L', name: 'Large sheet',  avgM2: 4.0 }
+      ],
+      panelRatioOnSite: 0.28
+    },
+    {
+      id: 'floating-shelves', name: 'Floating shelves', icon: '📚',
+      defaultInstallType: 'built-in',
+      hasCountertops: false, hasUpholstery: false,
+      hasModules: true, hasPanels: false,
+      intro: "Use for floating / wall-fixed shelves. Each shelf is one module event. Over 2.4 m or structurally integrated → Oversized.",
+      moduleBuckets: [
+        { id: 'S', name: 'Small',  wMax: 80,  hMax: 5, dMax: 25, ratio: 0.3, example: 'short shelf, single bracket pair',  images: [bucketSvg('floating-shelves','S')] },
+        { id: 'M', name: 'Medium', wMax: 160, hMax: 5, dMax: 30, ratio: 0.5, example: 'standard shelf, multi-bracket',     images: [bucketSvg('floating-shelves','M')] },
+        { id: 'L', name: 'Large',  wMax: 240, hMax: 5, dMax: 35, ratio: 0.8, example: 'long shelf, structural',            images: [bucketSvg('floating-shelves','L')] },
+        { id: 'Os', name: 'Oversized',                        ratio: 1.2, example: 'over 2.4 m / structural integration',images: [bucketSvg('floating-shelves','Os')] }
+      ],
+      panelDefaultMode: 'm2', panelBuckets: [], panelRatioOnSite: 0
+    },
+    {
+      id: 'hanging-racks', name: 'Hanging racks', icon: '👔',
+      defaultInstallType: 'built-in',
+      hasCountertops: false, hasUpholstery: false,
+      hasModules: true, hasPanels: false,
+      intro: "Use for hanging / clothing racks fixed to wall or ceiling.",
+      moduleBuckets: [
+        { id: 'S', name: 'Small',  wMax: 80,  hMax: 30, dMax: 40, ratio: 0.3, example: 'short rack',                 images: [bucketSvg('hanging-racks','S')] },
+        { id: 'M', name: 'Medium', wMax: 160, hMax: 40, dMax: 50, ratio: 0.6, example: 'standard rack',              images: [bucketSvg('hanging-racks','M')] },
+        { id: 'L', name: 'Large',  wMax: 240, hMax: 50, dMax: 60, ratio: 0.9, example: 'long rack with brackets',    images: [bucketSvg('hanging-racks','L')] },
+        { id: 'Os', name: 'Oversized',                        ratio: 1.4, example: 'multi-section / ceiling rack',images: [bucketSvg('hanging-racks','Os')] }
+      ],
+      panelDefaultMode: 'm2', panelBuckets: [], panelRatioOnSite: 0
+    },
+    {
+      id: 'headboards', name: 'Headboards', icon: '🛏️',
+      defaultInstallType: 'freestanding',
+      hasCountertops: false, hasUpholstery: true,
+      hasModules: true, hasPanels: true,
+      intro: "Use for headboards — wall-mounted or attached to a bed frame.\n\nIf upholstered, upholstery is scored separately in the upholstery calculator.",
+      moduleBuckets: [
+        { id: 'S', name: 'Small',  wMax: 120, hMax: 110, dMax: 15, ratio: 0.5, example: 'single bed headboard',         images: [bucketSvg('headboards','S')] },
+        { id: 'M', name: 'Medium', wMax: 180, hMax: 120, dMax: 20, ratio: 0.8, example: 'queen / double headboard',     images: [bucketSvg('headboards','M')] },
+        { id: 'L', name: 'Large',  wMax: 240, hMax: 140, dMax: 25, ratio: 1.2, example: 'king / wall-spanning',         images: [bucketSvg('headboards','L')] },
+        { id: 'Os', name: 'Oversized',                          ratio: 1.8, example: 'multi-panel custom headboard',  images: [bucketSvg('headboards','Os')] }
+      ],
+      panelDefaultMode: 'm2',
+      panelBuckets: [
+        { id: 'S', name: 'Small sheet',  avgM2: 0.8 },
+        { id: 'M', name: 'Medium sheet', avgM2: 2.0 },
+        { id: 'L', name: 'Large sheet',  avgM2: 4.0 }
+      ],
+      panelRatioOnSite: 0.28
+    }
+  ],
+  parser: {
+    defaultTemplate: 'cutr-default-v1',
+    columnNote: 'Users must enable the Qty column in the platform partlist view before pasting (default template assumes 10 columns including Qty).',
+    columnMap: {
+      partId: 0, moduleLabel: 1, thickness: 2, partType: 3,
+      thicknessLabel: 4, material: 5, reqMaterial: 6, width: 7, length: 8, qty: 9
+    },
+    moduleIdRegex: '^(M\\d+)',
+    excludedPartTypes: ['Door', 'Door Single Left', 'Door Single Right', 'Door Double', 'Drawer Front'],
+    modulePartTypes: ['Top', 'Bottom', 'Side', 'Backwall', 'Back', 'Vertical Divider', 'Horizontal Divider', 'Shelf'],
+    panelPartTypes: ['Side Panel', 'Top Panel', 'Slat Side panel', 'Slat Top panel', 'Wall Panel', 'End Panel', 'Cladding']
+  }
+};
+
+let CONFIG = loadConfig();
+function loadConfig() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+    const parsed = JSON.parse(raw);
+    const base = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+    return Object.assign(base, parsed);
+  } catch (e) {
+    return JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+  }
+}
+function saveConfig() { localStorage.setItem(STORAGE_KEY, JSON.stringify(CONFIG)); }
+
+// ============================================================================
+// JOB STATE
+// One file with file-level settings + N product type cards
+// ============================================================================
+
+let JOB = {
+  fileName: '',
+  floor: 0,    // file-level (installation type is now per card)
+  cards: []
+};
+
+function initJob() {
+  JOB.fileName = '';
+  JOB.floor = 0;
+  JOB.cards = [];
+}
+
+function makeCardFor(productTypeId) {
+  const pt = CONFIG.productTypes.find(t => t.id === productTypeId);
+  if (!pt) return null;
+  const cardCountSame = JOB.cards.filter(c => c.productTypeId === productTypeId).length;
+  const defaultIT = pt.defaultInstallType;
+  const card = {
+    id: 'c' + Date.now() + Math.floor(Math.random() * 1000),
+    productTypeId,
+    name: pt.name + (cardCountSame > 0 ? ` #${cardCountSame + 1}` : ''),
+    installationType: (defaultIT && defaultIT !== 'required') ? defaultIT : null,
+    countertopExcluded: true,
+    upholsteryExcluded: true,
+    panelInputMode: pt.panelDefaultMode || 'm2',
+    modules: {},
+    panelsM2: { site: 0, unknown: 0 },
+    panelsCount: {},
+    collapsed: false,
+    importedAt: null,
+    importSummary: null
+  };
+  (pt.moduleBuckets || []).forEach(b => card.modules[b.id] = 0);
+  (pt.panelBuckets || []).forEach(b => card.panelsCount[b.id] = { site: 0, unknown: 0 });
+  return card;
+}
+
+function addCard(productTypeId) {
+  const card = makeCardFor(productTypeId);
+  if (!card) return;
+  // Collapse all existing cards so the new one is in focus
+  JOB.cards.forEach(c => c.collapsed = true);
+  JOB.cards.push(card);
+  renderCards();
+  recalc();
+}
+
+function removeCard(cardId) {
+  JOB.cards = JOB.cards.filter(c => c.id !== cardId);
+  renderCards();
+  recalc();
+}
+
+function getCard(cardId) {
+  return JOB.cards.find(c => c.id === cardId);
+}
+function getPt(productTypeId) {
+  return CONFIG.productTypes.find(t => t.id === productTypeId);
+}
+
+// ============================================================================
+// RENDERING
+// ============================================================================
+
+function setMode(mode) {
+  document.getElementById('user-mode').classList.toggle('hidden', mode !== 'user');
+  document.getElementById('admin-mode').classList.toggle('hidden', mode !== 'admin');
+  document.getElementById('sticky-total').classList.toggle('hidden', mode !== 'user');
+  document.getElementById('mode-user').classList.toggle('active', mode === 'user');
+  document.getElementById('mode-admin').classList.toggle('active', mode === 'admin');
+  if (mode === 'admin') renderAdmin();
+}
+
+function renderInstallCards() {
+  // File-level install type removed — each product card has its own install type selector.
+}
+
+function renderTypePicker() {
+  const picker = document.getElementById('type-picker');
+  picker.innerHTML = '';
+  CONFIG.productTypes.forEach(pt => {
+    const chip = document.createElement('button');
+    chip.className = 'type-chip';
+    chip.innerHTML = `${pt.icon || ''} + ${escapeHtml(pt.name)}`;
+    chip.addEventListener('click', () => addCard(pt.id));
+    picker.appendChild(chip);
+  });
+}
+
+function renderCards() {
+  const c = document.getElementById('cards-container');
+  if (JOB.cards.length === 0) {
+    c.innerHTML = `<div class="empty-state" id="cards-empty">No product types added yet — pick from the chips above.</div>`;
+    return;
+  }
+  c.innerHTML = '';
+  JOB.cards.forEach((card, idx) => {
+    const pt = getPt(card.productTypeId);
+    if (!pt) return;
+    const cardRaw = computeCardRaw(card, pt).raw;
+    const wrap = document.createElement('div');
+    wrap.className = 'product-card' + (card.collapsed ? ' collapsed' : '');
+    wrap.innerHTML = `
+      <div class="card-header">
+        <button class="card-toggle" title="Collapse / expand" onclick="toggleCardCollapse('${card.id}')">▾</button>
+        <span class="badge">${pt.icon || (idx + 1)}</span>
+        <input class="name-input" data-card="${card.id}" type="text" value="${escapeHtml(card.name)}" />
+        <span class="type-tag">${escapeHtml(pt.name)}</span>
+        <span class="live-corpus">raw <span class="num">${cardRaw.toFixed(2)}</span></span>
+        <button class="card-remove" title="Remove this card" onclick="removeCard('${card.id}')">×</button>
+      </div>
+      <div class="card-summary">${computeCardSummary(card, pt)}</div>
+      <div class="card-body">
+        ${pt.intro ? `<div class="intro-block">${escapeHtml(pt.intro)}</div>` : ''}
+        ${renderInstallTypeSection(card, pt)}
+        ${renderExclusionBanners(card, pt)}
+        <div class="card-toolbar">
+          <button class="toolbar-btn experimental" onclick="openPartlistModal('${card.id}')">📋 Paste partlist (experimental)</button>
+          ${card.importSummary ? '' : ''}
+        </div>
+        ${card.importSummary ? `<div class="import-banner">
+          <span>↳ Filled from partlist · ${escapeHtml(card.importSummary)}</span>
+          <button class="reset-link" onclick="clearImport('${card.id}')">Clear marker</button>
+        </div>` : ''}
+        ${pt.hasModules ? renderModulesSection(card, pt) : ''}
+        ${pt.hasPanels ? renderPanelsSection(card, pt) : ''}
+        ${!pt.hasModules && !pt.hasPanels ? `<div class="empty-state">This product type has no scored inputs.</div>` : ''}
+      </div>
+    `;
+    c.appendChild(wrap);
+  });
+  bindCardEvents();
+}
+
+function bindCardEvents() {
+  // Install type per card
+  document.querySelectorAll('[data-card-install]').forEach(el => {
+    el.addEventListener('click', () => {
+      const [cardId, installType] = el.dataset.cardInstall.split('|');
+      const card = getCard(cardId);
+      if (card) { card.installationType = installType; renderCards(); recalc(); }
+    });
+  });
+  // Name input
+  document.querySelectorAll('input.name-input[data-card]').forEach(el => {
+    el.addEventListener('input', e => {
+      const card = getCard(el.dataset.card); if (card) { card.name = e.target.value; recalc(); }
+    });
+  });
+  // Exclusion toggle
+  document.querySelectorAll('[data-excl-card]').forEach(b => {
+    b.addEventListener('click', () => {
+      const card = getCard(b.dataset.exclCard);
+      if (!card) return;
+      const key = b.dataset.excl;
+      card[key] = b.dataset.value === 'true';
+      renderCards(); recalc();
+    });
+  });
+  // Module input
+  document.querySelectorAll('input[data-card-module]').forEach(el => {
+    el.addEventListener('input', e => {
+      const [cardId, bucket] = el.dataset.cardModule.split('|');
+      const card = getCard(cardId);
+      if (card) { card.modules[bucket] = parseFloat(e.target.value) || 0; recalcLive(cardId); recalc(); }
+    });
+  });
+  // Panel m2 input
+  document.querySelectorAll('input[data-card-panel-m2]').forEach(el => {
+    el.addEventListener('input', e => {
+      const [cardId, mode] = el.dataset.cardPanelM2.split('|');
+      const card = getCard(cardId);
+      if (card) { card.panelsM2[mode] = parseFloat(e.target.value) || 0; recalcLive(cardId); recalc(); }
+    });
+  });
+  // Panel count input
+  document.querySelectorAll('input[data-card-panel-count]').forEach(el => {
+    el.addEventListener('input', e => {
+      const [cardId, bucket, mode] = el.dataset.cardPanelCount.split('|');
+      const card = getCard(cardId);
+      if (card) {
+        if (!card.panelsCount[bucket]) card.panelsCount[bucket] = { site: 0, unknown: 0 };
+        card.panelsCount[bucket][mode] = parseFloat(e.target.value) || 0;
+        recalcLive(cardId); recalc();
+      }
+    });
+  });
+  // Panel mode toggle
+  document.querySelectorAll('[data-card-panel-mode]').forEach(b => {
+    b.addEventListener('click', () => {
+      const [cardId, mode] = b.dataset.cardPanelMode.split('|');
+      const card = getCard(cardId);
+      if (card) { card.panelInputMode = mode; renderCards(); recalc(); }
+    });
+  });
+}
+
+function recalcLive(cardId) {
+  const card = getCard(cardId);
+  const pt = getPt(card.productTypeId);
+  const raw = computeCardRaw(card, pt).raw;
+  const cardEl = document.querySelector(`input.name-input[data-card="${cardId}"]`);
+  if (cardEl) {
+    const numEl = cardEl.closest('.card-header').querySelector('.live-corpus .num');
+    if (numEl) numEl.textContent = raw.toFixed(2);
+  }
+}
+
+function renderExclusionBanners(card, pt) {
+  let html = '';
+  if (pt.hasCountertops) {
+    html += `<div class="exclusion-banner">
+      <div class="label">
+        <strong>Countertop in this card?</strong> If the countertop is scored through the countertop calculator, its install time is captured there — don't score it here.
+      </div>
+      <div class="seg">
+        <button class="${card.countertopExcluded === true ? 'active' : ''}" data-excl-card="${card.id}" data-excl="countertopExcluded" data-value="true">Yes — excluded</button>
+        <button class="${card.countertopExcluded === false ? 'active' : ''}" data-excl-card="${card.id}" data-excl="countertopExcluded" data-value="false">No countertop</button>
+      </div>
+    </div>`;
+  }
+  if (pt.hasUpholstery) {
+    html += `<div class="exclusion-banner">
+      <div class="label">
+        <strong>Upholstery in this card?</strong> Upholstery install time is captured by the upholstery calculator — never scored here.
+      </div>
+      <div class="seg">
+        <button class="${card.upholsteryExcluded === true ? 'active' : ''}" data-excl-card="${card.id}" data-excl="upholsteryExcluded" data-value="true">Yes — excluded</button>
+        <button class="${card.upholsteryExcluded === false ? 'active' : ''}" data-excl-card="${card.id}" data-excl="upholsteryExcluded" data-value="false">No upholstery</button>
+      </div>
+    </div>`;
+  }
+  return html;
+}
+
+function renderModulesSection(card, pt) {
+  if (!pt.hasModules || !pt.moduleBuckets || pt.moduleBuckets.length === 0) return '';
+  let html = `<div class="subsection">
+    <div class="subsection-label">
+      Modules
+      <span class="normal">— preassembled boxes / units</span>
+    </div>`;
+  pt.moduleBuckets.forEach(b => {
+    const images = (b.images && b.images.length) ? b.images : [];
+    html += `<div class="bucket-row">
+      <div class="images">
+        ${images.length ? images.slice(0,3).map(src => `<img src="${escapeAttr(src)}" alt="${escapeAttr(b.name)}" onclick="openLightbox('${escapeAttr(src)}')" />`).join('')
+                        : `<div class="ph">no image</div>`}
+      </div>
+      <div class="bucket-info">
+        <div class="name">${escapeHtml(b.name)}</div>
+        <div class="range">${formatBucketRange(b)}</div>
+        ${b.example ? `<div class="example">e.g., ${escapeHtml(b.example)}</div>` : ''}
+      </div>
+      <div class="contrib">+${(b.ratio || 0).toFixed(2)} corpus<br/>each</div>
+      <div class="input-box">
+        <input class="num-input" type="number" min="0" step="1"
+          data-card-module="${card.id}|${b.id}"
+          value="${card.modules[b.id] || 0}" />
+        <span class="unit">× ${escapeHtml(b.id)}</span>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
+function renderPanelsSection(card, pt) {
+  if (!pt.hasPanels) return '';
+  const mode = card.panelInputMode || pt.panelDefaultMode || 'm2';
+  let html = `<div class="subsection">
+    <div class="subsection-label">
+      External panels
+      <span class="normal">— end panels, cladding, wall paneling</span>
+    </div>
+    <div class="panel-mode-toggle">
+      <button class="${mode === 'm2' ? 'active' : ''}" data-card-panel-mode="${card.id}|m2">By m²</button>
+      <button class="${mode === 'count' ? 'active' : ''}" data-card-panel-mode="${card.id}|count">By count (per bucket)</button>
+    </div>
+    <div class="panel-note">
+      <strong style="color:var(--cutr-amber-700);">Important:</strong>
+      Panels preassembled onto modules <strong>don't count</strong> — their install time is folded into module install.
+      Only enter panels that are <strong>installed on site</strong>. If you don't yet know which panels will be preassembled vs installed on site,
+      use the <strong>Unknown</strong> row — it scores as on-site (conservative) and flags this card as provisional in the backtrace.
+    </div>
+  `;
+  if (mode === 'm2') {
+    const r = pt.panelRatioOnSite || 0;
+    html += `
+      <div class="panel-row-m2">
+        <div class="label">
+          <div class="main">Installed on-site</div>
+          <div class="desc">m² of external panels installed on site</div>
+        </div>
+        <div class="contrib">+${r.toFixed(2)} corpus / m²</div>
+        <div class="input-box">
+          <input class="num-input" type="number" min="0" step="0.1"
+            data-card-panel-m2="${card.id}|site" value="${card.panelsM2.site || 0}" />
+          <span class="unit">m²</span>
+        </div>
+      </div>
+      <div class="panel-row-m2 provisional">
+        <div class="label">
+          <div class="main">Unknown — provisional (assumed on-site)</div>
+          <div class="desc">Use when the preassembled/on-site split isn't decided yet. Flagged in backtrace.</div>
+        </div>
+        <div class="contrib">+${r.toFixed(2)} corpus / m²</div>
+        <div class="input-box">
+          <input class="num-input" type="number" min="0" step="0.1"
+            data-card-panel-m2="${card.id}|unknown" value="${card.panelsM2.unknown || 0}" />
+          <span class="unit">m²</span>
+        </div>
+      </div>
+    `;
+  } else {
+    const r = pt.panelRatioOnSite || 0;
+    (pt.panelBuckets || []).forEach(b => {
+      const perPanel = r * (b.avgM2 || 0);
+      const slot = card.panelsCount[b.id] || { site: 0, unknown: 0 };
+      html += `<div class="panel-count-row">
+        <div class="bucket-info">
+          <div class="name">${escapeHtml(b.name)}</div>
+          <div class="range">≈ ${(b.avgM2 || 0).toFixed(2)} m² each</div>
+          ${b.example ? `<div class="example">${escapeHtml(b.example)}</div>` : ''}
+        </div>
+        <div class="contrib">+${perPanel.toFixed(2)} corpus<br/>each</div>
+        <div class="input-pair">
+          <div>
+            <div class="small-label">On-site</div>
+            <input class="num-input" type="number" min="0" step="1"
+              data-card-panel-count="${card.id}|${b.id}|site" value="${slot.site || 0}" />
+          </div>
+        </div>
+        <div class="input-pair">
+          <div>
+            <div class="small-label warn">⚠ Unknown</div>
+            <input class="num-input" type="number" min="0" step="1"
+              data-card-panel-count="${card.id}|${b.id}|unknown" value="${slot.unknown || 0}" />
+          </div>
+        </div>
+        <div style="font-size:11px; color:var(--cutr-text-secondary); font-family:var(--cutr-font-mono);">
+          panels
+        </div>
+      </div>`;
+    });
+    if (!pt.panelBuckets || pt.panelBuckets.length === 0) {
+      html += `<div class="empty-state">No panel buckets configured for this product type. Add them in Admin.</div>`;
+    }
+  }
+  html += `</div>`;
+  return html;
+}
+
+function renderInstallTypeSection(card, pt) {
+  const I = CONFIG.installation;
+  let html = `<div class="subsection">
+    <div class="subsection-label">
+      Installation type
+      <span class="normal">— how will this product be installed?</span>
+    </div>
+    <div class="card-install-type">`;
+  Object.entries(I.types).forEach(([id, t]) => {
+    const perCorpus = I.UNLOADING_MIN + I.MOVING_MIN + t.installMin;
+    const active = card.installationType === id;
+    html += `<button class="card-install-card${active ? ' active' : ''}" data-card-install="${card.id}|${id}">
+      <span class="name">${escapeHtml(t.name)}</span>
+      <span class="mins">${perCorpus} min/corpus (floor 0)</span>
+    </button>`;
+  });
+  html += `</div>`;
+  if (!card.installationType) {
+    html += `<div class="install-required-note">⚠ Select the installation type for this card to calculate install time.</div>`;
+  }
+  html += `<div class="install-type-note">Water / electric outlet install time is handled via the platform's hardware inclusion — not scored here.</div>`;
+  html += `</div>`;
+  return html;
+}
+
+function formatBucketRange(b) {
+  if (b.wMax == null && b.hMax == null && b.dMax == null) return 'anything beyond Large';
+  const fmt = v => v == null ? '∞' : `≤${v}`;
+  return `W ${fmt(b.wMax)} · H ${fmt(b.hMax)} · D ${fmt(b.dMax)} cm`;
+}
+
+function clearImport(cardId) {
+  const card = getCard(cardId);
+  if (!card) return;
+  card.importedAt = null;
+  card.importSummary = null;
+  renderCards();
+}
+
+function toggleCardCollapse(cardId) {
+  const card = getCard(cardId);
+  if (!card) return;
+  card.collapsed = !card.collapsed;
+  renderCards();
+}
+
+function collapseAllCards() {
+  JOB.cards.forEach(c => c.collapsed = true);
+  renderCards();
+}
+
+function expandAllCards() {
+  JOB.cards.forEach(c => c.collapsed = false);
+  renderCards();
+}
+
+function computeCardSummary(card, pt) {
+  const parts = [];
+  if (pt.hasModules) {
+    (pt.moduleBuckets || []).forEach(b => {
+      const n = card.modules[b.id] || 0;
+      if (n > 0) parts.push(`${n}× ${b.id}`);
+    });
+  }
+  if (pt.hasPanels) {
+    if (card.panelInputMode === 'm2') {
+      const site = card.panelsM2.site || 0;
+      const unk = card.panelsM2.unknown || 0;
+      const total = site + unk;
+      if (total > 0) parts.push(unk > 0 ? `${total.toFixed(1)} m² (${unk.toFixed(1)} provisional)` : `${total.toFixed(1)} m²`);
+    } else {
+      let totalSite = 0, totalUnk = 0;
+      (pt.panelBuckets || []).forEach(b => {
+        const slot = card.panelsCount[b.id] || { site: 0, unknown: 0 };
+        totalSite += slot.site || 0;
+        totalUnk += slot.unknown || 0;
+      });
+      const total = totalSite + totalUnk;
+      if (total > 0) parts.push(totalUnk > 0 ? `${total} panels (${totalUnk} provisional)` : `${total} panels`);
+    }
+  }
+  const raw = computeCardRaw(card, pt).raw;
+  const installAbbrev = { 'freestanding': 'Freestanding', 'built-in': 'Built-in' };
+  const installLabel = card.installationType
+    ? (installAbbrev[card.installationType] || card.installationType)
+    : '⚠ type not set';
+  if (parts.length === 0) return `empty · ${installLabel} · raw 0.00`;
+  return parts.join(' · ') + ` · ${installLabel} · raw ${raw.toFixed(2)}`;
+}
+
+// ============================================================================
+// CALCULATION
+// ============================================================================
+
+function computeCardRaw(card, pt) {
+  let raw = 0;
+  const parts = [];
+  const provisional = [];
+
+  if (pt.hasModules) {
+    pt.moduleBuckets.forEach(b => {
+      const n = card.modules[b.id] || 0;
+      if (n > 0) {
+        const c = n * (b.ratio || 0);
+        raw += c;
+        parts.push({ label: `${b.name} module × ${n}`, calc: `${n} × ${b.ratio}`, contrib: c });
+      }
+    });
+  }
+  if (pt.hasPanels) {
+    const r = pt.panelRatioOnSite || 0;
+    if (card.panelInputMode === 'm2') {
+      const site = card.panelsM2.site || 0;
+      const unknown = card.panelsM2.unknown || 0;
+      if (site > 0) {
+        const c = site * r; raw += c;
+        parts.push({ label: `Panels on-site (${site} m²)`, calc: `${site} × ${r}`, contrib: c });
+      }
+      if (unknown > 0) {
+        const c = unknown * r; raw += c;
+        const p = { label: `Panels unknown (${unknown} m², provisional, assumed on-site)`, calc: `${unknown} × ${r}`, contrib: c, provisional: true };
+        parts.push(p); provisional.push(p);
+      }
+    } else {
+      (pt.panelBuckets || []).forEach(b => {
+        const slot = card.panelsCount[b.id] || { site: 0, unknown: 0 };
+        const perPanel = r * (b.avgM2 || 0);
+        if (slot.site > 0) {
+          const c = slot.site * perPanel; raw += c;
+          parts.push({ label: `${b.name} panel on-site × ${slot.site}`, calc: `${slot.site} × ${perPanel.toFixed(3)} (= ${r} × ${b.avgM2} m²)`, contrib: c });
+        }
+        if (slot.unknown > 0) {
+          const c = slot.unknown * perPanel; raw += c;
+          const p = { label: `${b.name} panel unknown × ${slot.unknown} (provisional)`, calc: `${slot.unknown} × ${perPanel.toFixed(3)}`, contrib: c, provisional: true };
+          parts.push(p); provisional.push(p);
+        }
+      });
+    }
+  }
+  return { raw, parts, provisional };
+}
+
+function computeJob() {
+  let totalRaw = 0;
+  const cardResults = [];
+  const provisional = [];
+  JOB.cards.forEach(card => {
+    const pt = getPt(card.productTypeId);
+    if (!pt) return;
+    const r = computeCardRaw(card, pt);
+    totalRaw += r.raw;
+    cardResults.push({ card, pt, ...r });
+    r.provisional.forEach(p => provisional.push({ cardName: card.name, ...p }));
+  });
+  return { raw: totalRaw, ceil: Math.ceil(totalRaw), cards: cardResults, provisional };
+}
+
+// Computes accurate per-card install time, then finds the closest standard
+// file-level setting for the platform (Freestanding or Built-in).
+function computeInstallBreakdown(jobResult) {
+  const I = CONFIG.installation;
+  const floorMin = (JOB.floor || 0) * I.FLOOR_MIN;
+  const { raw: rawTotal, ceil: corpusCeil, cards } = jobResult;
+
+  // Per-card accurate time using each card's own install type
+  let accurateMin = 0;
+  let hasUnset = false;
+  const cardTimes = cards.map(cr => {
+    if (!cr.card.installationType) {
+      hasUnset = true;
+      return { ...cr, perCorpus: null, cardMin: null, installTypeName: '⚠ not set' };
+    }
+    const t = I.types[cr.card.installationType];
+    if (!t) {
+      hasUnset = true;
+      return { ...cr, perCorpus: null, cardMin: null, installTypeName: '⚠ unknown type' };
+    }
+    const perCorpus = I.UNLOADING_MIN + I.MOVING_MIN + t.installMin + floorMin;
+    const cardMin = cr.raw * perCorpus;
+    accurateMin += cardMin;
+    return { ...cr, perCorpus, cardMin, installTypeName: t.name };
+  });
+
+  // Find the standard setting whose per-corpus rate is closest to the
+  // effective per-corpus rate of the accurate total. Comparing rates
+  // (not totals) avoids ceiling-rounding bias when rawTotal < corpusCeil.
+  let recommended = null;
+  if (!hasUnset && cards.length > 0 && rawTotal > 0) {
+    const effectiveRate = accurateMin / rawTotal;
+    let bestId = null, bestDiff = Infinity;
+    Object.entries(I.types).forEach(([id, t]) => {
+      const perCorpus = I.UNLOADING_MIN + I.MOVING_MIN + t.installMin + floorMin;
+      const diff = Math.abs(perCorpus - effectiveRate);
+      if (diff < bestDiff) { bestDiff = diff; bestId = id; }
+    });
+    if (bestId) {
+      const t = I.types[bestId];
+      const perCorpus = I.UNLOADING_MIN + I.MOVING_MIN + t.installMin + floorMin;
+      const totalMin = corpusCeil * perCorpus;
+      recommended = {
+        id: bestId, typeName: t.name, perCorpus,
+        totalMin, totalHours: totalMin / 60,
+        delta: totalMin - accurateMin,
+        breakdown: { unloading: I.UNLOADING_MIN, moving: I.MOVING_MIN, install: t.installMin, floor: floorMin }
+      };
+    }
+  }
+
+  const typeSet = new Set(cards.filter(c => c.card.installationType).map(c => c.card.installationType));
+  return { accurateMin, accurateHours: accurateMin / 60, hasUnset, cardTimes, recommended, floorMin, isMixed: typeSet.size > 1 };
+}
+
+function renderPlatformInterp(r, install) {
+  if (r.cards.length === 0) {
+    return `<div style="font-size:13px; color:var(--cutr-text-secondary); padding:4px 0;">Add product cards to see install time.</div>`;
+  }
+  if (install.hasUnset) {
+    let html = `<div style="color:var(--cutr-warning); font-size:12px; margin-bottom:10px; font-weight:500;">⚠ Set installation type on all cards to get the recommended file setting.</div>`;
+    install.cardTimes.forEach(ct => {
+      html += `<div class="pi-row"><span class="k">${escapeHtml(ct.card.name)}</span>
+        <span class="v" style="${ct.cardMin === null ? 'color:var(--cutr-warning)' : ''}">${escapeHtml(ct.installTypeName)}</span></div>`;
+    });
+    return html;
+  }
+  const rec = install.recommended;
+  let html = '';
+  if (!rec) {
+    // Cards exist and all have install types, but no modules entered yet
+    html += `<div style="font-size:13px; color:var(--cutr-text-secondary); padding:4px 0 12px;">Enter modules to see the recommended file setting.</div>`;
+  }
+  if (rec) {
+    html += `<div style="background:var(--cutr-amber-100); padding:10px 12px; border-left:3px solid var(--cutr-brand); margin-bottom:14px;">
+      <div class="pi-label" style="margin-bottom:4px;">Set in platform for this file</div>
+      <div style="font-size:20px; font-weight:700; color:var(--cutr-amber-700); letter-spacing:-0.01em;">${escapeHtml(rec.typeName)}</div>
+      <div style="font-family:var(--cutr-font-mono); font-size:11px; color:var(--cutr-n-700); margin-top:4px;">
+        ${r.ceil} corpus × ${rec.perCorpus} min/corpus = ${rec.totalMin.toFixed(1)} min (${rec.totalHours.toFixed(2)} hrs)
+      </div>
+      ${install.isMixed ? `<div style="font-size:11px; color:var(--cutr-text-secondary); font-family:var(--cutr-font-mono); margin-top:3px;">Mixed types in file — closest to per-card total · Δ ${rec.delta >= 0 ? '+' : ''}${rec.delta.toFixed(1)} min</div>` : ''}
+    </div>`;
+  }
+  html += `<div class="pi-label">Per-card breakdown</div>`;
+  install.cardTimes.forEach(ct => {
+    html += `<div class="pi-row">
+      <span class="k">${escapeHtml(ct.card.name)} <span style="font-weight:400; color:var(--cutr-n-600);">[${escapeHtml(ct.installTypeName)}]</span></span>
+      <span class="v">${ct.cardMin !== null ? ct.cardMin.toFixed(1) + ' min' : '—'}</span>
+    </div>`;
+  });
+  html += `<div class="pi-formula">Accurate per-card total: ${install.accurateMin.toFixed(1)} min (${install.accurateHours.toFixed(2)} hrs)</div>`;
+  if (rec) {
+    html += `<div class="pi-formula">Formula: ${rec.breakdown.unloading} unloading + ${rec.breakdown.moving} moving + ${rec.breakdown.install} install + ${install.floorMin} floor = ${rec.perCorpus} min/corpus</div>`;
+  }
+  return html;
+}
+
+function recalc() {
+  const r = computeJob();
+  const install = computeInstallBreakdown(r);
+  const rec = install.recommended;
+
+  document.getElementById('total-corpus').textContent = r.ceil;
+  document.getElementById('total-raw').textContent = `raw ${r.raw.toFixed(2)} → ceil ${r.ceil}`;
+  document.getElementById('sticky-total-num').textContent = r.ceil;
+  document.getElementById('sticky-install').textContent = rec
+    ? `· ${rec.typeName} · floor ${JOB.floor} · ${rec.totalMin.toFixed(0)} min (${rec.totalHours.toFixed(2)} h)`
+    : install.hasUnset && JOB.cards.length > 0
+      ? '· ⚠ Set install type on each card'
+      : `· floor ${JOB.floor}`;
+
+  // Per-card breakdown
+  const bd = document.getElementById('card-breakdown');
+  if (r.cards.length === 0) {
+    bd.innerHTML = '';
+  } else {
+    bd.innerHTML = r.cards.map(c => `
+      <div class="row">
+        <span>${escapeHtml(c.card.name)}</span>
+        <span class="num">raw ${c.raw.toFixed(2)}</span>
+      </div>
+    `).join('') + `
+      <div class="row total">
+        <span>Sum → ceil</span>
+        <span class="num">${r.raw.toFixed(2)} → ${r.ceil}</span>
+      </div>
+    `;
+  }
+
+  // Platform interpretation
+  document.getElementById('platform-interp-body').innerHTML = renderPlatformInterp(r, install);
+
+  // Backtrace
+  document.getElementById('backtrace-text').textContent = buildBacktrace(r, install);
+  const flag = document.getElementById('provisional-flag');
+  if (r.provisional.length > 0) {
+    flag.classList.remove('hidden');
+    flag.innerHTML = `<strong>⚠ Provisional sum.</strong> The following lines were scored on-site as a provisional value; revisit once the preassembled/on-site split is confirmed:<br>` +
+      r.provisional.map(p => `• <em>${escapeHtml(p.cardName)}</em>: ${escapeHtml(p.label)} (contribution ${p.contrib.toFixed(2)})`).join('<br>');
+  } else {
+    flag.classList.add('hidden');
+  }
+}
+
+function buildBacktrace(r, install) {
+  const dt = new Date();
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  const stamp = dt.toLocaleString('sv-SE', { timeZone: tz }).replace(/\..+/, '');
+
+  let s = `Corpus Calculation — V2\n`;
+  s += `Generated: ${stamp} (${tz})\n`;
+  s += `File name: ${JOB.fileName || '(unnamed)'}\n`;
+  s += `Floor: ${JOB.floor}\n`;
+  s += `\n`;
+  if (r.cards.length === 0) {
+    s += `(no product types added yet)\n`;
+  } else {
+    r.cards.forEach((c, idx) => {
+      const ct = install.cardTimes.find(t => t.card.id === c.card.id);
+      s += `${idx + 1}. ${c.card.name} [${c.pt.name}]\n`;
+      if (c.card.installationType) {
+        const t = CONFIG.installation.types[c.card.installationType];
+        s += `   Install type: ${t ? t.name : c.card.installationType}\n`;
+      } else {
+        s += `   Install type: ⚠ not set\n`;
+      }
+      if (c.pt.hasCountertops) {
+        s += `   Countertop: ${c.card.countertopExcluded ? 'excluded (via countertop calc)' : 'no countertop in this card'}\n`;
+      }
+      if (c.pt.hasUpholstery) {
+        s += `   Upholstery: ${c.card.upholsteryExcluded ? 'excluded (via upholstery calc)' : 'no upholstery in this card'}\n`;
+      }
+      if (c.card.importedAt) {
+        s += `   Source: partlist paste at ${c.card.importedAt}\n`;
+        if (c.card.importSummary) s += `      ${c.card.importSummary}\n`;
+      }
+      if (c.parts.length === 0) {
+        s += `   (no inputs)\n`;
+      } else {
+        c.parts.forEach(p => {
+          s += `   - ${p.label}${p.provisional ? ' ⚠ provisional' : ''}\n`;
+          s += `       contribution: ${p.contrib.toFixed(2)}  (${p.calc})\n`;
+        });
+      }
+      s += `   Card raw: ${c.raw.toFixed(2)}`;
+      if (ct && ct.cardMin !== null) s += ` · install: ${c.raw.toFixed(2)} raw × ${ct.perCorpus} min/corpus = ${ct.cardMin.toFixed(1)} min`;
+      s += '\n\n';
+    });
+  }
+  s += `Total: ceil(${r.raw.toFixed(2)}) = ${r.ceil} corpus\n`;
+  s += `\nPlatform interpretation (installation time):\n`;
+  if (install.recommended) {
+    const rec = install.recommended;
+    s += `  Recommended file setting: ${rec.typeName}\n`;
+    s += `  ${r.ceil} corpus × ${rec.perCorpus} min/corpus = ${rec.totalMin.toFixed(1)} min (${rec.totalHours.toFixed(2)} hrs)\n`;
+    s += `  Accurate per-card total: ${install.accurateMin.toFixed(1)} min (${install.accurateHours.toFixed(2)} hrs)\n`;
+    if (install.isMixed) {
+      s += `  [Mixed install types — ${rec.typeName} is closest · Δ ${rec.delta >= 0 ? '+' : ''}${rec.delta.toFixed(1)} min]\n`;
+    }
+    s += `  Formula: ${rec.breakdown.unloading} unloading + ${rec.breakdown.moving} moving + ${rec.breakdown.install} install + ${install.floorMin} floor = ${rec.perCorpus} min/corpus\n`;
+  } else if (install.hasUnset) {
+    s += `  ⚠ Installation type not set on one or more cards — set all cards to get a recommendation.\n`;
+  }
+  if (r.provisional.length > 0) {
+    s += `\n⚠ PROVISIONAL — this corpus number is provisional. Re-run after the preassembled/on-site split is confirmed for:\n`;
+    r.provisional.forEach(p => { s += `   • ${p.cardName}: ${p.label}\n`; });
+  }
+  s += `\nInstruction: Paste this block into the comment section of the quote.\n`;
+  return s;
+}
+
+function copyBacktrace() {
+  const text = document.getElementById('backtrace-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copy-backtrace');
+    btn.textContent = '✓ Copied';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = '📋 Copy block';
+      btn.classList.remove('copied');
+    }, 1500);
+  });
+}
+
+function resetJob() {
+  if (!confirm('Reset this file? All inputs will be cleared.')) return;
+  initJob();
+  document.getElementById('file-name').value = '';
+  document.getElementById('floor-input').value = '0';
+  renderCards();
+  recalc();
+}
+
+// ============================================================================
+// PARTLIST IMPORT (per-card)
+// ============================================================================
+
+let PARTLIST_STATE = { cardId: null, parsed: null };
+let ADMIN_EXPANDED = new Set();
+
+function openPartlistModal(cardId) {
+  PARTLIST_STATE.cardId = cardId;
+  PARTLIST_STATE.parsed = null;
+  document.getElementById('partlist-modal').classList.remove('hidden');
+  document.getElementById('apply-partlist-btn').disabled = true;
+  renderPartlistModalBody();
+}
+function closePartlistModal() { document.getElementById('partlist-modal').classList.add('hidden'); }
+
+function renderPartlistModalBody() {
+  const card = getCard(PARTLIST_STATE.cardId);
+  const pt = card ? getPt(card.productTypeId) : null;
+  const body = document.getElementById('partlist-modal-body');
+  body.innerHTML = `
+    <div class="instruction-block">
+      <strong>How to paste a partlist for "${escapeHtml(card ? card.name : '')}" (${escapeHtml(pt ? pt.name : '')})</strong><br>
+      <strong>1.</strong> In your platform's partlist view, enable the <strong>Qty column</strong> (Settings → Columns). The default template requires Qty.<br>
+      <strong>2.</strong> Filter the partlist to the parts belonging to this card only (one product type).<br>
+      <strong>3.</strong> Copy the rows and paste below. The parser uses the Cutr default template:
+      <span class="template">P-#  ·  M# - Part type  ·  T (mm)  ·  Part type  ·  T label  ·  Material  ·  Req. material  ·  W  ·  L  ·  Qty</span>
+      Doors and drawer fronts are excluded automatically (V2 exclusion).<br>
+      Modules fill into the module rows; external panels fill into the panel rows (current mode for this card: <strong>${card && card.panelInputMode === 'm2' ? 'by m²' : 'by count'}</strong>).
+    </div>
+    <textarea class="paste-area" id="partlist-paste" placeholder="Paste the partlist rows here…"></textarea>
+    <div style="margin-top:10px; display:flex; gap:8px;">
+      <button class="btn btn-primary" onclick="parsePartlist()">Parse</button>
+      <button class="btn" onclick="document.getElementById('partlist-paste').value=''; document.getElementById('partlist-result').innerHTML='';">Clear</button>
+    </div>
+    <div id="partlist-result"></div>
+  `;
+}
+
+function parsePartlist() {
+  const raw = document.getElementById('partlist-paste').value;
+  if (!raw.trim()) return;
+  const card = getCard(PARTLIST_STATE.cardId);
+  const pt = card ? getPt(card.productTypeId) : null;
+  if (!pt) return;
+
+  const map = CONFIG.parser.columnMap;
+  const moduleRegex = new RegExp(CONFIG.parser.moduleIdRegex);
+  const excluded = (CONFIG.parser.excludedPartTypes || []).map(s => s.toLowerCase());
+  const panelPartTypes = (CONFIG.parser.panelPartTypes || []).map(s => s.toLowerCase());
+
+  const lines = raw.split('\n').map(l => l.trim()).filter(l => l.length > 0);
+  const cols = Object.keys(map).length;
+  let rows = [];
+  const looksOnePerLine = lines.length >= cols && lines.length % cols === 0
+    && lines.slice(0, cols).every(l => !l.includes('\t') && !l.includes(','));
+  if (looksOnePerLine) {
+    for (let i = 0; i < lines.length; i += cols) rows.push(lines.slice(i, i + cols));
+  } else {
+    rows = lines.map(l => {
+      if (l.includes('\t')) return l.split('\t').map(s => s.trim());
+      return l.split(/\s{2,}|,/).map(s => s.trim());
+    }).filter(r => r.length >= cols - 1);
+  }
+
+  const groups = {};
+  let ignoredDoors = 0;
+  rows.forEach(r => {
+    const moduleLabel = r[map.moduleLabel] || '';
+    const partType = (r[map.partType] || '').trim();
+    const w = parseFloat(r[map.width]) || 0;
+    const len = parseFloat(r[map.length]) || 0;
+    const qty = parseFloat(r[map.qty]) || 1;
+    if (excluded.some(ex => partType.toLowerCase().includes(ex) || moduleLabel.toLowerCase().includes(ex))) {
+      ignoredDoors += qty;
+      return;
+    }
+    const m = moduleLabel.match(moduleRegex);
+    const moduleId = m ? m[1] : '__ungrouped__';
+    if (!groups[moduleId]) groups[moduleId] = { id: moduleId, parts: [], label: moduleLabel };
+    groups[moduleId].parts.push({ moduleLabel, partType, w, len, qty });
+  });
+
+  const classified = Object.values(groups).map(g => {
+    const types = g.parts.map(p => p.partType.toLowerCase());
+    const hasTop = types.some(t => t === 'top' || (t.includes('top') && !t.includes('panel')));
+    const hasBottom = types.some(t => t.includes('bottom'));
+    const hasSide = types.some(t => t === 'side' || (t.includes('side') && !t.includes('panel')));
+    const hasBack = types.some(t => t.includes('backwall') || t === 'back');
+    const looksLikeModule = hasTop && hasBottom && hasSide && hasBack;
+    const allPanelLike = g.parts.length > 0 && g.parts.every(p => panelPartTypes.some(pp => p.partType.toLowerCase().includes(pp)));
+
+    if (looksLikeModule) {
+      const sideParts = g.parts.filter(p => p.partType.toLowerCase() === 'side');
+      const topParts = g.parts.filter(p => p.partType.toLowerCase() === 'top' && !p.partType.toLowerCase().includes('panel'));
+      const height = sideParts.length ? Math.max(...sideParts.map(p => p.len)) : 0;
+      const width = topParts.length ? Math.max(...topParts.map(p => p.len)) : 0;
+      const depth = topParts.length ? Math.max(...topParts.map(p => p.w)) : (sideParts.length ? Math.max(...sideParts.map(p => p.w)) : 0);
+      const bucket = findBucketForDims(pt, { w: width, h: height, d: depth });
+      return { ...g, classification: 'module', dims: { w: width, h: height, d: depth }, bucket };
+    }
+    if (allPanelLike) {
+      const panels = [];
+      g.parts.forEach(p => {
+        for (let i = 0; i < p.qty; i++) panels.push({ m2: (p.w * p.len) / 1e6, w: p.w, l: p.len, partType: p.partType });
+      });
+      return { ...g, classification: 'panel', panels };
+    }
+    return { ...g, classification: 'unknown' };
+  });
+
+  PARTLIST_STATE.parsed = { groups: classified, ignoredDoors };
+  renderPartlistResult();
+}
+
+function findBucketForDims(pt, dims) {
+  if (!pt.moduleBuckets || pt.moduleBuckets.length === 0) return null;
+  const wcm = (dims.w || 0) / 10;
+  const hcm = (dims.h || 0) / 10;
+  const dcm = (dims.d || 0) / 10;
+  for (const b of pt.moduleBuckets) {
+    if (b.wMax == null && b.hMax == null && b.dMax == null) continue;
+    const fits = (b.wMax == null || wcm <= b.wMax) &&
+                 (b.hMax == null || hcm <= b.hMax) &&
+                 (b.dMax == null || dcm <= b.dMax);
+    if (fits) return b.id;
+  }
+  return 'Os';
+}
+
+function findPanelBucketForM2(pt, m2) {
+  if (!pt.panelBuckets || pt.panelBuckets.length === 0) return null;
+  let best = null, bestDelta = Infinity;
+  pt.panelBuckets.forEach(b => {
+    const d = Math.abs((b.avgM2 || 0) - m2);
+    if (d < bestDelta) { bestDelta = d; best = b.id; }
+  });
+  return best;
+}
+
+function renderPartlistResult() {
+  const card = getCard(PARTLIST_STATE.cardId);
+  const pt = card ? getPt(card.productTypeId) : null;
+  const p = PARTLIST_STATE.parsed;
+  const el = document.getElementById('partlist-result');
+  if (!p || !pt) { el.innerHTML = ''; return; }
+
+  const moduleCounts = {};
+  let panelTotalM2 = 0;
+  const panelCounts = {};
+  let unknownGroups = 0;
+  p.groups.forEach(g => {
+    if (g.classification === 'module' && g.bucket) {
+      moduleCounts[g.bucket] = (moduleCounts[g.bucket] || 0) + 1;
+    } else if (g.classification === 'panel') {
+      g.panels.forEach(panel => {
+        panelTotalM2 += panel.m2;
+        if (pt.panelBuckets && pt.panelBuckets.length > 0) {
+          const b = findPanelBucketForM2(pt, panel.m2);
+          if (b) panelCounts[b] = (panelCounts[b] || 0) + 1;
+        }
+      });
+    } else if (g.classification === 'unknown') {
+      unknownGroups++;
+    }
+  });
+
+  const moduleStr = Object.keys(moduleCounts).length
+    ? Object.entries(moduleCounts).map(([k,v]) => `${v}× ${k}`).join(', ') : 'none';
+  const panelCountStr = Object.keys(panelCounts).length
+    ? Object.entries(panelCounts).map(([k,v]) => `${v}× ${k}`).join(', ') : 'none';
+
+  el.innerHTML = `
+    <div class="parse-result">
+      <strong>Parse summary</strong> · ${p.groups.length} groups · ${p.ignoredDoors} doors/drawer fronts ignored${unknownGroups > 0 ? ` · ${unknownGroups} unrecognised group(s)` : ''}<br>
+      <strong>Will fill into "${escapeHtml(card.name)}":</strong><br>
+      &nbsp;• Modules → ${moduleStr}<br>
+      ${pt.hasPanels ? `&nbsp;• Panels → ${panelTotalM2.toFixed(2)} m² total ${pt.panelBuckets && pt.panelBuckets.length ? `(buckets: ${panelCountStr})` : ''}<br>` : ''}
+      <span style="font-size:11px; color:var(--cutr-text-secondary);">All filled panels go into the <strong>${card.panelInputMode === 'm2' ? 'on-site m²' : 'on-site count'}</strong> input. Move to "Unknown" manually if the assembly plan is not confirmed.</span>
+    </div>
+  `;
+  PARTLIST_STATE.parsed.moduleCounts = moduleCounts;
+  PARTLIST_STATE.parsed.panelTotalM2 = panelTotalM2;
+  PARTLIST_STATE.parsed.panelCounts = panelCounts;
+  PARTLIST_STATE.parsed.unknownGroups = unknownGroups;
+  document.getElementById('apply-partlist-btn').disabled = false;
+}
+
+function applyPartlist() {
+  const card = getCard(PARTLIST_STATE.cardId);
+  const pt = card ? getPt(card.productTypeId) : null;
+  const p = PARTLIST_STATE.parsed;
+  if (!pt || !p) return;
+
+  if (pt.hasModules) {
+    pt.moduleBuckets.forEach(b => card.modules[b.id] = p.moduleCounts[b.id] || 0);
+  }
+  if (pt.hasPanels) {
+    if (card.panelInputMode === 'm2') {
+      card.panelsM2 = { site: +p.panelTotalM2.toFixed(2), unknown: 0 };
+    } else {
+      pt.panelBuckets.forEach(b => {
+        card.panelsCount[b.id] = { site: p.panelCounts[b.id] || 0, unknown: 0 };
+      });
+    }
+  }
+  const moduleStr = Object.entries(p.moduleCounts).map(([k,v]) => `${v}× ${k}`).join(', ') || 'none';
+  card.importedAt = new Date().toISOString();
+  card.importSummary = `modules: ${moduleStr} · panels: ${p.panelTotalM2.toFixed(2)} m² · ignored ${p.ignoredDoors} doors`;
+
+  closePartlistModal();
+  renderCards();
+  recalc();
+}
+
+// ============================================================================
+// LIGHTBOX
+// ============================================================================
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.remove('hidden');
+}
+function closeLightbox() { document.getElementById('lightbox').classList.add('hidden'); }
+
+// ============================================================================
+// ADMIN
+// ============================================================================
+
+function setAdminTab(tab) {
+  document.querySelectorAll('.admin-tab').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
+  document.getElementById('admin-tab-types').classList.toggle('hidden', tab !== 'types');
+  document.getElementById('admin-tab-parser').classList.toggle('hidden', tab !== 'parser');
+  document.getElementById('admin-tab-install').classList.toggle('hidden', tab !== 'install');
+  document.getElementById('admin-tab-json').classList.toggle('hidden', tab !== 'json');
+  if (tab === 'types') renderAdminTypes();
+  if (tab === 'parser') renderAdminParser();
+  if (tab === 'install') renderAdminInstall();
+  if (tab === 'json') loadConfigToJson();
+}
+function renderAdmin() { renderAdminTypes(); }
+
+function toggleAdminSection(key) {
+  if (ADMIN_EXPANDED.has(key)) ADMIN_EXPANDED.delete(key);
+  else ADMIN_EXPANDED.add(key);
+  const bodyEl = document.querySelector(`[data-admin-body="${key}"]`);
+  const chevronEl = document.querySelector(`[data-admin-chevron="${key}"]`);
+  if (bodyEl) bodyEl.style.display = ADMIN_EXPANDED.has(key) ? '' : 'none';
+  if (chevronEl) chevronEl.textContent = ADMIN_EXPANDED.has(key) ? '▾' : '▸';
+}
+
+function renderAdminTypes() {
+  const c = document.getElementById('admin-tab-types');
+  c.innerHTML = CONFIG.productTypes.map((pt, idx) => {
+    const key = 'type-' + pt.id;
+    const expanded = ADMIN_EXPANDED.has(key);
+    return `
+    <div class="admin-section">
+      <div class="admin-section-header" onclick="toggleAdminSection('${key}')">
+        <span>${pt.icon || ''} ${escapeHtml(pt.name)} <span class="meta">id: ${escapeHtml(pt.id)}</span></span>
+        <span data-admin-chevron="${key}">${expanded ? '▾' : '▸'}</span>
+      </div>
+      <div class="admin-section-body" data-admin-body="${key}" style="${expanded ? '' : 'display:none'}">
+        <div class="admin-row">
+          <label>Icon (emoji): <input type="text" style="width:60px;" value="${escapeHtml(pt.icon||'')}" onchange="CONFIG.productTypes[${idx}].icon=this.value; saveConfig(); renderTypePicker(); renderCards(); renderAdminTypes();"></label>
+          <label><input type="checkbox" ${pt.hasModules ? 'checked' : ''} onchange="CONFIG.productTypes[${idx}].hasModules=this.checked; saveConfig(); renderAdminTypes();"> Has modules</label>
+          <label><input type="checkbox" ${pt.hasPanels ? 'checked' : ''} onchange="CONFIG.productTypes[${idx}].hasPanels=this.checked; saveConfig(); renderAdminTypes();"> Has panels</label>
+          <label><input type="checkbox" ${pt.hasCountertops ? 'checked' : ''} onchange="CONFIG.productTypes[${idx}].hasCountertops=this.checked; saveConfig(); renderAdminTypes();"> Has countertops (show exclusion)</label>
+          <label><input type="checkbox" ${pt.hasUpholstery ? 'checked' : ''} onchange="CONFIG.productTypes[${idx}].hasUpholstery=this.checked; saveConfig(); renderAdminTypes();"> Has upholstery (show exclusion)</label>
+          <label>Default install type:
+            <select onchange="CONFIG.productTypes[${idx}].defaultInstallType=this.value; saveConfig();">
+              <option value="required" ${pt.defaultInstallType === 'required' ? 'selected' : ''}>⚠ Requires user input</option>
+              ${Object.entries(CONFIG.installation.types).map(([id, t]) =>
+                `<option value="${id}" ${pt.defaultInstallType === id ? 'selected' : ''}>${escapeHtml(t.name)}</option>`).join('')}
+            </select>
+          </label>
+          ${pt.hasPanels ? `
+            <label>Panel default mode:
+              <select onchange="CONFIG.productTypes[${idx}].panelDefaultMode=this.value; saveConfig();">
+                <option value="m2" ${pt.panelDefaultMode === 'm2' ? 'selected' : ''}>m²</option>
+                <option value="count" ${pt.panelDefaultMode === 'count' ? 'selected' : ''}>count by bucket</option>
+              </select>
+            </label>
+          ` : ''}
+        </div>
+
+        <div style="margin: 12px 0;">
+          <div class="field-label">Intro text (shown above the inputs)</div>
+          <textarea style="width:100%; min-height:70px; font-family:var(--cutr-font-primary); font-size:13px; padding:8px; border:1px solid var(--cutr-rule); border-radius:2px;"
+            onchange="CONFIG.productTypes[${idx}].intro=this.value; saveConfig();">${escapeHtml(pt.intro || '')}</textarea>
+        </div>
+
+        ${pt.hasModules ? `
+          <h4 style="font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--cutr-text-secondary); margin:14px 0 8px;">Module size buckets</h4>
+          <table class="admin-table">
+            <thead><tr><th>ID</th><th>Name</th><th>W max (cm)</th><th>H max (cm)</th><th>D max (cm)</th><th>Ratio /unit</th><th>Example</th><th>Image URLs (one per line)</th></tr></thead>
+            <tbody>
+              ${pt.moduleBuckets.map((b, bidx) => `
+                <tr>
+                  <td><strong>${escapeHtml(b.id)}</strong></td>
+                  <td><input type="text" value="${escapeHtml(b.name)}" onchange="CONFIG.productTypes[${idx}].moduleBuckets[${bidx}].name=this.value; saveConfig();"></td>
+                  <td><input type="number" value="${b.wMax ?? ''}" onchange="CONFIG.productTypes[${idx}].moduleBuckets[${bidx}].wMax=this.value===''?null:+this.value; saveConfig();"></td>
+                  <td><input type="number" value="${b.hMax ?? ''}" onchange="CONFIG.productTypes[${idx}].moduleBuckets[${bidx}].hMax=this.value===''?null:+this.value; saveConfig();"></td>
+                  <td><input type="number" value="${b.dMax ?? ''}" onchange="CONFIG.productTypes[${idx}].moduleBuckets[${bidx}].dMax=this.value===''?null:+this.value; saveConfig();"></td>
+                  <td><input type="number" step="0.05" value="${b.ratio}" onchange="CONFIG.productTypes[${idx}].moduleBuckets[${bidx}].ratio=+this.value; saveConfig();"></td>
+                  <td><textarea onchange="CONFIG.productTypes[${idx}].moduleBuckets[${bidx}].example=this.value; saveConfig();">${escapeHtml(b.example || '')}</textarea></td>
+                  <td><textarea style="min-height:60px;" onchange="CONFIG.productTypes[${idx}].moduleBuckets[${bidx}].images=this.value.split('\\n').map(s=>s.trim()).filter(x=>x); saveConfig();">${escapeHtml((b.images || []).join('\n'))}</textarea></td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        ` : ''}
+
+        ${pt.hasPanels ? `
+          <h4 style="font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--cutr-text-secondary); margin:14px 0 8px;">Panel ratio (per m² when on-site)</h4>
+          <div class="admin-row">
+            <label>On-site ratio per m²: <input type="number" step="0.01" value="${pt.panelRatioOnSite || 0}" onchange="CONFIG.productTypes[${idx}].panelRatioOnSite=+this.value; saveConfig();"></label>
+          </div>
+          <h4 style="font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--cutr-text-secondary); margin:14px 0 8px;">Panel buckets (count mode — per-panel ratio is derived)</h4>
+          <table class="admin-table">
+            <thead><tr><th>ID</th><th>Name</th><th>Avg m² per panel</th><th>Example</th><th>Derived per-panel ratio</th></tr></thead>
+            <tbody>
+              ${(pt.panelBuckets || []).map((b, bidx) => `
+                <tr>
+                  <td><strong>${escapeHtml(b.id)}</strong></td>
+                  <td><input type="text" value="${escapeHtml(b.name)}" onchange="CONFIG.productTypes[${idx}].panelBuckets[${bidx}].name=this.value; saveConfig();"></td>
+                  <td><input type="number" step="0.1" value="${b.avgM2 || 0}" onchange="CONFIG.productTypes[${idx}].panelBuckets[${bidx}].avgM2=+this.value; saveConfig(); renderAdminTypes();"></td>
+                  <td><textarea onchange="CONFIG.productTypes[${idx}].panelBuckets[${bidx}].example=this.value; saveConfig();">${escapeHtml(b.example || '')}</textarea></td>
+                  <td style="font-family:var(--cutr-font-mono);">${((pt.panelRatioOnSite || 0) * (b.avgM2 || 0)).toFixed(3)} /panel</td>
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        ` : ''}
+      </div>
+    </div>
+  `;}).join('');
+}
+
+function renderAdminParser() {
+  const c = document.getElementById('admin-tab-parser');
+  const p = CONFIG.parser;
+  const mkSection = (key, title, body) => {
+    const exp = ADMIN_EXPANDED.has(key);
+    return `<div class="admin-section">
+      <div class="admin-section-header" onclick="toggleAdminSection('${key}')">
+        <span>${title}</span>
+        <span data-admin-chevron="${key}">${exp ? '▾' : '▸'}</span>
+      </div>
+      <div class="admin-section-body" data-admin-body="${key}" style="${exp ? '' : 'display:none'}">${body}</div>
+    </div>`;
+  };
+  c.innerHTML = [
+    mkSection('parser-template', 'Default partlist template', `
+      <div style="font-size:13px;">
+        <p style="margin-bottom:8px;">Template id: <code>${escapeHtml(p.defaultTemplate)}</code></p>
+        <p style="color:var(--cutr-text-secondary); font-size:12px;">${escapeHtml(p.columnNote)}</p>
+        <p style="margin-top:8px; font-family:var(--cutr-font-mono); font-size:11px;">
+          Column order: ${Object.entries(p.columnMap).map(([k,v]) => `${k}=${v}`).join(', ')}
+        </p>
+      </div>`),
+    mkSection('parser-regex', 'Module ID pattern (regex)', `
+      <input type="text" style="width:100%; font-family:var(--cutr-font-mono);" value="${escapeHtml(p.moduleIdRegex)}" onchange="CONFIG.parser.moduleIdRegex=this.value; saveConfig();">
+      <div style="font-size:11px; color:var(--cutr-text-secondary); margin-top:4px;">Default <code>^M\\d+</code> matches "M0", "M12", etc.</div>`),
+    mkSection('parser-excluded', 'Excluded part types (treated as 0 corpus)', `
+      <div>${(p.excludedPartTypes || []).map(s => `<span class="synonym-tag">${escapeHtml(s)}</span>`).join('')}</div>
+      <textarea style="width:100%; min-height:60px; margin-top:8px; font-family:var(--cutr-font-mono);" onchange="CONFIG.parser.excludedPartTypes=this.value.split(/,\\s*/).filter(x=>x); saveConfig(); renderAdminParser();">${(p.excludedPartTypes || []).join(', ')}</textarea>
+      <div style="font-size:11px; color:var(--cutr-text-secondary); margin-top:4px;">Comma-separated. Substring + case-insensitive.</div>`),
+    mkSection('parser-module-synonyms', 'Module-part-type synonyms (need Top+Bottom+Side+Backwall)', `
+      <div>${(p.modulePartTypes || []).map(s => `<span class="synonym-tag">${escapeHtml(s)}</span>`).join('')}</div>
+      <textarea style="width:100%; min-height:60px; margin-top:8px; font-family:var(--cutr-font-mono);" onchange="CONFIG.parser.modulePartTypes=this.value.split(/,\\s*/).filter(x=>x); saveConfig(); renderAdminParser();">${(p.modulePartTypes || []).join(', ')}</textarea>`),
+    mkSection('parser-panel-synonyms', 'Panel-part-type synonyms', `
+      <div>${(p.panelPartTypes || []).map(s => `<span class="synonym-tag">${escapeHtml(s)}</span>`).join('')}</div>
+      <textarea style="width:100%; min-height:60px; margin-top:8px; font-family:var(--cutr-font-mono);" onchange="CONFIG.parser.panelPartTypes=this.value.split(/,\\s*/).filter(x=>x); saveConfig(); renderAdminParser();">${(p.panelPartTypes || []).join(', ')}</textarea>`)
+  ].join('');
+}
+
+function renderAdminInstall() {
+  const c = document.getElementById('admin-tab-install');
+  const I = CONFIG.installation;
+  const mkSection = (key, title, body) => {
+    const exp = ADMIN_EXPANDED.has(key);
+    return `<div class="admin-section">
+      <div class="admin-section-header" onclick="toggleAdminSection('${key}')">
+        <span>${title}</span>
+        <span data-admin-chevron="${key}">${exp ? '▾' : '▸'}</span>
+      </div>
+      <div class="admin-section-body" data-admin-body="${key}" style="${exp ? '' : 'display:none'}">${body}</div>
+    </div>`;
+  };
+  c.innerHTML = [
+    mkSection('install-constants', 'Per-corpus time constants (minutes)', `
+      <div class="admin-row">
+        <label>Unloading: <input type="number" step="0.5" value="${I.UNLOADING_MIN}" onchange="CONFIG.installation.UNLOADING_MIN=+this.value; saveConfig(); recalc();"></label>
+        <label>Moving: <input type="number" step="0.5" value="${I.MOVING_MIN}" onchange="CONFIG.installation.MOVING_MIN=+this.value; saveConfig(); recalc();"></label>
+        <label>Floor (per floor): <input type="number" step="0.5" value="${I.FLOOR_MIN}" onchange="CONFIG.installation.FLOOR_MIN=+this.value; saveConfig(); recalc();"></label>
+      </div>
+      <p style="font-size:12px; color:var(--cutr-text-secondary); margin-top:8px;">
+        Platform formula: <code style="font-family:var(--cutr-font-mono);">time = qty × corpus × (unloading + moving + install + floor×floorMin)</code>
+      </p>`),
+    mkSection('install-types', 'Installation types', `
+      <table class="admin-table">
+        <thead><tr><th>ID</th><th>Name</th><th>Install minutes</th><th>Per-corpus min (floor 0)</th></tr></thead>
+        <tbody>
+          ${Object.entries(I.types).map(([id, t]) => `
+            <tr>
+              <td><strong>${escapeHtml(id)}</strong></td>
+              <td><input type="text" value="${escapeHtml(t.name)}" onchange="CONFIG.installation.types['${id}'].name=this.value; saveConfig();"></td>
+              <td><input type="number" step="0.5" value="${t.installMin}" onchange="CONFIG.installation.types['${id}'].installMin=+this.value; saveConfig(); renderAdminInstall(); recalc();"></td>
+              <td style="font-family:var(--cutr-font-mono);">${(I.UNLOADING_MIN + I.MOVING_MIN + t.installMin).toFixed(1)}</td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+      <p style="font-size:12px; color:var(--cutr-text-secondary); margin-top:10px; padding:8px 10px; background:var(--cutr-n-100); border-left:3px solid var(--cutr-n-400);">
+        <strong>Water / electric outlets excluded from corpus:</strong> Appliance, tap, and sink installation time is handled by the platform's hardware inclusion feature — not scored via corpus settings. Call this out to users when relevant (the card selector already includes a note).
+      </p>`),
+    mkSection('install-matrix', 'Per-corpus matrix (sanity check vs platform)', `
+      <div style="overflow-x:auto;">${renderInstallMatrix()}</div>`)
+  ].join('');
+}
+
+function renderInstallMatrix() {
+  const I = CONFIG.installation;
+  const types = Object.entries(I.types);
+  let html = `<table class="admin-table" style="font-size:11px;"><thead><tr><th>Corpus #</th>${types.map(([_, t]) => `<th>${escapeHtml(t.name)}<br/><span style="font-weight:400; color:var(--cutr-text-secondary);">(min / hr)</span></th>`).join('')}</tr></thead><tbody>`;
+  for (let n = 1; n <= 20; n++) {
+    html += `<tr><td><strong>${n}</strong></td>`;
+    types.forEach(([_, t]) => {
+      const min = n * (I.UNLOADING_MIN + I.MOVING_MIN + t.installMin);
+      html += `<td style="font-family:var(--cutr-font-mono);">${min.toFixed(1)} / ${(min / 60).toFixed(2)}</td>`;
+    });
+    html += `</tr>`;
+  }
+  html += `</tbody></table>`;
+  return html;
+}
+
+function loadConfigToJson() { document.getElementById('config-json').value = JSON.stringify(CONFIG, null, 2); }
+function applyJsonConfig() {
+  try {
+    const parsed = JSON.parse(document.getElementById('config-json').value);
+    CONFIG = parsed;
+    saveConfig();
+    alert('Config applied.');
+    initJob();
+    renderTypePicker();
+    renderCards();
+    renderAdmin();
+    recalc();
+  } catch (e) { alert('Invalid JSON: ' + e.message); }
+}
+function resetConfig() {
+  if (!confirm('Reset config to defaults?')) return;
+  CONFIG = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+  saveConfig();
+  initJob();
+  renderTypePicker();
+  renderCards();
+  renderAdmin();
+  recalc();
+}
+
+// ============================================================================
+// UTILITIES
+// ============================================================================
+
+function escapeHtml(str) {
+  return String(str ?? '').replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+}
+function escapeAttr(str) { return String(str ?? '').replace(/"/g, '&quot;'); }
+
+// ============================================================================
+// INIT
+// ============================================================================
+
+initJob();
+renderTypePicker();
+renderCards();
+recalc();
+
+document.getElementById('file-name').addEventListener('input', e => {
+  JOB.fileName = e.target.value;
+  recalc();
+});
+document.getElementById('floor-input').addEventListener('input', e => {
+  JOB.floor = parseInt(e.target.value) || 0;
+  recalc();
+});
+</script>
+
+</body>
+</html>

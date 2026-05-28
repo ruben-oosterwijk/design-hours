@@ -1270,9 +1270,9 @@ const DEFAULT_CONFIG = {
       hasModules: true, hasPanels: true,
       intro: "Use for cabinet runs — base units, wall units, tall units. Score the carcasses here; doors and drawer fronts are excluded (they don't drive install time meaningfully).\n\nIf this card includes a countertop, score the countertop separately in the countertop calculator — the toggle below excludes its install time here.",
       moduleBuckets: [
-        { id: 'S',  name: 'Small',     wMax: 60,  hMax: 80,  dMax: 60, ratio: 0.6, example: '600 base unit, nightstand-sized', images: [bucketSvg('cabinets','S')] },
-        { id: 'M',  name: 'Medium',    wMax: 90,  hMax: 200, dMax: 70, ratio: 1.0, example: 'standard tall larder, 900 base',   images: [bucketSvg('cabinets','M')] },
-        { id: 'L',  name: 'Large',     wMax: 120, hMax: 240, dMax: 80, ratio: 1.4, example: 'full-height pantry, 1200 wide',   images: [bucketSvg('cabinets','L')] },
+        { id: 'S',  name: 'Small',     wMax: 600,  hMax: 800,  dMax: 600, ratio: 0.6, example: '600 base unit, nightstand-sized', images: [bucketSvg('cabinets','S')] },
+        { id: 'M',  name: 'Medium',    wMax: 900,  hMax: 2000, dMax: 700, ratio: 1.0, example: 'standard tall larder, 900 base',   images: [bucketSvg('cabinets','M')] },
+        { id: 'L',  name: 'Large',     wMax: 1200, hMax: 2400, dMax: 800, ratio: 1.4, example: 'full-height pantry, 1200 wide',   images: [bucketSvg('cabinets','L')] },
         { id: 'Os', name: 'Oversized', wMax: null,hMax: null,dMax: null,ratio: 2.0, example: "won't fit a standard van",         images: [bucketSvg('cabinets','Os')] }
       ],
       panelDefaultMode: 'm2',
@@ -1290,9 +1290,9 @@ const DEFAULT_CONFIG = {
       hasModules: true, hasPanels: true,
       intro: "Use for benches — single seats, banquettes, banquette runs.\n\nIf upholstered, upholstery is scored separately in the upholstery calculator.",
       moduleBuckets: [
-        { id: 'S', name: 'Small',     wMax: 80,  hMax: 50, dMax: 45, ratio: 0.5, example: 'single-seat stool / short bench', images: [bucketSvg('benches','S')] },
-        { id: 'M', name: 'Medium',    wMax: 160, hMax: 50, dMax: 45, ratio: 0.9, example: '2-seater bench',                  images: [bucketSvg('benches','M')] },
-        { id: 'L', name: 'Large',     wMax: 240, hMax: 50, dMax: 45, ratio: 1.3, example: 'banquette run',                   images: [bucketSvg('benches','L')] },
+        { id: 'S', name: 'Small',     wMax: 800,  hMax: 500, dMax: 450, ratio: 0.5, example: 'single-seat stool / short bench', images: [bucketSvg('benches','S')] },
+        { id: 'M', name: 'Medium',    wMax: 1600, hMax: 500, dMax: 450, ratio: 0.9, example: '2-seater bench',                  images: [bucketSvg('benches','M')] },
+        { id: 'L', name: 'Large',     wMax: 2400, hMax: 500, dMax: 450, ratio: 1.3, example: 'banquette run',                   images: [bucketSvg('benches','L')] },
         { id: 'Os', name: 'Oversized',                              ratio: 1.8, example: 'multi-section banquette',         images: [bucketSvg('benches','Os')] }
       ],
       panelDefaultMode: 'm2',
@@ -1310,9 +1310,9 @@ const DEFAULT_CONFIG = {
       hasModules: true, hasPanels: true,
       intro: "Use for reception / front-of-house counters and runs. Countertop install is owned by the countertop calculator when used.",
       moduleBuckets: [
-        { id: 'S', name: 'Small',     wMax: 120, hMax: 110, dMax: 60, ratio: 0.8, example: 'small front desk',           images: [bucketSvg('counters','S')] },
-        { id: 'M', name: 'Medium',    wMax: 220, hMax: 110, dMax: 70, ratio: 1.4, example: 'standard reception desk',    images: [bucketSvg('counters','M')] },
-        { id: 'L', name: 'Large',     wMax: 320, hMax: 120, dMax: 80, ratio: 2.0, example: 'lobby reception run',        images: [bucketSvg('counters','L')] },
+        { id: 'S', name: 'Small',     wMax: 1200, hMax: 1100, dMax: 600, ratio: 0.8, example: 'small front desk',           images: [bucketSvg('counters','S')] },
+        { id: 'M', name: 'Medium',    wMax: 2200, hMax: 1100, dMax: 700, ratio: 1.4, example: 'standard reception desk',    images: [bucketSvg('counters','M')] },
+        { id: 'L', name: 'Large',     wMax: 3200, hMax: 1200, dMax: 800, ratio: 2.0, example: 'lobby reception run',        images: [bucketSvg('counters','L')] },
         { id: 'Os', name: 'Oversized',                              ratio: 2.8, example: 'wrap-around / multi-module', images: [bucketSvg('counters','Os')] }
       ],
       panelDefaultMode: 'm2',
@@ -1345,9 +1345,9 @@ const DEFAULT_CONFIG = {
       hasModules: true, hasPanels: false,
       intro: "Use for planters — typically fully preassembled units that need placement only.",
       moduleBuckets: [
-        { id: 'S', name: 'Small',  wMax: 60,  hMax: 60,  dMax: 40, ratio: 0.5, example: 'desktop / tabletop planter',  images: [bucketSvg('planters','S')] },
-        { id: 'M', name: 'Medium', wMax: 120, hMax: 100, dMax: 60, ratio: 0.9, example: 'floor planter, single',       images: [bucketSvg('planters','M')] },
-        { id: 'L', name: 'Large',  wMax: 200, hMax: 120, dMax: 60, ratio: 1.4, example: 'long divider planter',        images: [bucketSvg('planters','L')] },
+        { id: 'S', name: 'Small',  wMax: 600,  hMax: 600,  dMax: 400, ratio: 0.5, example: 'desktop / tabletop planter',  images: [bucketSvg('planters','S')] },
+        { id: 'M', name: 'Medium', wMax: 1200, hMax: 1000, dMax: 600, ratio: 0.9, example: 'floor planter, single',       images: [bucketSvg('planters','M')] },
+        { id: 'L', name: 'Large',  wMax: 2000, hMax: 1200, dMax: 600, ratio: 1.4, example: 'long divider planter',        images: [bucketSvg('planters','L')] },
         { id: 'Os', name: 'Oversized',                          ratio: 2.0, example: 'multi-section planter > 2 m', images: [bucketSvg('planters','Os')] }
       ],
       panelDefaultMode: 'm2', panelBuckets: [], panelRatioOnSite: 0
@@ -1359,9 +1359,9 @@ const DEFAULT_CONFIG = {
       hasModules: true, hasPanels: true,
       intro: "Use for room dividers — freestanding or anchored. Score frame as modules and any external cladding as panels.",
       moduleBuckets: [
-        { id: 'S', name: 'Small',  wMax: 120, hMax: 200, dMax: 30, ratio: 0.7, example: 'half-height divider',          images: [bucketSvg('wall-dividers','S')] },
-        { id: 'M', name: 'Medium', wMax: 200, hMax: 240, dMax: 40, ratio: 1.2, example: 'full-height divider',          images: [bucketSvg('wall-dividers','M')] },
-        { id: 'L', name: 'Large',  wMax: 300, hMax: 280, dMax: 50, ratio: 1.8, example: 'extended divider with storage',images: [bucketSvg('wall-dividers','L')] },
+        { id: 'S', name: 'Small',  wMax: 1200, hMax: 2000, dMax: 300, ratio: 0.7, example: 'half-height divider',          images: [bucketSvg('wall-dividers','S')] },
+        { id: 'M', name: 'Medium', wMax: 2000, hMax: 2400, dMax: 400, ratio: 1.2, example: 'full-height divider',          images: [bucketSvg('wall-dividers','M')] },
+        { id: 'L', name: 'Large',  wMax: 3000, hMax: 2800, dMax: 500, ratio: 1.8, example: 'extended divider with storage',images: [bucketSvg('wall-dividers','L')] },
         { id: 'Os', name: 'Oversized',                          ratio: 2.5, example: 'room-spanning divider',         images: [bucketSvg('wall-dividers','Os')] }
       ],
       panelDefaultMode: 'm2',
@@ -1379,9 +1379,9 @@ const DEFAULT_CONFIG = {
       hasModules: true, hasPanels: false,
       intro: "Use for floating / wall-fixed shelves. Each shelf is one module event. Over 2.4 m or structurally integrated → Oversized.",
       moduleBuckets: [
-        { id: 'S', name: 'Small',  wMax: 80,  hMax: 5, dMax: 25, ratio: 0.3, example: 'short shelf, single bracket pair',  images: [bucketSvg('floating-shelves','S')] },
-        { id: 'M', name: 'Medium', wMax: 160, hMax: 5, dMax: 30, ratio: 0.5, example: 'standard shelf, multi-bracket',     images: [bucketSvg('floating-shelves','M')] },
-        { id: 'L', name: 'Large',  wMax: 240, hMax: 5, dMax: 35, ratio: 0.8, example: 'long shelf, structural',            images: [bucketSvg('floating-shelves','L')] },
+        { id: 'S', name: 'Small',  wMax: 800,  hMax: 50, dMax: 250, ratio: 0.3, example: 'short shelf, single bracket pair',  images: [bucketSvg('floating-shelves','S')] },
+        { id: 'M', name: 'Medium', wMax: 1600, hMax: 50, dMax: 300, ratio: 0.5, example: 'standard shelf, multi-bracket',     images: [bucketSvg('floating-shelves','M')] },
+        { id: 'L', name: 'Large',  wMax: 2400, hMax: 50, dMax: 350, ratio: 0.8, example: 'long shelf, structural',            images: [bucketSvg('floating-shelves','L')] },
         { id: 'Os', name: 'Oversized',                        ratio: 1.2, example: 'over 2.4 m / structural integration',images: [bucketSvg('floating-shelves','Os')] }
       ],
       panelDefaultMode: 'm2', panelBuckets: [], panelRatioOnSite: 0
@@ -1393,9 +1393,9 @@ const DEFAULT_CONFIG = {
       hasModules: true, hasPanels: false,
       intro: "Use for hanging / clothing racks fixed to wall or ceiling.",
       moduleBuckets: [
-        { id: 'S', name: 'Small',  wMax: 80,  hMax: 30, dMax: 40, ratio: 0.3, example: 'short rack',                 images: [bucketSvg('hanging-racks','S')] },
-        { id: 'M', name: 'Medium', wMax: 160, hMax: 40, dMax: 50, ratio: 0.6, example: 'standard rack',              images: [bucketSvg('hanging-racks','M')] },
-        { id: 'L', name: 'Large',  wMax: 240, hMax: 50, dMax: 60, ratio: 0.9, example: 'long rack with brackets',    images: [bucketSvg('hanging-racks','L')] },
+        { id: 'S', name: 'Small',  wMax: 800,  hMax: 300, dMax: 400, ratio: 0.3, example: 'short rack',                 images: [bucketSvg('hanging-racks','S')] },
+        { id: 'M', name: 'Medium', wMax: 1600, hMax: 400, dMax: 500, ratio: 0.6, example: 'standard rack',              images: [bucketSvg('hanging-racks','M')] },
+        { id: 'L', name: 'Large',  wMax: 2400, hMax: 500, dMax: 600, ratio: 0.9, example: 'long rack with brackets',    images: [bucketSvg('hanging-racks','L')] },
         { id: 'Os', name: 'Oversized',                        ratio: 1.4, example: 'multi-section / ceiling rack',images: [bucketSvg('hanging-racks','Os')] }
       ],
       panelDefaultMode: 'm2', panelBuckets: [], panelRatioOnSite: 0
@@ -1407,9 +1407,9 @@ const DEFAULT_CONFIG = {
       hasModules: true, hasPanels: true,
       intro: "Use for headboards — wall-mounted or attached to a bed frame.\n\nIf upholstered, upholstery is scored separately in the upholstery calculator.",
       moduleBuckets: [
-        { id: 'S', name: 'Small',  wMax: 120, hMax: 110, dMax: 15, ratio: 0.5, example: 'single bed headboard',         images: [bucketSvg('headboards','S')] },
-        { id: 'M', name: 'Medium', wMax: 180, hMax: 120, dMax: 20, ratio: 0.8, example: 'queen / double headboard',     images: [bucketSvg('headboards','M')] },
-        { id: 'L', name: 'Large',  wMax: 240, hMax: 140, dMax: 25, ratio: 1.2, example: 'king / wall-spanning',         images: [bucketSvg('headboards','L')] },
+        { id: 'S', name: 'Small',  wMax: 1200, hMax: 1100, dMax: 150, ratio: 0.5, example: 'single bed headboard',         images: [bucketSvg('headboards','S')] },
+        { id: 'M', name: 'Medium', wMax: 1800, hMax: 1200, dMax: 200, ratio: 0.8, example: 'queen / double headboard',     images: [bucketSvg('headboards','M')] },
+        { id: 'L', name: 'Large',  wMax: 2400, hMax: 1400, dMax: 250, ratio: 1.2, example: 'king / wall-spanning',         images: [bucketSvg('headboards','L')] },
         { id: 'Os', name: 'Oversized',                          ratio: 1.8, example: 'multi-panel custom headboard',  images: [bucketSvg('headboards','Os')] }
       ],
       panelDefaultMode: 'm2',
@@ -1849,7 +1849,7 @@ function renderInstallTypeSection(card, pt) {
 function formatBucketRange(b) {
   if (b.wMax == null && b.hMax == null && b.dMax == null) return 'anything beyond Large';
   const fmt = v => v == null ? '∞' : `≤${v}`;
-  return `W ${fmt(b.wMax)} · H ${fmt(b.hMax)} · D ${fmt(b.dMax)} cm`;
+  return `W ${fmt(b.wMax)} · H ${fmt(b.hMax)} · D ${fmt(b.dMax)} mm`;
 }
 
 function clearImport(cardId) {
@@ -2328,14 +2328,14 @@ function parsePartlist() {
 
 function findBucketForDims(pt, dims) {
   if (!pt.moduleBuckets || pt.moduleBuckets.length === 0) return null;
-  const wcm = (dims.w || 0) / 10;
-  const hcm = (dims.h || 0) / 10;
-  const dcm = (dims.d || 0) / 10;
+  const wmm = (dims.w || 0);
+  const hmm = (dims.h || 0);
+  const dmm = (dims.d || 0);
   for (const b of pt.moduleBuckets) {
     if (b.wMax == null && b.hMax == null && b.dMax == null) continue;
-    const fits = (b.wMax == null || wcm <= b.wMax) &&
-                 (b.hMax == null || hcm <= b.hMax) &&
-                 (b.dMax == null || dcm <= b.dMax);
+    const fits = (b.wMax == null || wmm <= b.wMax) &&
+                 (b.hMax == null || hmm <= b.hMax) &&
+                 (b.dMax == null || dmm <= b.dMax);
     if (fits) return b.id;
   }
   return 'Os';
@@ -2505,7 +2505,7 @@ function renderAdminTypes() {
         ${pt.hasModules ? `
           <h4 style="font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--cutr-text-secondary); margin:14px 0 8px;">Module size buckets</h4>
           <table class="admin-table">
-            <thead><tr><th>ID</th><th>Name</th><th>W max (cm)</th><th>H max (cm)</th><th>D max (cm)</th><th>Ratio /unit</th><th>Example</th><th>Image URLs (one per line)</th></tr></thead>
+            <thead><tr><th>ID</th><th>Name</th><th>W max (mm)</th><th>H max (mm)</th><th>D max (mm)</th><th>Ratio /unit</th><th>Example</th><th>Image URLs (one per line)</th></tr></thead>
             <tbody>
               ${pt.moduleBuckets.map((b, bidx) => `
                 <tr>

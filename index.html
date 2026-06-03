@@ -1262,6 +1262,12 @@ const DEFAULT_CONFIG = {
     // Appliance, tap, and sink installation time is captured via the platform's
     // hardware inclusion feature — not via corpus settings.
   },
+  countertopBuckets: [
+    { id: 'S',  label: '≤600 mm',  maxMm: 600,  ratio: 0.5 },
+    { id: 'M',  label: '≤1200 mm', maxMm: 1200, ratio: 0.8 },
+    { id: 'L',  label: '≤2400 mm', maxMm: 2400, ratio: 1.2 },
+    { id: 'Os', label: 'Longer',   maxMm: null, ratio: 1.8 }
+  ],
   productTypes: [
     {
       id: 'cabinets', name: 'Cabinets', icon: '📦',
@@ -1700,8 +1706,8 @@ function renderExclusionBanners(card, pt) {
   if (pt.hasCountertops) {
     const ctMode = card.countertopMode || 'calc';
     const ctSize = card.countertopSize || 'M';
-    const CT_RATIOS = { S: 0.5, M: 0.8, L: 1.2, Os: 1.8 };
-    const CT_LABELS = { S: '≤600mm', M: '≤1200mm', L: '≤2400mm', Os: 'longer' };
+    const ctBuckets = CONFIG.countertopBuckets || [];
+    const ctActiveBucket = ctBuckets.find(b => b.id === ctSize);
     html += `<div class="exclusion-banner">
       <div class="label">
         <strong>Countertop in this card?</strong> How is it quoted?
@@ -1716,12 +1722,12 @@ function renderExclusionBanners(card, pt) {
       ${ctMode === 'materials' ? `<div style="margin-top:10px;">
         <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--cutr-text-secondary); margin-bottom:6px;">Countertop run length</div>
         <div class="seg">
-          ${['S','M','L','Os'].map(s => `<button class="${ctSize === s ? 'active' : ''}" data-ct-card="${card.id}" data-ct-size="${s}" style="min-width:72px;">
-            <span style="display:block; font-weight:600;">${s === 'Os' ? 'Oversize' : s}</span>
-            <span style="display:block; font-size:10px; font-weight:400; opacity:0.75;">${CT_LABELS[s]}</span>
+          ${ctBuckets.map(b => `<button class="${ctSize === b.id ? 'active' : ''}" data-ct-card="${card.id}" data-ct-size="${b.id}" style="min-width:72px;">
+            <span style="display:block; font-weight:600;">${escapeHtml(b.id)}</span>
+            <span style="display:block; font-size:10px; font-weight:400; opacity:0.75;">${escapeHtml(b.label)}</span>
           </button>`).join('')}
         </div>
-        <div style="font-size:12px; color:var(--cutr-text-secondary); margin-top:6px; font-family:var(--cutr-font-mono);">+${CT_RATIOS[ctSize]} corpus added to this card</div>
+        <div style="font-size:12px; color:var(--cutr-text-secondary); margin-top:6px; font-family:var(--cutr-font-mono);">+${ctActiveBucket ? ctActiveBucket.ratio : '?'} corpus added to this card</div>
       </div>` : ''}
     </div>`;
   }
@@ -1968,9 +1974,9 @@ function computeCardRaw(card, pt) {
   }
   // Countertop scored via materials & nesting (not via countertop calculator)
   if (pt.hasCountertops && card.countertopMode === 'materials') {
-    const CT_RATIOS = { S: 0.5, M: 0.8, L: 1.2, Os: 1.8 };
     const sz = card.countertopSize || 'M';
-    const ratio = CT_RATIOS[sz] ?? 0.8;
+    const bucket = (CONFIG.countertopBuckets || []).find(b => b.id === sz);
+    const ratio = bucket ? bucket.ratio : 0.8;
     raw += ratio;
     parts.push({ label: `Countertop — ${sz} (materials & nesting)`, calc: `1 × ${ratio}`, contrib: ratio });
   }
@@ -2673,6 +2679,24 @@ function renderAdminInstall() {
       <p style="font-size:12px; color:var(--cutr-text-secondary); margin-top:10px; padding:8px 10px; background:var(--cutr-n-100); border-left:3px solid var(--cutr-n-400);">
         <strong>Water / electric outlets excluded from corpus:</strong> Appliance, tap, and sink installation time is handled by the platform's hardware inclusion feature — not scored via corpus settings. Call this out to users when relevant (the card selector already includes a note).
       </p>`),
+    mkSection('countertop-buckets', 'Countertop run sizes (materials &amp; nesting)', `
+      <p style="font-size:12px; color:var(--cutr-text-secondary); margin-bottom:12px; line-height:1.55;">
+        Used when a countertop in a cabinet or counter card is quoted via <strong>materials &amp; nesting</strong> (not via the countertop calculator).
+        Each row is a run-length bucket with its corpus ratio. The user picks the bucket that matches the countertop run length.
+      </p>
+      <table class="admin-table">
+        <thead><tr><th>ID</th><th>Label (shown to user)</th><th>Max run (mm, blank = no limit)</th><th>Corpus ratio</th></tr></thead>
+        <tbody>
+          ${(CONFIG.countertopBuckets || []).map((b, i) => `
+            <tr>
+              <td><input type="text" value="${escapeHtml(b.id)}" onchange="CONFIG.countertopBuckets[${i}].id=this.value; saveConfig(); renderAdminInstall(); renderCards();"></td>
+              <td><input type="text" value="${escapeHtml(b.label)}" onchange="CONFIG.countertopBuckets[${i}].label=this.value; saveConfig(); renderCards();"></td>
+              <td><input type="number" step="1" value="${b.maxMm ?? ''}" placeholder="no limit" onchange="CONFIG.countertopBuckets[${i}].maxMm=this.value===''?null:+this.value; saveConfig();"></td>
+              <td><input type="number" step="0.1" value="${b.ratio}" onchange="CONFIG.countertopBuckets[${i}].ratio=+this.value; saveConfig(); recalc(); renderCards();"></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>`),
     mkSection('install-matrix', 'Per-corpus matrix (sanity check vs platform)', `
       <div style="overflow-x:auto;">${renderInstallMatrix()}</div>`)
   ].join('');

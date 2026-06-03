@@ -1476,7 +1476,8 @@ function makeCardFor(productTypeId) {
     productTypeId,
     name: pt.name + (cardCountSame > 0 ? ` #${cardCountSame + 1}` : ''),
     installationType: (defaultIT && defaultIT !== 'required') ? defaultIT : null,
-    countertopExcluded: true,
+    countertopMode: 'calc',  // 'calc' | 'materials' | 'none'
+    countertopSize: 'M',     // used when countertopMode === 'materials'
     upholsteryExcluded: true,
     panelInputMode: pt.panelDefaultMode || 'm2',
     modules: {},
@@ -1617,13 +1618,31 @@ function bindCardEvents() {
       const card = getCard(el.dataset.card); if (card) { card.name = e.target.value; recalc(); }
     });
   });
-  // Exclusion toggle
+  // Exclusion toggle (upholstery — boolean)
   document.querySelectorAll('[data-excl-card]').forEach(b => {
     b.addEventListener('click', () => {
       const card = getCard(b.dataset.exclCard);
       if (!card) return;
       const key = b.dataset.excl;
       card[key] = b.dataset.value === 'true';
+      renderCards(); recalc();
+    });
+  });
+  // Countertop mode (3-way)
+  document.querySelectorAll('[data-ct-card][data-ct-mode]').forEach(b => {
+    b.addEventListener('click', () => {
+      const card = getCard(b.dataset.ctCard);
+      if (!card) return;
+      card.countertopMode = b.dataset.ctMode;
+      renderCards(); recalc();
+    });
+  });
+  // Countertop size
+  document.querySelectorAll('[data-ct-card][data-ct-size]').forEach(b => {
+    b.addEventListener('click', () => {
+      const card = getCard(b.dataset.ctCard);
+      if (!card) return;
+      card.countertopSize = b.dataset.ctSize;
       renderCards(); recalc();
     });
   });
@@ -1679,14 +1698,31 @@ function recalcLive(cardId) {
 function renderExclusionBanners(card, pt) {
   let html = '';
   if (pt.hasCountertops) {
+    const ctMode = card.countertopMode || 'calc';
+    const ctSize = card.countertopSize || 'M';
+    const CT_RATIOS = { S: 0.5, M: 0.8, L: 1.2, Os: 1.8 };
+    const CT_LABELS = { S: '≤600mm', M: '≤1200mm', L: '≤2400mm', Os: 'longer' };
     html += `<div class="exclusion-banner">
       <div class="label">
-        <strong>Countertop in this card?</strong> If the countertop is scored through the countertop calculator, its install time is captured there — don't score it here.
+        <strong>Countertop in this card?</strong> How is it quoted?
       </div>
       <div class="seg">
-        <button class="${card.countertopExcluded === true ? 'active' : ''}" data-excl-card="${card.id}" data-excl="countertopExcluded" data-value="true">Yes — excluded</button>
-        <button class="${card.countertopExcluded === false ? 'active' : ''}" data-excl-card="${card.id}" data-excl="countertopExcluded" data-value="false">No countertop</button>
+        <button class="${ctMode === 'calc' ? 'active' : ''}" data-ct-card="${card.id}" data-ct-mode="calc">Via countertop calculator</button>
+        <button class="${ctMode === 'materials' ? 'active' : ''}" data-ct-card="${card.id}" data-ct-mode="materials">Via materials &amp; nesting</button>
+        <button class="${ctMode === 'none' ? 'active' : ''}" data-ct-card="${card.id}" data-ct-mode="none">Not in quote</button>
       </div>
+      ${ctMode === 'calc' ? `<div style="font-size:12px; color:var(--cutr-text-secondary); margin-top:8px;">Install time is captured by the countertop calculator — not scored here.</div>` : ''}
+      ${ctMode === 'none' ? `<div style="font-size:12px; color:var(--cutr-text-secondary); margin-top:8px;">No countertop to score.</div>` : ''}
+      ${ctMode === 'materials' ? `<div style="margin-top:10px;">
+        <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--cutr-text-secondary); margin-bottom:6px;">Countertop run length</div>
+        <div class="seg">
+          ${['S','M','L','Os'].map(s => `<button class="${ctSize === s ? 'active' : ''}" data-ct-card="${card.id}" data-ct-size="${s}" style="min-width:72px;">
+            <span style="display:block; font-weight:600;">${s === 'Os' ? 'Oversize' : s}</span>
+            <span style="display:block; font-size:10px; font-weight:400; opacity:0.75;">${CT_LABELS[s]}</span>
+          </button>`).join('')}
+        </div>
+        <div style="font-size:12px; color:var(--cutr-text-secondary); margin-top:6px; font-family:var(--cutr-font-mono);">+${CT_RATIOS[ctSize]} corpus added to this card</div>
+      </div>` : ''}
     </div>`;
   }
   if (pt.hasUpholstery) {
@@ -1930,6 +1966,14 @@ function computeCardRaw(card, pt) {
       }
     });
   }
+  // Countertop scored via materials & nesting (not via countertop calculator)
+  if (pt.hasCountertops && card.countertopMode === 'materials') {
+    const CT_RATIOS = { S: 0.5, M: 0.8, L: 1.2, Os: 1.8 };
+    const sz = card.countertopSize || 'M';
+    const ratio = CT_RATIOS[sz] ?? 0.8;
+    raw += ratio;
+    parts.push({ label: `Countertop — ${sz} (materials & nesting)`, calc: `1 × ${ratio}`, contrib: ratio });
+  }
   if (pt.hasPanels) {
     const r = pt.panelRatioOnSite || 0;
     if (card.panelInputMode === 'm2') {
@@ -2145,7 +2189,9 @@ function buildBacktrace(r, install) {
         s += `   Install type: ⚠ not set\n`;
       }
       if (c.pt.hasCountertops) {
-        s += `   Countertop: ${c.card.countertopExcluded ? 'excluded (via countertop calc)' : 'no countertop in this card'}\n`;
+        const ctMode = c.card.countertopMode || 'calc';
+        const ctBtLabel = { calc: 'excluded — install time in countertop calculator', materials: `scored via materials & nesting (${c.card.countertopSize || 'M'})`, none: 'not in quote' };
+        s += `   Countertop: ${ctBtLabel[ctMode] || ctBtLabel.calc}\n`;
       }
       if (c.pt.hasUpholstery) {
         s += `   Upholstery: ${c.card.upholsteryExcluded ? 'excluded (via upholstery calc)' : 'no upholstery in this card'}\n`;

@@ -290,6 +290,9 @@ input, select, textarea { font-family: inherit; }
   align-items: center; gap: 14px; padding: 12px 0;
   border-bottom: 1px solid var(--cutr-border);
 }
+.bucket-row--no-image {
+  grid-template-columns: 1fr 100px 100px;
+}
 .bucket-row:last-child { border-bottom: none; }
 .bucket-row .images { display: flex; gap: 4px; height: 64px; overflow: hidden; }
 .bucket-row .images img {
@@ -1711,11 +1714,10 @@ function renderExclusionBanners(card, pt) {
     const incl = card.countertopIncluded === true;
     html += `<div class="exclusion-banner">
       <div class="label">
-        <strong>Countertops scored in this card?</strong>
-        <span style="font-weight:400; color:var(--cutr-text-secondary);"> — only if quoted via materials &amp; nesting. Say No if using the countertop calculator or if there's no countertop.</span>
+        <strong>Countertops scored in this card?</strong> Only if quoted via materials &amp; nesting — not via the countertop calculator.
       </div>
       <div class="seg">
-        <button class="${incl ? 'active' : ''}" data-ct-card="${card.id}" data-ct-incl="true">Yes</button>
+        <button class="${incl ? 'active' : ''}" data-ct-card="${card.id}" data-ct-incl="true">Yes — score here</button>
         <button class="${!incl ? 'active' : ''}" data-ct-card="${card.id}" data-ct-incl="false">No</button>
       </div>
     </div>`;
@@ -1855,6 +1857,7 @@ function renderPanelsSection(card, pt) {
 function renderCountertopSection(card, pt) {
   if (!pt.hasCountertops || !card.countertopIncluded) return '';
   const buckets = CONFIG.countertopBuckets || [];
+  const CT_NAMES = { S: 'Small', M: 'Medium', L: 'Large', Os: 'Oversize' };
   let html = `<div class="subsection">
     <div class="subsection-label">
       Countertops
@@ -1862,16 +1865,17 @@ function renderCountertopSection(card, pt) {
     </div>`;
   buckets.forEach(b => {
     const n = card.countertops[b.id] || 0;
-    html += `<div class="bucket-row">
-      <div class="bucket-info" style="flex:1;">
-        <div class="name">${escapeHtml(b.id === 'Os' ? 'Oversize' : b.id)}</div>
+    const displayName = CT_NAMES[b.id] || b.id;
+    html += `<div class="bucket-row bucket-row--no-image">
+      <div class="bucket-info">
+        <div class="name">${escapeHtml(displayName)}</div>
         <div class="range">${escapeHtml(b.label)}</div>
       </div>
-      <div class="contrib">+${b.ratio} corpus<br/>each</div>
+      <div class="contrib">+${(b.ratio || 0).toFixed(2)} corpus<br/>each</div>
       <div class="input-box">
         <input class="num-input" type="number" min="0" step="1"
           data-ct-qty="${card.id}|${b.id}" value="${n}" />
-        <span class="unit">pcs</span>
+        <span class="unit">× ${escapeHtml(b.id)}</span>
       </div>
     </div>`;
   });

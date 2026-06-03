@@ -1482,8 +1482,8 @@ function makeCardFor(productTypeId) {
     productTypeId,
     name: pt.name + (cardCountSame > 0 ? ` #${cardCountSame + 1}` : ''),
     installationType: (defaultIT && defaultIT !== 'required') ? defaultIT : null,
-    countertopMode: 'calc',  // 'calc' | 'materials' | 'none'
-    countertopSize: 'M',     // used when countertopMode === 'materials'
+    countertopIncluded: false, // scored in this card (materials & nesting only)
+    countertops: {},           // qty per bucket id, e.g. { S:0, M:1, L:0, Os:0 }
     upholsteryExcluded: true,
     panelInputMode: pt.panelDefaultMode || 'm2',
     modules: {},
@@ -1495,6 +1495,7 @@ function makeCardFor(productTypeId) {
   };
   (pt.moduleBuckets || []).forEach(b => card.modules[b.id] = 0);
   (pt.panelBuckets || []).forEach(b => card.panelsCount[b.id] = { site: 0, unknown: 0 });
+  if (pt.hasCountertops) (CONFIG.countertopBuckets || []).forEach(b => card.countertops[b.id] = 0);
   return card;
 }
 
@@ -1601,7 +1602,8 @@ function renderCards() {
         </div>` : ''}
         ${pt.hasModules ? renderModulesSection(card, pt) : ''}
         ${pt.hasPanels ? renderPanelsSection(card, pt) : ''}
-        ${!pt.hasModules && !pt.hasPanels ? `<div class="empty-state">This product type has no scored inputs.</div>` : ''}
+        ${renderCountertopSection(card, pt)}
+        ${!pt.hasModules && !pt.hasPanels && !pt.hasCountertops ? `<div class="empty-state">This product type has no scored inputs.</div>` : ''}
       </div>
     `;
     c.appendChild(wrap);
@@ -1634,22 +1636,24 @@ function bindCardEvents() {
       renderCards(); recalc();
     });
   });
-  // Countertop mode (3-way)
-  document.querySelectorAll('[data-ct-card][data-ct-mode]').forEach(b => {
+  // Countertop yes/no toggle
+  document.querySelectorAll('[data-ct-card][data-ct-incl]').forEach(b => {
     b.addEventListener('click', () => {
       const card = getCard(b.dataset.ctCard);
       if (!card) return;
-      card.countertopMode = b.dataset.ctMode;
+      card.countertopIncluded = b.dataset.ctIncl === 'true';
       renderCards(); recalc();
     });
   });
-  // Countertop size
-  document.querySelectorAll('[data-ct-card][data-ct-size]').forEach(b => {
-    b.addEventListener('click', () => {
-      const card = getCard(b.dataset.ctCard);
+  // Countertop quantity inputs
+  document.querySelectorAll('input[data-ct-qty]').forEach(el => {
+    el.addEventListener('input', () => {
+      const [cardId, bucketId] = el.dataset.ctQty.split('|');
+      const card = getCard(cardId);
       if (!card) return;
-      card.countertopSize = b.dataset.ctSize;
-      renderCards(); recalc();
+      if (!card.countertops) card.countertops = {};
+      card.countertops[bucketId] = Math.max(0, parseInt(el.value) || 0);
+      recalcLive(cardId); recalc();
     });
   });
   // Module input
@@ -1704,31 +1708,16 @@ function recalcLive(cardId) {
 function renderExclusionBanners(card, pt) {
   let html = '';
   if (pt.hasCountertops) {
-    const ctMode = card.countertopMode || 'calc';
-    const ctSize = card.countertopSize || 'M';
-    const ctBuckets = CONFIG.countertopBuckets || [];
-    const ctActiveBucket = ctBuckets.find(b => b.id === ctSize);
+    const incl = card.countertopIncluded === true;
     html += `<div class="exclusion-banner">
       <div class="label">
-        <strong>Countertop in this card?</strong> How is it quoted?
+        <strong>Countertops scored in this card?</strong>
+        <span style="font-weight:400; color:var(--cutr-text-secondary);"> — only if quoted via materials &amp; nesting. Say No if using the countertop calculator or if there's no countertop.</span>
       </div>
       <div class="seg">
-        <button class="${ctMode === 'calc' ? 'active' : ''}" data-ct-card="${card.id}" data-ct-mode="calc">Via countertop calculator</button>
-        <button class="${ctMode === 'materials' ? 'active' : ''}" data-ct-card="${card.id}" data-ct-mode="materials">Via materials &amp; nesting</button>
-        <button class="${ctMode === 'none' ? 'active' : ''}" data-ct-card="${card.id}" data-ct-mode="none">Not in quote</button>
+        <button class="${incl ? 'active' : ''}" data-ct-card="${card.id}" data-ct-incl="true">Yes</button>
+        <button class="${!incl ? 'active' : ''}" data-ct-card="${card.id}" data-ct-incl="false">No</button>
       </div>
-      ${ctMode === 'calc' ? `<div style="font-size:12px; color:var(--cutr-text-secondary); margin-top:8px;">Install time is captured by the countertop calculator — not scored here.</div>` : ''}
-      ${ctMode === 'none' ? `<div style="font-size:12px; color:var(--cutr-text-secondary); margin-top:8px;">No countertop to score.</div>` : ''}
-      ${ctMode === 'materials' ? `<div style="margin-top:10px;">
-        <div style="font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--cutr-text-secondary); margin-bottom:6px;">Countertop run length</div>
-        <div class="seg">
-          ${ctBuckets.map(b => `<button class="${ctSize === b.id ? 'active' : ''}" data-ct-card="${card.id}" data-ct-size="${b.id}" style="min-width:72px;">
-            <span style="display:block; font-weight:600;">${escapeHtml(b.id)}</span>
-            <span style="display:block; font-size:10px; font-weight:400; opacity:0.75;">${escapeHtml(b.label)}</span>
-          </button>`).join('')}
-        </div>
-        <div style="font-size:12px; color:var(--cutr-text-secondary); margin-top:6px; font-family:var(--cutr-font-mono);">+${ctActiveBucket ? ctActiveBucket.ratio : '?'} corpus added to this card</div>
-      </div>` : ''}
     </div>`;
   }
   if (pt.hasUpholstery) {
@@ -1863,6 +1852,33 @@ function renderPanelsSection(card, pt) {
   return html;
 }
 
+function renderCountertopSection(card, pt) {
+  if (!pt.hasCountertops || !card.countertopIncluded) return '';
+  const buckets = CONFIG.countertopBuckets || [];
+  let html = `<div class="subsection">
+    <div class="subsection-label">
+      Countertops
+      <span class="normal">— pieces quoted via materials &amp; nesting</span>
+    </div>`;
+  buckets.forEach(b => {
+    const n = card.countertops[b.id] || 0;
+    html += `<div class="bucket-row">
+      <div class="bucket-info" style="flex:1;">
+        <div class="name">${escapeHtml(b.id === 'Os' ? 'Oversize' : b.id)}</div>
+        <div class="range">${escapeHtml(b.label)}</div>
+      </div>
+      <div class="contrib">+${b.ratio} corpus<br/>each</div>
+      <div class="input-box">
+        <input class="num-input" type="number" min="0" step="1"
+          data-ct-qty="${card.id}|${b.id}" value="${n}" />
+        <span class="unit">pcs</span>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+  return html;
+}
+
 function renderInstallTypeSection(card, pt) {
   const I = CONFIG.installation;
   let html = `<div class="subsection">
@@ -1972,13 +1988,16 @@ function computeCardRaw(card, pt) {
       }
     });
   }
-  // Countertop scored via materials & nesting (not via countertop calculator)
-  if (pt.hasCountertops && card.countertopMode === 'materials') {
-    const sz = card.countertopSize || 'M';
-    const bucket = (CONFIG.countertopBuckets || []).find(b => b.id === sz);
-    const ratio = bucket ? bucket.ratio : 0.8;
-    raw += ratio;
-    parts.push({ label: `Countertop — ${sz} (materials & nesting)`, calc: `1 × ${ratio}`, contrib: ratio });
+  // Countertops scored in this card (materials & nesting, not via countertop calculator)
+  if (pt.hasCountertops && card.countertopIncluded) {
+    (CONFIG.countertopBuckets || []).forEach(b => {
+      const n = card.countertops[b.id] || 0;
+      if (n > 0) {
+        const c = n * b.ratio;
+        raw += c;
+        parts.push({ label: `Countertop ${b.id} × ${n}`, calc: `${n} × ${b.ratio}`, contrib: c });
+      }
+    });
   }
   if (pt.hasPanels) {
     const r = pt.panelRatioOnSite || 0;
@@ -2195,9 +2214,13 @@ function buildBacktrace(r, install) {
         s += `   Install type: ⚠ not set\n`;
       }
       if (c.pt.hasCountertops) {
-        const ctMode = c.card.countertopMode || 'calc';
-        const ctBtLabel = { calc: 'excluded — install time in countertop calculator', materials: `scored via materials & nesting (${c.card.countertopSize || 'M'})`, none: 'not in quote' };
-        s += `   Countertop: ${ctBtLabel[ctMode] || ctBtLabel.calc}\n`;
+        if (c.card.countertopIncluded) {
+          const ctPieces = (CONFIG.countertopBuckets || []).filter(b => (c.card.countertops||{})[b.id] > 0)
+            .map(b => `${c.card.countertops[b.id]}× ${b.id}`).join(', ');
+          s += `   Countertop: scored via materials & nesting (${ctPieces || 'none entered'})\n`;
+        } else {
+          s += `   Countertop: not scored here\n`;
+        }
       }
       if (c.pt.hasUpholstery) {
         s += `   Upholstery: ${c.card.upholsteryExcluded ? 'excluded (via upholstery calc)' : 'no upholstery in this card'}\n`;

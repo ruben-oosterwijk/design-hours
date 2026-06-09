@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Cutr · Corpus Calculator V2</title>
+<title>Cutr · Corpus Calculator V3</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -555,6 +555,120 @@ input, select, textarea { font-family: inherit; }
 .hidden { display: none !important; }
 .empty-state { text-align: center; padding: 32px 20px; color: var(--cutr-text-secondary); font-size: 13px; font-style: italic; }
 
+/* ── File blocks (Order → Files → Elements) ── */
+.file-block {
+  border: 1px solid var(--cutr-n-400);
+  margin-bottom: 32px;
+  background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.file-block:last-child { margin-bottom: 4px; }
+
+.file-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 14px; background: var(--cutr-n-200);
+  border-bottom: 2px solid var(--cutr-n-400);
+}
+
+.file-name-input {
+  flex: 1; font-size: 14px; font-weight: 600; padding: 3px 7px;
+  border: 1px solid transparent; border-radius: 2px; background: transparent;
+  min-width: 0;
+}
+.file-name-input:hover { border-color: var(--cutr-rule); background: white; }
+.file-name-input:focus { outline: none; border-color: var(--cutr-brand); background: white; }
+
+/* ── Copy fields ── */
+.copy-field {
+  display: inline-flex; flex-direction: column;
+  padding: 5px 8px; border: none; background: none;
+  border-radius: 3px; cursor: pointer; text-align: left; min-width: 0;
+  transition: background 0.1s;
+}
+.copy-field:hover { background: var(--cutr-amber-100); }
+.copy-field.flash { background: var(--cutr-amber-100); }
+.cf-label {
+  font-size: 9px; color: var(--cutr-n-400); line-height: 1;
+  margin-bottom: 3px; white-space: nowrap;
+}
+.cf-value {
+  display: flex; align-items: center; gap: 3px;
+  font-size: 12.5px; line-height: 1.3; color: var(--cutr-text);
+}
+.copy-field.flash .cf-value { color: var(--cutr-brand); }
+.cf-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cf-icon-hover {
+  font-size: 9px; color: var(--cutr-n-600);
+  opacity: 0; transition: opacity 0.1s; flex-shrink: 0;
+}
+.copy-field:hover .cf-icon-hover { opacity: 1; }
+.cf-icon-flash {
+  font-size: 9px; color: var(--cutr-brand); display: none; flex-shrink: 0;
+}
+.copy-field.flash .cf-icon-flash { display: inline; }
+.copy-field.flash .cf-icon-hover { display: none; }
+
+/* ── Quote line items ── */
+.ql-parent {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 4px 10px;
+  font-size: 13px; font-weight: 700; color: var(--cutr-n-900);
+  border-bottom: 2px solid var(--cutr-n-900);
+}
+.ql-thead-row,
+.ql-row {
+  display: grid;
+  grid-template-columns: minmax(0,2fr) 88px 80px minmax(0,1.5fr);
+  align-items: start;
+}
+.ql-thead-row {
+  border-bottom: 1px solid var(--cutr-n-400);
+}
+.ql-th {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--cutr-text-secondary);
+  padding: 8px 8px 6px; white-space: nowrap;
+}
+.ql-th:first-child { padding-left: 4px; }
+.ql-row { border-bottom: 1px solid var(--cutr-n-100); }
+.ql-row:last-child { border-bottom: none; }
+
+/* ── Backtrace section ── */
+.backtrace-section { padding: 16px 20px; border-top: 1px solid var(--cutr-border); }
+.backtrace-instruction {
+  font-size: 12px; color: var(--cutr-text-secondary); margin-bottom: 10px;
+}
+
+/* ── Changelog overlay ── */
+.changelog-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(38,38,38,0.65); z-index: 60;
+  align-items: center; justify-content: center; padding: 24px;
+}
+.changelog-overlay.open { display: flex; }
+.changelog-panel {
+  background: white; border-radius: 4px; overflow: hidden;
+  width: 600px; max-width: 100%; max-height: calc(100vh - 48px);
+  overflow-y: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+  display: flex; flex-direction: column;
+}
+
+/* ── Order-level layout ── */
+.order-name-wrap { margin-bottom: 20px; }
+.order-name-input { width: 100%; font-size: 20px; font-weight: 600; padding: 10px 14px; border: 1px solid var(--cutr-rule); border-radius: 3px; background: white; letter-spacing: -0.01em; }
+.order-name-input:focus { outline: none; border-color: var(--cutr-brand); box-shadow: 0 0 0 3px var(--cutr-amber-100); }
+.add-file-bar { display: flex; gap: 10px; margin: 16px 0 24px; }
+.add-file-btn { padding: 9px 16px; background: var(--cutr-n-900); color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 13px; font-weight: 500; }
+.add-file-btn:hover { background: var(--cutr-amber-700); }
+.add-file-btn.secondary { background: white; color: var(--cutr-text); border: 1px solid var(--cutr-rule); }
+.add-file-btn.secondary:hover { background: var(--cutr-n-100); }
+.file-result-summary { padding: 14px 20px; background: var(--cutr-amber-100); border-top: 2px solid var(--cutr-amber-300); font-family: var(--cutr-font-mono); font-size: 12px; display: flex; gap: 24px; align-items: center; flex-wrap: wrap; }
+.file-corpus-num { font-size: 28px; font-weight: 600; font-family: var(--cutr-font-mono); color: var(--cutr-text); }
+.bulk-import-area { margin: 0 0 16px; padding: 14px 18px; background: var(--cutr-n-100); border: 1px solid var(--cutr-rule); border-radius: 3px; }
+.dup-badge { font-size: 11px; color: var(--cutr-text-secondary); background: var(--cutr-n-200); padding: 3px 8px; border-radius: 2px; font-family: var(--cutr-font-mono); }
+
 /* How-to button in header */
 .how-to-btn {
   font-size: 12px; font-weight: 500; color: var(--cutr-text-secondary);
@@ -621,37 +735,37 @@ input, select, textarea { font-family: inherit; }
   <div class="onboarding-panel">
     <div class="onboarding-hero">
       <div class="brand">cutr<span class="dot">.</span></div>
-      <h2>Corpus Calculator</h2>
-      <p>Use this tool to score a production file before quoting. It tells you the corpus number to enter in the platform and the correct installation time setting — in four steps.</p>
+      <h2>Corpus Calculator V3</h2>
+      <p>Score an entire order across multiple platform files. One order, multiple files, cards per file — corpus and install time per file in four steps.</p>
     </div>
     <div class="onboarding-steps">
       <div class="onboarding-step">
         <div class="step-header">
           <span class="num">1</span>
-          <span class="step-title">File settings</span>
+          <span class="step-title">Name the order</span>
         </div>
-        <p>Give the file a name and set the floor level. Floor adds 15 min per corpus for every level above ground — this applies across the whole file.</p>
+        <p>Give the order a name — e.g. "Brasserie Noord / Project 1234". This appears in the backtrace for the audit trail.</p>
       </div>
       <div class="onboarding-step">
         <div class="step-header">
           <span class="num">2</span>
-          <span class="step-title">What's in this file?</span>
+          <span class="step-title">Add files</span>
         </div>
-        <p>Pick every product type the file contains — cabinets, benches, counters, planters, and so on. Each selection adds a card you fill in separately.</p>
+        <p>Add one file per Cutr platform file. Use the file name as it appears on the platform. Paste multiple names at once with Bulk import.</p>
       </div>
       <div class="onboarding-step">
         <div class="step-header">
           <span class="num">3</span>
-          <span class="step-title">Fill in each product</span>
+          <span class="step-title">Fill in each file</span>
         </div>
-        <p>On each card: enter the number of modules per size (S / M / L / Oversize), choose the install type, and mark unknown modules as on-site or unknown if the split isn't decided yet.</p>
+        <p>For each file: pick product types, fill in module/panel counts, set floor level and install type. If two files share the same layout, use "Same config as" to copy cards instantly.</p>
       </div>
       <div class="onboarding-step step-4">
         <div class="step-header">
           <span class="num">4</span>
-          <span class="step-title">Set in platform</span>
+          <span class="step-title">Copy to platform</span>
         </div>
-        <p>The calculator shows the total corpus number and the recommended installation type. Copy the backtrace block and paste it into the quote comment for a full audit trail.</p>
+        <p>See corpus + install time per file. Click any quote line item value to copy it. Paste the backtrace block as a comment on the order in the platform.</p>
       </div>
     </div>
     <div class="onboarding-note">
@@ -667,9 +781,10 @@ input, select, textarea { font-family: inherit; }
 <header class="header">
   <div class="header-left">
     <div class="brand">cutr<span class="dot">.</span></div>
-    <div class="header-title">Corpus Calculator <span class="version-pill">V2 PROTOTYPE</span></div>
+    <div class="header-title">Corpus Calculator <span class="version-pill">V3</span></div>
   </div>
   <div style="display:flex; align-items:center;">
+    <button class="how-to-btn" onclick="openChangelog()">What's new</button>
     <button class="how-to-btn" onclick="openOnboarding()">How it works</button>
     <div class="mode-toggle">
       <button id="mode-user" class="active" onclick="setMode('user')">User</button>
@@ -680,80 +795,52 @@ input, select, textarea { font-family: inherit; }
 
 <!-- ==================== USER MODE ==================== -->
 <main id="user-mode" class="page">
-  <h1>Score one file</h1>
-  <p class="subtitle">A file can contain one or more product types — add a card for each. Total corpus updates live. Copy the backtrace into the quote when done.</p>
+  <div class="order-name-wrap">
+    <input class="order-name-input" id="order-name" type="text" placeholder="Order name — e.g. Brasserie Noord / Project 1234" />
+  </div>
 
-  <!-- Step 1: File settings -->
-  <section class="section">
-    <div class="section-header"><h2><span class="step-num">1</span>File settings</h2></div>
-    <div class="section-body">
-      <div class="file-settings-grid">
-        <div class="full">
-          <div class="field-label">File name</div>
-          <input class="text-input" id="file-name" type="text" placeholder="e.g., Project X — common room" />
-        </div>
-        <div>
-          <div class="field-label">Floor <span style="font-weight:400; color:var(--cutr-text-secondary); text-transform:none; font-size:11px;">(applies to the whole file)</span></div>
-          <div style="display: flex; align-items: center; gap: 8px;">
-            <input class="num-input" id="floor-input" type="number" min="0" step="1" value="0" />
-            <span style="font-size: 12px; color: var(--cutr-text-secondary); font-family: var(--cutr-font-mono);">
-              ground = 0 · +15 min/corpus per floor
-            </span>
-          </div>
-        </div>
-        <div>
-          <div class="field-label" style="color:var(--cutr-text-secondary);">Installation type</div>
-          <div style="font-size:12px; color:var(--cutr-text-secondary); margin-top:4px; line-height:1.5;">
-            Set per product card in Step 3 — the calculator derives the recommended file setting from your cards.
-          </div>
-        </div>
-      </div>
+  <!-- Bulk import -->
+  <div class="bulk-import-area" id="bulk-import-area" style="display:none;">
+    <div class="field-label" style="margin-bottom:8px;">Bulk add files — paste one file name per line</div>
+    <textarea class="paste-area" id="bulk-paste" style="min-height:100px;" placeholder="Bestand 01 - Klant naam&#10;Bestand 02 - Klant naam&#10;Bestand 03 - Klant naam"></textarea>
+    <div style="margin-top:8px; display:flex; gap:8px;">
+      <button class="btn btn-primary" onclick="applyBulkImport()">Add files</button>
+      <button class="btn" onclick="closeBulkImport()">Cancel</button>
     </div>
-  </section>
+  </div>
 
-  <!-- Step 2: What's in this file? (product types) -->
-  <section class="section">
-    <div class="section-header"><h2><span class="step-num">2</span>What's in this file?</h2></div>
-    <div class="section-body">
-      <p class="help">Pick one or more product types — each becomes a card you can fill in. A file can hold any combination (e.g., one bench + two wall paneling cards).</p>
-      <div class="type-picker" id="type-picker"></div>
-    </div>
-  </section>
+  <!-- Files rendered here -->
+  <div id="files-container"></div>
 
-  <!-- Step 3: Cards stack -->
-  <section class="section">
-    <div class="section-header">
-      <h2><span class="step-num">3</span>Fill in each product</h2>
-      <div class="cards-actions">
-        <button class="sm-btn" onclick="collapseAllCards()">Collapse all</button>
-        <button class="sm-btn" onclick="expandAllCards()">Expand all</button>
-      </div>
-    </div>
-    <div class="section-body" id="cards-container">
-      <div class="empty-state" id="cards-empty">No product types added yet — pick from the chips above.</div>
-    </div>
-  </section>
+  <!-- Add file controls -->
+  <div class="add-file-bar">
+    <button class="add-file-btn" onclick="addFile()">+ Add file</button>
+    <button class="add-file-btn secondary" onclick="openBulkImport()">+ Bulk import by paste</button>
+  </div>
 
-  <!-- Step 4: Set in platform -->
+  <!-- Order-level result -->
   <section class="result-section section" id="result-section">
     <div class="section-header">
-      <h2><span class="step-num">4</span>Set in platform</h2>
+      <h2><span class="step-num">↳</span>Order total</h2>
     </div>
     <div class="result-grid">
       <div>
-        <div class="result-big-label">Corpus number for this file</div>
+        <div class="result-big-label">Total corpus (all files)</div>
         <div class="result-big-num" id="total-corpus">0</div>
-        <div class="result-big-sub" id="total-raw">raw 0.00 → ceil 0</div>
+        <div class="result-big-sub" id="total-raw">0 files</div>
         <div class="card-breakdown" id="card-breakdown"></div>
       </div>
       <div class="platform-interp">
-        <div class="pi-label">Platform interpretation — installation time</div>
+        <div class="pi-label">Per-file breakdown</div>
         <div id="platform-interp-body"></div>
       </div>
     </div>
+    <!-- Quote line items -->
+    <div id="quote-line-items-section" style="padding: 0 28px 0;"></div>
+    <!-- Backtrace -->
     <div class="backtrace-block">
       <div class="label-row">
-        <div class="label">Backtrace — paste this into the quote comment</div>
+        <div class="label">Backtrace — paste as comment on the order in the platform</div>
         <button class="copy-btn" id="copy-backtrace" onclick="copyBacktrace()">📋 Copy block</button>
       </div>
       <pre class="backtrace-pre" id="backtrace-text"></pre>
@@ -796,13 +883,13 @@ input, select, textarea { font-family: inherit; }
 <div class="sticky-total" id="sticky-total">
   <div class="left">
     <div>
-      <div class="sleep-label">Corpus number</div>
+      <div class="sleep-label">Total corpus</div>
       <span class="total-num" id="sticky-total-num">0</span>
     </div>
     <div class="install-summary" id="sticky-install"></div>
   </div>
   <div class="right">
-    <button class="btn" onclick="resetJob()">Reset file</button>
+    <button class="btn" onclick="resetOrder()">Reset order</button>
   </div>
 </div>
 
@@ -819,6 +906,34 @@ input, select, textarea { font-family: inherit; }
     <div class="modal-footer">
       <button class="btn" onclick="closePartlistModal()">Cancel</button>
       <button class="btn btn-primary" id="apply-partlist-btn" disabled onclick="applyPartlist()">Apply to card</button>
+    </div>
+  </div>
+</div>
+
+<!-- Changelog overlay -->
+<div class="changelog-overlay" id="changelog-overlay" onclick="onChangelogOverlayClick(event)">
+  <div class="changelog-panel">
+    <div class="onboarding-hero">
+      <div class="brand">cutr<span class="dot">.</span></div>
+      <h2>What's new — Corpus Calculator V3</h2>
+      <p>Multi-file order support, configuration copy, quote line items.</p>
+    </div>
+    <div style="padding: 24px 36px;">
+      <div style="margin-bottom: 16px;">
+        <div style="font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.1em; color:var(--cutr-text-secondary); margin-bottom:8px;">V3 — 2026</div>
+        <ul style="font-size:13px; color:var(--cutr-text); line-height:1.8; padding-left:18px;">
+          <li><strong>Order → Files → Elements</strong> — one order, multiple platform files, cards per file.</li>
+          <li><strong>Bulk file import</strong> — paste file names from the platform to add multiple files at once.</li>
+          <li><strong>Configuration copy</strong> — mark a file as "same config as" another to copy all product cards instantly.</li>
+          <li><strong>Quote line items</strong> — click-to-copy line items in Cutr platform format (DSP - Installatie / per file).</li>
+          <li><strong>Per-file corpus + install summary</strong> — see each file's result inline.</li>
+          <li><strong>Updated backtrace</strong> — covers the full order with all files.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="onboarding-footer">
+      <div></div>
+      <button class="btn btn-primary" onclick="closeChangelog()">Got it →</button>
     </div>
   </div>
 </div>
@@ -1460,33 +1575,101 @@ function saveConfig() { localStorage.setItem(STORAGE_KEY, JSON.stringify(CONFIG)
 
 // ============================================================================
 // JOB STATE
-// One file with file-level settings + N product type cards
+// Order → Files → Elements architecture
 // ============================================================================
 
-let JOB = {
-  fileName: '',
-  floor: 0,    // file-level (installation type is now per card)
-  cards: []
-};
+const JOB_KEY = 'cutr-corpus-v2-job';
+
+let JOB = { orderName: '', files: [] };
+
+function makeFile(name) {
+  return {
+    id: 'f' + Date.now() + Math.floor(Math.random() * 1000),
+    name: name || '',
+    floor: 0,
+    isDuplicateOf: null,
+    cards: []
+  };
+}
 
 function initJob() {
-  JOB.fileName = '';
-  JOB.floor = 0;
-  JOB.cards = [];
+  JOB = { orderName: '', files: [makeFile('')] };
+}
+
+function saveJob() {
+  try { localStorage.setItem(JOB_KEY, JSON.stringify(JOB)); } catch(e) {}
+}
+
+function loadJob() {
+  try {
+    const raw = localStorage.getItem(JOB_KEY);
+    if (!raw) { initJob(); return; }
+    const data = JSON.parse(raw);
+    // Migration from old format (had cards at top level)
+    if (data.cards && !data.files) {
+      JOB = { orderName: '', files: [{ id: 'f1', name: data.fileName || '', floor: data.floor || 0, isDuplicateOf: null, cards: data.cards || [] }] };
+    } else {
+      JOB = data;
+      if (!JOB.files || !JOB.files.length) JOB.files = [makeFile('')];
+    }
+  } catch(e) { initJob(); }
+}
+
+function addFile(name) {
+  const file = makeFile(name || '');
+  JOB.files.push(file);
+  saveJob();
+  renderFiles();
+  recalc();
+  // scroll to new file
+  setTimeout(() => {
+    const el = document.getElementById('file-block-' + file.id);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+function removeFile(fileId) {
+  if (JOB.files.length <= 1) { alert('An order needs at least one file.'); return; }
+  if (!confirm('Remove this file and all its cards?')) return;
+  JOB.files = JOB.files.filter(f => f.id !== fileId);
+  // clear isDuplicateOf references to the removed file
+  JOB.files.forEach(f => { if (f.isDuplicateOf === fileId) f.isDuplicateOf = null; });
+  saveJob();
+  renderFiles();
+  recalc();
+}
+
+function getFile(fileId) {
+  return JOB.files.find(f => f.id === fileId);
+}
+
+function onDuplicateChange(fileId, sourceFileId) {
+  const file = getFile(fileId);
+  if (!file) return;
+  if (!sourceFileId) { file.isDuplicateOf = null; saveJob(); return; }
+  const source = getFile(sourceFileId);
+  if (!source) return;
+  // Copy configuration — clone all cards from source file
+  file.isDuplicateOf = sourceFileId;
+  file.cards = JSON.parse(JSON.stringify(source.cards)).map(c => ({
+    ...c,
+    id: 'c' + Date.now() + Math.floor(Math.random() * 10000)  // new ids to avoid collisions
+  }));
+  saveJob();
+  renderFiles();
+  recalc();
 }
 
 function makeCardFor(productTypeId) {
   const pt = CONFIG.productTypes.find(t => t.id === productTypeId);
   if (!pt) return null;
-  const cardCountSame = JOB.cards.filter(c => c.productTypeId === productTypeId).length;
-  const defaultIT = pt.defaultInstallType;
   const card = {
     id: 'c' + Date.now() + Math.floor(Math.random() * 1000),
     productTypeId,
-    name: pt.name + (cardCountSame > 0 ? ` #${cardCountSame + 1}` : ''),
-    installationType: (defaultIT && defaultIT !== 'required') ? defaultIT : null,
-    countertopIncluded: false, // scored in this card (materials & nesting only)
-    countertops: {},           // qty per bucket id, e.g. { S:0, M:1, L:0, Os:0 }
+    name: pt.name,
+    installationType: (pt.defaultInstallType && pt.defaultInstallType !== 'required') ? pt.defaultInstallType : null,
+    countertopIncluded: false,
+    countertops: {},
     upholsteryExcluded: true,
     panelInputMode: pt.panelDefaultMode || 'm2',
     modules: {},
@@ -1502,27 +1685,78 @@ function makeCardFor(productTypeId) {
   return card;
 }
 
-function addCard(productTypeId) {
+function addCard(productTypeId, fileId) {
+  const file = getFile(fileId);
+  if (!file) return;
   const card = makeCardFor(productTypeId);
   if (!card) return;
-  // Collapse all existing cards so the new one is in focus
-  JOB.cards.forEach(c => c.collapsed = true);
-  JOB.cards.push(card);
-  renderCards();
+  // number the card if same type already exists in this file
+  const sameType = file.cards.filter(c => c.productTypeId === productTypeId).length;
+  if (sameType > 0) card.name = card.name + ` #${sameType + 1}`;
+  file.cards.forEach(c => c.collapsed = true);
+  file.cards.push(card);
+  saveJob();
+  renderFiles();
   recalc();
 }
 
 function removeCard(cardId) {
-  JOB.cards = JOB.cards.filter(c => c.id !== cardId);
-  renderCards();
+  for (const file of JOB.files) {
+    const idx = file.cards.findIndex(c => c.id === cardId);
+    if (idx !== -1) { file.cards.splice(idx, 1); break; }
+  }
+  saveJob();
+  renderFiles();
   recalc();
 }
 
 function getCard(cardId) {
-  return JOB.cards.find(c => c.id === cardId);
+  for (const file of JOB.files) {
+    const card = file.cards.find(c => c.id === cardId);
+    if (card) return card;
+  }
+  return null;
 }
+
 function getPt(productTypeId) {
   return CONFIG.productTypes.find(t => t.id === productTypeId);
+}
+
+function clearImport(cardId) {
+  const card = getCard(cardId);
+  if (!card) return;
+  card.importedAt = null;
+  card.importSummary = null;
+  saveJob();
+  renderFiles();
+}
+
+function toggleCardCollapse(cardId) {
+  const card = getCard(cardId);
+  if (!card) return;
+  card.collapsed = !card.collapsed;
+  renderFiles();
+}
+
+function collapseAllCards(fileId) {
+  const file = getFile(fileId);
+  if (file) file.cards.forEach(c => c.collapsed = true);
+  renderFiles();
+}
+
+function expandAllCards(fileId) {
+  const file = getFile(fileId);
+  if (file) file.cards.forEach(c => c.collapsed = false);
+  renderFiles();
+}
+
+function resetOrder() {
+  if (!confirm('Reset the entire order? All files and inputs will be cleared.')) return;
+  initJob();
+  document.getElementById('order-name').value = '';
+  saveJob();
+  renderFiles();
+  recalc();
 }
 
 // ============================================================================
@@ -1556,62 +1790,156 @@ function renderInstallCards() {
   // File-level install type removed — each product card has its own install type selector.
 }
 
-function renderTypePicker() {
-  const picker = document.getElementById('type-picker');
-  picker.innerHTML = '';
-  CONFIG.productTypes.forEach(pt => {
-    const chip = document.createElement('button');
-    chip.className = 'type-chip';
-    chip.innerHTML = `${pt.icon || ''} + ${escapeHtml(pt.name)}`;
-    chip.addEventListener('click', () => addCard(pt.id));
-    picker.appendChild(chip);
-  });
-}
+function renderFiles() {
+  const container = document.getElementById('files-container');
+  if (!container) return;
+  container.innerHTML = '';
 
-function renderCards() {
-  const c = document.getElementById('cards-container');
-  if (JOB.cards.length === 0) {
-    c.innerHTML = `<div class="empty-state" id="cards-empty">No product types added yet — pick from the chips above.</div>`;
-    return;
-  }
-  c.innerHTML = '';
-  JOB.cards.forEach((card, idx) => {
-    const pt = getPt(card.productTypeId);
-    if (!pt) return;
-    const cardRaw = computeCardRaw(card, pt).raw;
-    const wrap = document.createElement('div');
-    wrap.className = 'product-card' + (card.collapsed ? ' collapsed' : '');
-    wrap.innerHTML = `
-      <div class="card-header">
-        <button class="card-toggle" title="Collapse / expand" onclick="toggleCardCollapse('${card.id}')">▾</button>
-        <span class="badge">${pt.icon || (idx + 1)}</span>
-        <input class="name-input" data-card="${card.id}" type="text" value="${escapeHtml(card.name)}" />
-        <span class="type-tag">${escapeHtml(pt.name)}</span>
-        <span class="live-corpus">raw <span class="num">${cardRaw.toFixed(2)}</span></span>
-        <button class="card-remove" title="Remove this card" onclick="removeCard('${card.id}')">×</button>
+  JOB.files.forEach((file, fileIdx) => {
+    const block = document.createElement('div');
+    block.className = 'file-block';
+    block.id = 'file-block-' + file.id;
+
+    const otherFiles = JOB.files.filter(f => f.id !== file.id);
+    const dupOptions = otherFiles.map(f =>
+      `<option value="${escapeAttr(f.id)}" ${file.isDuplicateOf === f.id ? 'selected' : ''}>${escapeHtml(f.name || `File ${JOB.files.indexOf(f) + 1}`)}</option>`
+    ).join('');
+
+    // Per-file corpus result
+    const fileResult = computeFileResult(file);
+    const fileCorpus = fileResult.ceil;
+    const fileRec = fileResult.install.recommended;
+
+    block.innerHTML = `
+      <div class="file-header">
+        <span style="font-size:11px; font-weight:700; color:var(--cutr-n-600); text-transform:uppercase; letter-spacing:0.1em; flex-shrink:0;">File ${fileIdx + 1}</span>
+        <input class="file-name-input text-input" style="flex:1; font-size:14px; padding:6px 10px;"
+          data-file="${escapeAttr(file.id)}" type="text"
+          value="${escapeHtml(file.name)}" placeholder="File name (e.g. Bestand 01 - Klant naam)" />
+        <label style="display:flex; align-items:center; gap:6px; font-size:12px; color:var(--cutr-text-secondary); flex-shrink:0;">
+          Floor
+          <input class="num-input" style="width:60px;" type="number" min="0" step="1"
+            data-file-floor="${escapeAttr(file.id)}" value="${file.floor || 0}" />
+        </label>
+        <label style="display:flex; align-items:center; gap:6px; font-size:12px; color:var(--cutr-text-secondary); flex-shrink:0;">
+          Same config as
+          <select data-file-dup="${escapeAttr(file.id)}" style="font-size:12px; padding:5px 8px; border:1px solid var(--cutr-rule); border-radius:2px; background:white;">
+            <option value="">—</option>
+            ${dupOptions}
+          </select>
+        </label>
+        ${JOB.files.length > 1 ? `<button class="card-remove" onclick="removeFile('${escapeAttr(file.id)}')" title="Remove file">×</button>` : ''}
       </div>
-      <div class="card-summary">${computeCardSummary(card, pt)}</div>
-      <div class="card-body">
-        ${pt.intro ? `<div class="intro-block">${escapeHtml(pt.intro)}</div>` : ''}
-        ${renderInstallTypeSection(card, pt)}
-        ${renderExclusionBanners(card, pt)}
-        <div class="card-toolbar">
-          <button class="toolbar-btn experimental" onclick="openPartlistModal('${card.id}')">📋 Paste partlist (experimental)</button>
-          ${card.importSummary ? '' : ''}
+      ${file.isDuplicateOf ? `<div style="padding:6px 14px; background:var(--cutr-amber-100); border-bottom:1px solid var(--cutr-amber-300); font-size:11px; color:var(--cutr-amber-700);">Configuration copied from "${escapeHtml(getFile(file.isDuplicateOf) ? (getFile(file.isDuplicateOf).name || `File ${JOB.files.indexOf(getFile(file.isDuplicateOf)) + 1}`) : '?')}" — cards are editable.</div>` : ''}
+      <div style="padding:14px 20px 10px; border-bottom:1px solid var(--cutr-border);">
+        <div class="field-label" style="margin-bottom:8px;">Add to this file</div>
+        <div class="type-picker" id="type-picker-${escapeAttr(file.id)}"></div>
+      </div>
+      <div class="section-header" style="padding:10px 20px;">
+        <h2 style="font-size:11px;">Cards</h2>
+        <div class="cards-actions">
+          <button class="sm-btn" onclick="collapseAllCards('${escapeAttr(file.id)}')">Collapse all</button>
+          <button class="sm-btn" onclick="expandAllCards('${escapeAttr(file.id)}')">Expand all</button>
         </div>
-        ${card.importSummary ? `<div class="import-banner">
-          <span>↳ Filled from partlist · ${escapeHtml(card.importSummary)}</span>
-          <button class="reset-link" onclick="clearImport('${card.id}')">Clear marker</button>
-        </div>` : ''}
-        ${pt.hasModules ? renderModulesSection(card, pt) : ''}
-        ${pt.hasPanels ? renderPanelsSection(card, pt) : ''}
-        ${renderCountertopSection(card, pt)}
-        ${!pt.hasModules && !pt.hasPanels && !pt.hasCountertops ? `<div class="empty-state">This product type has no scored inputs.</div>` : ''}
+      </div>
+      <div id="cards-${escapeAttr(file.id)}" style="padding:0 20px 8px;"></div>
+      <div class="file-result-summary" id="file-result-${escapeAttr(file.id)}">
+        <div>
+          <div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:var(--cutr-amber-700); margin-bottom:2px;">Corpus</div>
+          <span class="file-corpus-num">${fileCorpus}</span>
+        </div>
+        ${fileRec ? `<div style="font-size:12px; color:var(--cutr-n-700);">
+          <div style="font-weight:600;">${escapeHtml(fileRec.typeName)}</div>
+          <div style="font-family:var(--cutr-font-mono);">${fileRec.totalMin.toFixed(0)} min · ${fileRec.totalHours.toFixed(2)} h</div>
+        </div>` : `<div style="font-size:12px; color:var(--cutr-text-secondary);">${file.cards.length ? '⚠ Set install type on cards' : 'No cards yet'}</div>`}
+        <div style="font-size:11px; font-family:var(--cutr-font-mono); color:var(--cutr-n-600);">raw ${fileResult.raw.toFixed(2)} → ceil ${fileResult.ceil}</div>
       </div>
     `;
-    c.appendChild(wrap);
+
+    container.appendChild(block);
+
+    // Render type picker chips for this file
+    const picker = block.querySelector(`#type-picker-${file.id}`);
+    if (picker) {
+      CONFIG.productTypes.forEach(pt => {
+        const chip = document.createElement('button');
+        chip.className = 'type-chip';
+        chip.innerHTML = `${pt.icon || ''} + ${escapeHtml(pt.name)}`;
+        chip.addEventListener('click', () => addCard(pt.id, file.id));
+        picker.appendChild(chip);
+      });
+    }
+
+    // Render cards for this file
+    const cardsContainer = block.querySelector(`#cards-${file.id}`);
+    if (cardsContainer) {
+      if (file.cards.length === 0) {
+        cardsContainer.innerHTML = `<div class="empty-state" style="padding:20px 0;">No product types yet — pick from the chips above.</div>`;
+      } else {
+        file.cards.forEach((card, idx) => {
+          const pt = getPt(card.productTypeId);
+          if (!pt) return;
+          const cardRaw = computeCardRaw(card, pt).raw;
+          const wrap = document.createElement('div');
+          wrap.className = 'product-card' + (card.collapsed ? ' collapsed' : '');
+          wrap.innerHTML = `
+            <div class="card-header">
+              <button class="card-toggle" title="Collapse / expand" onclick="toggleCardCollapse('${card.id}')">▾</button>
+              <span class="badge">${pt.icon || (idx + 1)}</span>
+              <input class="name-input" data-card="${card.id}" type="text" value="${escapeHtml(card.name)}" />
+              <span class="type-tag">${escapeHtml(pt.name)}</span>
+              <span class="live-corpus">raw <span class="num">${cardRaw.toFixed(2)}</span></span>
+              <button class="card-remove" title="Remove this card" onclick="removeCard('${card.id}')">×</button>
+            </div>
+            <div class="card-summary">${computeCardSummary(card, pt)}</div>
+            <div class="card-body">
+              ${pt.intro ? `<div class="intro-block">${escapeHtml(pt.intro)}</div>` : ''}
+              ${renderInstallTypeSection(card, pt)}
+              ${renderExclusionBanners(card, pt)}
+              <div class="card-toolbar">
+                <button class="toolbar-btn experimental" onclick="openPartlistModal('${card.id}')">📋 Paste partlist (experimental)</button>
+              </div>
+              ${card.importSummary ? `<div class="import-banner">
+                <span>↳ Filled from partlist · ${escapeHtml(card.importSummary)}</span>
+                <button class="reset-link" onclick="clearImport('${card.id}')">Clear marker</button>
+              </div>` : ''}
+              ${pt.hasModules ? renderModulesSection(card, pt) : ''}
+              ${pt.hasPanels ? renderPanelsSection(card, pt) : ''}
+              ${renderCountertopSection(card, pt)}
+              ${!pt.hasModules && !pt.hasPanels && !pt.hasCountertops ? `<div class="empty-state">This product type has no scored inputs.</div>` : ''}
+            </div>
+          `;
+          cardsContainer.appendChild(wrap);
+        });
+      }
+    }
   });
+
   bindCardEvents();
+  bindFileEvents();
+}
+
+function bindFileEvents() {
+  // File name inputs
+  document.querySelectorAll('input[data-file]').forEach(el => {
+    el.addEventListener('input', e => {
+      const file = getFile(el.dataset.file);
+      if (file) { file.name = e.target.value; saveJob(); recalc(); }
+    });
+  });
+  // Floor inputs
+  document.querySelectorAll('input[data-file-floor]').forEach(el => {
+    el.addEventListener('input', e => {
+      const file = getFile(el.dataset.fileFloor);
+      if (file) { file.floor = parseInt(e.target.value) || 0; saveJob(); recalc(); }
+    });
+  });
+  // Duplicate-of selects
+  document.querySelectorAll('select[data-file-dup]').forEach(el => {
+    el.addEventListener('change', e => {
+      onDuplicateChange(el.dataset.fileDup, e.target.value || null);
+    });
+  });
 }
 
 function bindCardEvents() {
@@ -1620,7 +1948,7 @@ function bindCardEvents() {
     el.addEventListener('click', () => {
       const [cardId, installType] = el.dataset.cardInstall.split('|');
       const card = getCard(cardId);
-      if (card) { card.installationType = installType; renderCards(); recalc(); }
+      if (card) { card.installationType = installType; renderFiles(); recalc(); }
     });
   });
   // Name input
@@ -1636,7 +1964,7 @@ function bindCardEvents() {
       if (!card) return;
       const key = b.dataset.excl;
       card[key] = b.dataset.value === 'true';
-      renderCards(); recalc();
+      renderFiles(); recalc();
     });
   });
   // Countertop yes/no toggle
@@ -1645,7 +1973,7 @@ function bindCardEvents() {
       const card = getCard(b.dataset.ctCard);
       if (!card) return;
       card.countertopIncluded = b.dataset.ctIncl === 'true';
-      renderCards(); recalc();
+      renderFiles(); recalc();
     });
   });
   // Countertop quantity inputs
@@ -1692,7 +2020,7 @@ function bindCardEvents() {
     b.addEventListener('click', () => {
       const [cardId, mode] = b.dataset.cardPanelMode.split('|');
       const card = getCard(cardId);
-      if (card) { card.panelInputMode = mode; renderCards(); recalc(); }
+      if (card) { card.panelInputMode = mode; renderFiles(); recalc(); }
     });
   });
 }
@@ -1914,31 +2242,6 @@ function formatBucketRange(b) {
   return `W ${fmt(b.wMax)} · H ${fmt(b.hMax)} · D ${fmt(b.dMax)} mm`;
 }
 
-function clearImport(cardId) {
-  const card = getCard(cardId);
-  if (!card) return;
-  card.importedAt = null;
-  card.importSummary = null;
-  renderCards();
-}
-
-function toggleCardCollapse(cardId) {
-  const card = getCard(cardId);
-  if (!card) return;
-  card.collapsed = !card.collapsed;
-  renderCards();
-}
-
-function collapseAllCards() {
-  JOB.cards.forEach(c => c.collapsed = true);
-  renderCards();
-}
-
-function expandAllCards() {
-  JOB.cards.forEach(c => c.collapsed = false);
-  renderCards();
-}
-
 function computeCardSummary(card, pt) {
   const parts = [];
   if (pt.hasModules) {
@@ -2036,11 +2339,26 @@ function computeCardRaw(card, pt) {
   return { raw, parts, provisional };
 }
 
-function computeJob() {
+// ── CopyField helpers ──
+function copyField(el, value) {
+  const text = String(value);
+  const doFlash = () => { el.classList.add('flash'); setTimeout(() => el.classList.remove('flash'), 1000); };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(doFlash).catch(() => { _copyFallback(text); doFlash(); });
+  } else { _copyFallback(text); doFlash(); }
+}
+function _copyFallback(text) {
+  const ta = document.createElement('textarea'); ta.value = text;
+  ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); } catch(e) {} document.body.removeChild(ta);
+}
+
+function computeFileResult(file) {
   let totalRaw = 0;
   const cardResults = [];
   const provisional = [];
-  JOB.cards.forEach(card => {
+  file.cards.forEach(card => {
     const pt = getPt(card.productTypeId);
     if (!pt) return;
     const r = computeCardRaw(card, pt);
@@ -2048,14 +2366,29 @@ function computeJob() {
     cardResults.push({ card, pt, ...r });
     r.provisional.forEach(p => provisional.push({ cardName: card.name, ...p }));
   });
-  return { raw: totalRaw, ceil: Math.ceil(totalRaw), cards: cardResults, provisional };
+  const result = { raw: totalRaw, ceil: Math.ceil(totalRaw), cards: cardResults, provisional };
+  result.install = computeInstallBreakdown(result, file.floor || 0);
+  return result;
+}
+
+function computeJob() {
+  let totalRaw = 0;
+  const fileResults = [];
+  const provisional = [];
+  JOB.files.forEach(file => {
+    const fr = computeFileResult(file);
+    totalRaw += fr.raw;
+    fileResults.push({ file, ...fr });
+    fr.provisional.forEach(p => provisional.push(p));
+  });
+  return { raw: totalRaw, ceil: Math.ceil(totalRaw), fileResults, provisional };
 }
 
 // Computes accurate per-card install time, then finds the closest standard
 // file-level setting for the platform (Freestanding or Built-in).
-function computeInstallBreakdown(jobResult) {
+function computeInstallBreakdown(jobResult, floor) {
   const I = CONFIG.installation;
-  const floorMin = (JOB.floor || 0) * I.FLOOR_MIN;
+  const floorMin = (floor || 0) * I.FLOOR_MIN;
   const { raw: rawTotal, ceil: corpusCeil, cards } = jobResult;
 
   // Per-card accurate time using each card's own install type
@@ -2106,165 +2439,199 @@ function computeInstallBreakdown(jobResult) {
   return { accurateMin, accurateHours: accurateMin / 60, hasUnset, cardTimes, recommended, floorMin, isMixed: typeSet.size > 1 };
 }
 
-function renderPlatformInterp(r, install) {
-  if (r.cards.length === 0) {
-    return `<div style="font-size:13px; color:var(--cutr-text-secondary); padding:4px 0;">Add product cards to see install time.</div>`;
-  }
-  if (install.hasUnset) {
-    let html = `<div style="color:var(--cutr-warning); font-size:12px; margin-bottom:10px; font-weight:500;">⚠ Set installation type on all cards to get the recommended file setting.</div>`;
-    install.cardTimes.forEach(ct => {
-      html += `<div class="pi-row"><span class="k">${escapeHtml(ct.card.name)}</span>
-        <span class="v" style="${ct.cardMin === null ? 'color:var(--cutr-warning)' : ''}">${escapeHtml(ct.installTypeName)}</span></div>`;
-    });
-    return html;
-  }
-  const rec = install.recommended;
-  let html = '';
-  if (!rec) {
-    // Cards exist and all have install types, but no modules entered yet
-    html += `<div style="font-size:13px; color:var(--cutr-text-secondary); padding:4px 0 12px;">Enter modules to see the recommended file setting.</div>`;
-  }
-  if (rec) {
-    html += `<div style="background:var(--cutr-amber-100); padding:10px 12px; border-left:3px solid var(--cutr-brand); margin-bottom:14px;">
-      <div class="pi-label" style="margin-bottom:4px;">Set in platform for this file</div>
-      <div style="font-size:20px; font-weight:700; color:var(--cutr-amber-700); letter-spacing:-0.01em;">${escapeHtml(rec.typeName)}</div>
-      <div style="font-family:var(--cutr-font-mono); font-size:11px; color:var(--cutr-n-700); margin-top:4px;">
-        ${r.ceil} corpus × ${rec.perCorpus} min/corpus = ${rec.totalMin.toFixed(1)} min (${rec.totalHours.toFixed(2)} hrs)
-      </div>
-      ${install.isMixed ? `<div style="font-size:11px; color:var(--cutr-text-secondary); font-family:var(--cutr-font-mono); margin-top:3px;">Mixed types in file — closest to per-card total · Δ ${rec.delta >= 0 ? '+' : ''}${rec.delta.toFixed(1)} min</div>` : ''}
-    </div>`;
-  }
-  html += `<div class="pi-label">Per-card breakdown</div>`;
-  install.cardTimes.forEach(ct => {
-    html += `<div class="pi-row">
-      <span class="k">${escapeHtml(ct.card.name)} <span style="font-weight:400; color:var(--cutr-n-600);">[${escapeHtml(ct.installTypeName)}]</span></span>
-      <span class="v">${ct.cardMin !== null ? ct.cardMin.toFixed(1) + ' min' : '—'}</span>
-    </div>`;
-  });
-  html += `<div class="pi-formula">Accurate per-card total: ${install.accurateMin.toFixed(1)} min (${install.accurateHours.toFixed(2)} hrs)</div>`;
-  if (rec) {
-    html += `<div class="pi-formula">Formula: ${rec.breakdown.unloading} unloading + ${rec.breakdown.moving} moving + ${rec.breakdown.install} install + ${install.floorMin} floor = ${rec.perCorpus} min/corpus</div>`;
-  }
-  return html;
-}
-
 function recalc() {
   const r = computeJob();
-  const install = computeInstallBreakdown(r);
-  const rec = install.recommended;
 
+  // Update order totals
   document.getElementById('total-corpus').textContent = r.ceil;
-  document.getElementById('total-raw').textContent = `raw ${r.raw.toFixed(2)} → ceil ${r.ceil}`;
+  document.getElementById('total-raw').textContent = `${JOB.files.length} file${JOB.files.length !== 1 ? 's' : ''} · raw ${r.raw.toFixed(2)} → ceil ${r.ceil}`;
   document.getElementById('sticky-total-num').textContent = r.ceil;
-  document.getElementById('sticky-install').textContent = rec
-    ? `· ${rec.typeName} · floor ${JOB.floor} · ${rec.totalMin.toFixed(0)} min (${rec.totalHours.toFixed(2)} h)`
-    : install.hasUnset && JOB.cards.length > 0
-      ? '· ⚠ Set install type on each card'
-      : `· floor ${JOB.floor}`;
 
-  // Per-card breakdown
+  // Update sticky install summary
+  const totalInstallMin = r.fileResults.reduce((sum, fr) => {
+    return sum + (fr.install.recommended ? fr.install.recommended.totalMin : 0);
+  }, 0);
+  document.getElementById('sticky-install').textContent = r.fileResults.length
+    ? `· ${(totalInstallMin / 60).toFixed(2)} hrs total install`
+    : '';
+
+  // Per-file breakdown in order result
   const bd = document.getElementById('card-breakdown');
-  if (r.cards.length === 0) {
-    bd.innerHTML = '';
-  } else {
-    bd.innerHTML = r.cards.map(c => `
-      <div class="row">
-        <span>${escapeHtml(c.card.name)}</span>
-        <span class="num">raw ${c.raw.toFixed(2)}</span>
-      </div>
-    `).join('') + `
+  const piBody = document.getElementById('platform-interp-body');
+  if (bd && piBody) {
+    bd.innerHTML = r.fileResults.map(fr => {
+      const name = fr.file.name || `File ${JOB.files.indexOf(fr.file) + 1}`;
+      return `<div class="row">
+        <span>${escapeHtml(name)}</span>
+        <span class="num">${fr.ceil} corpus</span>
+      </div>`;
+    }).join('') + (r.fileResults.length > 1 ? `
       <div class="row total">
-        <span>Sum → ceil</span>
-        <span class="num">${r.raw.toFixed(2)} → ${r.ceil}</span>
-      </div>
-    `;
+        <span>Order total</span>
+        <span class="num">${r.ceil} corpus</span>
+      </div>` : '');
+
+    piBody.innerHTML = r.fileResults.map(fr => {
+      const name = fr.file.name || `File ${JOB.files.indexOf(fr.file) + 1}`;
+      const rec = fr.install.recommended;
+      return `<div class="pi-row" style="margin-bottom:4px;">
+        <span class="k">${escapeHtml(name)}</span>
+        <span class="v">${rec ? `${rec.typeName} · ${rec.totalMin.toFixed(0)} min` : fr.file.cards.length ? '⚠ set install type' : '—'}</span>
+      </div>`;
+    }).join('');
   }
 
-  // Platform interpretation
-  document.getElementById('platform-interp-body').innerHTML = renderPlatformInterp(r, install);
+  // Quote line items
+  const qli = document.getElementById('quote-line-items-section');
+  if (qli) qli.innerHTML = buildQuoteLineItems(r);
 
   // Backtrace
-  document.getElementById('backtrace-text').textContent = buildBacktrace(r, install);
+  document.getElementById('backtrace-text').textContent = buildBacktrace(r);
+
+  // Provisional flag
   const flag = document.getElementById('provisional-flag');
-  if (r.provisional.length > 0) {
-    flag.classList.remove('hidden');
-    flag.innerHTML = `<strong>⚠ Provisional sum.</strong> The following lines were scored on-site as a provisional value; revisit once the preassembled/on-site split is confirmed:<br>` +
-      r.provisional.map(p => `• <em>${escapeHtml(p.cardName)}</em>: ${escapeHtml(p.label)} (contribution ${p.contrib.toFixed(2)})`).join('<br>');
-  } else {
-    flag.classList.add('hidden');
+  if (flag) {
+    if (r.provisional.length > 0) {
+      flag.classList.remove('hidden');
+      flag.innerHTML = `<strong>⚠ Provisional sum.</strong> ` + r.provisional.map(p =>
+        `• <em>${escapeHtml(p.cardName)}</em>: ${escapeHtml(p.label)} (contribution ${p.contrib.toFixed(2)})`
+      ).join('<br>');
+    } else {
+      flag.classList.add('hidden');
+    }
   }
+
+  // Update per-file result summaries
+  r.fileResults.forEach(fr => {
+    const el = document.getElementById('file-result-' + fr.file.id);
+    if (!el) return;
+    const rec = fr.install.recommended;
+    el.innerHTML = `
+      <div>
+        <div style="font-size:10px; text-transform:uppercase; letter-spacing:0.1em; color:var(--cutr-amber-700); margin-bottom:2px;">Corpus</div>
+        <span class="file-corpus-num">${fr.ceil}</span>
+      </div>
+      ${rec ? `<div style="font-size:12px; color:var(--cutr-n-700);">
+        <div style="font-weight:600;">${escapeHtml(rec.typeName)}</div>
+        <div style="font-family:var(--cutr-font-mono);">${rec.totalMin.toFixed(0)} min · ${rec.totalHours.toFixed(2)} h</div>
+      </div>` : `<div style="font-size:12px; color:var(--cutr-text-secondary);">${fr.file.cards.length ? '⚠ Set install type on all cards' : 'No cards yet'}</div>`}
+      <div style="font-size:11px; font-family:var(--cutr-font-mono); color:var(--cutr-n-600);">raw ${fr.raw.toFixed(2)} → ceil ${fr.ceil} · floor ${fr.file.floor || 0}</div>
+    `;
+  });
+
+  saveJob();
 }
 
-function buildBacktrace(r, install) {
+function buildQuoteLineItems(jobResult) {
+  const rows = jobResult.fileResults.map((fr, i) => {
+    const name = fr.file.name || `File ${i + 1}`;
+    const corpus = fr.ceil;
+    const installName = `Installatie - Bestand: ${name}`;
+    return `<div class="ql-row">
+      <button class="copy-field" onclick="copyField(this, ${JSON.stringify(installName)})" title="Copy line item name">
+        <span class="cf-label">Line item name</span>
+        <span class="cf-value"><span class="cf-text">${escapeHtml(installName)}</span><span class="cf-icon-hover">⎘</span><span class="cf-icon-flash">✓</span></span>
+      </button>
+      <button class="copy-field" onclick="copyField(this, '${corpus}')" title="Copy corpus">
+        <span class="cf-label">Qty (corpus)</span>
+        <span class="cf-value"><span class="cf-text">${corpus}</span><span class="cf-icon-hover">⎘</span><span class="cf-icon-flash">✓</span></span>
+      </button>
+      <button class="copy-field" onclick="copyField(this, '1')" title="Copy rate">
+        <span class="cf-label">Rate (€/corpus)</span>
+        <span class="cf-value"><span class="cf-text">1</span><span class="cf-icon-hover">⎘</span><span class="cf-icon-flash">✓</span></span>
+      </button>
+      <button class="copy-field" onclick="copyField(this, ${JSON.stringify(name)})" title="Copy file name">
+        <span class="cf-label">File</span>
+        <span class="cf-value"><span class="cf-text">${escapeHtml(name)}</span><span class="cf-icon-hover">⎘</span><span class="cf-icon-flash">✓</span></span>
+      </button>
+    </div>`;
+  }).join('');
+
+  if (!rows) return '';
+
+  return `<div style="padding: 16px 0 8px;">
+    <h3 style="font-size:13px; font-weight:700; color:var(--cutr-text); margin-bottom:4px;">Quote line items</h3>
+    <p style="font-size:12px; color:var(--cutr-text-secondary); margin-bottom:12px;">Click any value to copy. Add under <strong>DSP - Installatie</strong> in the platform.</p>
+    <div class="ql-parent">DSP - Installatie</div>
+    <div class="ql-thead-row">
+      <div class="ql-th">Line item name</div>
+      <div class="ql-th">Qty (corpus)</div>
+      <div class="ql-th">Rate (€/corpus)</div>
+      <div class="ql-th">File</div>
+    </div>
+    ${rows}
+  </div>`;
+}
+
+function buildBacktrace(r) {
   const dt = new Date();
   const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
   const stamp = dt.toLocaleString('sv-SE', { timeZone: tz }).replace(/\..+/, '');
 
-  let s = `Corpus Calculation — V2\n`;
+  let s = `Corpus Calculation — V3 (Order)\n`;
   s += `Generated: ${stamp} (${tz})\n`;
-  s += `File name: ${JOB.fileName || '(unnamed)'}\n`;
-  s += `Floor: ${JOB.floor}\n`;
-  s += `\n`;
-  if (r.cards.length === 0) {
-    s += `(no product types added yet)\n`;
-  } else {
-    r.cards.forEach((c, idx) => {
-      const ct = install.cardTimes.find(t => t.card.id === c.card.id);
-      s += `${idx + 1}. ${c.card.name} [${c.pt.name}]\n`;
-      if (c.card.installationType) {
-        const t = CONFIG.installation.types[c.card.installationType];
-        s += `   Install type: ${t ? t.name : c.card.installationType}\n`;
-      } else {
-        s += `   Install type: ⚠ not set\n`;
-      }
-      if (c.pt.hasCountertops) {
-        if (c.card.countertopIncluded) {
-          const ctPieces = (CONFIG.countertopBuckets || []).filter(b => (c.card.countertops||{})[b.id] > 0)
-            .map(b => `${c.card.countertops[b.id]}× ${b.id}`).join(', ');
-          s += `   Countertop: scored via materials & nesting (${ctPieces || 'none entered'})\n`;
-        } else {
-          s += `   Countertop: not scored here\n`;
-        }
-      }
-      if (c.pt.hasUpholstery) {
-        s += `   Upholstery: ${c.card.upholsteryExcluded ? 'excluded (via upholstery calc)' : 'no upholstery in this card'}\n`;
-      }
-      if (c.card.importedAt) {
-        s += `   Source: partlist paste at ${c.card.importedAt}\n`;
-        if (c.card.importSummary) s += `      ${c.card.importSummary}\n`;
-      }
-      if (c.parts.length === 0) {
-        s += `   (no inputs)\n`;
-      } else {
-        c.parts.forEach(p => {
-          s += `   - ${p.label}${p.provisional ? ' ⚠ provisional' : ''}\n`;
-          s += `       contribution: ${p.contrib.toFixed(2)}  (${p.calc})\n`;
-        });
-      }
-      s += `   Card raw: ${c.raw.toFixed(2)}`;
-      if (ct && ct.cardMin !== null) s += ` · install: ${c.raw.toFixed(2)} raw × ${ct.perCorpus} min/corpus = ${ct.cardMin.toFixed(1)} min`;
-      s += '\n\n';
-    });
-  }
-  s += `Total: ceil(${r.raw.toFixed(2)}) = ${r.ceil} corpus\n`;
-  s += `\nPlatform interpretation (installation time):\n`;
-  if (install.recommended) {
-    const rec = install.recommended;
-    s += `  Recommended file setting: ${rec.typeName}\n`;
-    s += `  ${r.ceil} corpus × ${rec.perCorpus} min/corpus = ${rec.totalMin.toFixed(1)} min (${rec.totalHours.toFixed(2)} hrs)\n`;
-    s += `  Accurate per-card total: ${install.accurateMin.toFixed(1)} min (${install.accurateHours.toFixed(2)} hrs)\n`;
-    if (install.isMixed) {
-      s += `  [Mixed install types — ${rec.typeName} is closest · Δ ${rec.delta >= 0 ? '+' : ''}${rec.delta.toFixed(1)} min]\n`;
+  s += `Order: ${JOB.orderName || '(unnamed)'}\n`;
+  s += `Files: ${JOB.files.length}\n\n`;
+
+  r.fileResults.forEach((fr, fileIdx) => {
+    const fileName = fr.file.name || `File ${fileIdx + 1}`;
+    s += `${'='.repeat(60)}\n`;
+    s += `File ${fileIdx + 1}: ${fileName}\n`;
+    s += `Floor: ${fr.file.floor || 0}\n`;
+    if (fr.file.isDuplicateOf) {
+      const src = getFile(fr.file.isDuplicateOf);
+      s += `Config copied from: ${src ? (src.name || `File ${JOB.files.indexOf(src) + 1}`) : '?'}\n`;
     }
-    s += `  Formula: ${rec.breakdown.unloading} unloading + ${rec.breakdown.moving} moving + ${rec.breakdown.install} install + ${install.floorMin} floor = ${rec.perCorpus} min/corpus\n`;
-  } else if (install.hasUnset) {
-    s += `  ⚠ Installation type not set on one or more cards — set all cards to get a recommendation.\n`;
-  }
+    s += `\n`;
+
+    if (fr.cards.length === 0) {
+      s += `  (no product types added)\n\n`;
+    } else {
+      fr.cards.forEach((c, idx) => {
+        const ct = fr.install.cardTimes ? fr.install.cardTimes.find(t => t.card.id === c.card.id) : null;
+        s += `  ${idx + 1}. ${c.card.name} [${c.pt.name}]\n`;
+        if (c.card.installationType) {
+          const t = CONFIG.installation.types[c.card.installationType];
+          s += `     Install type: ${t ? t.name : c.card.installationType}\n`;
+        } else {
+          s += `     Install type: ⚠ not set\n`;
+        }
+        if (c.card.importedAt) {
+          s += `     Source: partlist paste at ${c.card.importedAt}\n`;
+          if (c.card.importSummary) s += `        ${c.card.importSummary}\n`;
+        }
+        if (c.parts.length === 0) {
+          s += `     (no inputs)\n`;
+        } else {
+          c.parts.forEach(p => {
+            s += `     - ${p.label}${p.provisional ? ' ⚠ provisional' : ''}\n`;
+            s += `         contribution: ${p.contrib.toFixed(2)}  (${p.calc})\n`;
+          });
+        }
+        s += `     Card raw: ${c.raw.toFixed(2)}`;
+        if (ct && ct.cardMin !== null) s += ` · install: ${c.raw.toFixed(2)} raw × ${ct.perCorpus} min/corpus = ${ct.cardMin.toFixed(1)} min`;
+        s += '\n\n';
+      });
+    }
+
+    s += `  File total: ceil(${fr.raw.toFixed(2)}) = ${fr.ceil} corpus\n`;
+    const rec = fr.install.recommended;
+    if (rec) {
+      s += `  Platform: ${rec.typeName} · ${fr.ceil} corpus × ${rec.perCorpus} min/corpus = ${rec.totalMin.toFixed(1)} min (${rec.totalHours.toFixed(2)} hrs)\n`;
+      if (fr.install.isMixed) s += `  [Mixed install types — ${rec.typeName} is closest]\n`;
+    } else if (fr.install.hasUnset) {
+      s += `  ⚠ Install type not set on all cards.\n`;
+    }
+    s += '\n';
+  });
+
+  s += `${'='.repeat(60)}\n`;
+  s += `ORDER TOTAL: ceil(${r.raw.toFixed(2)}) = ${r.ceil} corpus\n`;
   if (r.provisional.length > 0) {
-    s += `\n⚠ PROVISIONAL — this corpus number is provisional. Re-run after the preassembled/on-site split is confirmed for:\n`;
+    s += `\n⚠ PROVISIONAL — Re-run after assembly split is confirmed for:\n`;
     r.provisional.forEach(p => { s += `   • ${p.cardName}: ${p.label}\n`; });
   }
-  s += `\nInstruction: Paste this block into the comment section of the quote.\n`;
+  s += `\nInstruction: Paste this block as a comment on the order in the Cutr platform.\n`;
   return s;
 }
 
@@ -2281,12 +2648,30 @@ function copyBacktrace() {
   });
 }
 
-function resetJob() {
-  if (!confirm('Reset this file? All inputs will be cleared.')) return;
-  initJob();
-  document.getElementById('file-name').value = '';
-  document.getElementById('floor-input').value = '0';
-  renderCards();
+// ── Changelog + bulk import ──
+function openChangelog() { document.getElementById('changelog-overlay').classList.add('open'); }
+function closeChangelog() { document.getElementById('changelog-overlay').classList.remove('open'); }
+function onChangelogOverlayClick(e) { if (e.target === document.getElementById('changelog-overlay')) closeChangelog(); }
+
+function openBulkImport() {
+  document.getElementById('bulk-import-area').style.display = 'block';
+  document.getElementById('bulk-paste').focus();
+}
+function closeBulkImport() {
+  document.getElementById('bulk-import-area').style.display = 'none';
+  document.getElementById('bulk-paste').value = '';
+}
+function applyBulkImport() {
+  const lines = document.getElementById('bulk-paste').value.split('\n')
+    .map(l => l.trim()).filter(l => l.length > 0);
+  if (!lines.length) return;
+  lines.forEach(name => {
+    const file = makeFile(name);
+    JOB.files.push(file);
+  });
+  closeBulkImport();
+  saveJob();
+  renderFiles();
   recalc();
 }
 
@@ -2501,7 +2886,7 @@ function applyPartlist() {
   card.importSummary = `modules: ${moduleStr} · panels: ${p.panelTotalM2.toFixed(2)} m² · ignored ${p.ignoredDoors} doors`;
 
   closePartlistModal();
-  renderCards();
+  renderFiles();
   recalc();
 }
 
@@ -2553,7 +2938,7 @@ function renderAdminTypes() {
       </div>
       <div class="admin-section-body" data-admin-body="${key}" style="${expanded ? '' : 'display:none'}">
         <div class="admin-row">
-          <label>Icon (emoji): <input type="text" style="width:60px;" value="${escapeHtml(pt.icon||'')}" onchange="CONFIG.productTypes[${idx}].icon=this.value; saveConfig(); renderTypePicker(); renderCards(); renderAdminTypes();"></label>
+          <label>Icon (emoji): <input type="text" style="width:60px;" value="${escapeHtml(pt.icon||'')}" onchange="CONFIG.productTypes[${idx}].icon=this.value; saveConfig(); renderFiles(); renderAdminTypes();"></label>
           <label><input type="checkbox" ${pt.hasModules ? 'checked' : ''} onchange="CONFIG.productTypes[${idx}].hasModules=this.checked; saveConfig(); renderAdminTypes();"> Has modules</label>
           <label><input type="checkbox" ${pt.hasPanels ? 'checked' : ''} onchange="CONFIG.productTypes[${idx}].hasPanels=this.checked; saveConfig(); renderAdminTypes();"> Has panels</label>
           <label><input type="checkbox" ${pt.hasCountertops ? 'checked' : ''} onchange="CONFIG.productTypes[${idx}].hasCountertops=this.checked; saveConfig(); renderAdminTypes();"> Has countertops (show exclusion)</label>
@@ -2716,10 +3101,10 @@ function renderAdminInstall() {
         <tbody>
           ${(CONFIG.countertopBuckets || []).map((b, i) => `
             <tr>
-              <td><input type="text" value="${escapeHtml(b.id)}" onchange="CONFIG.countertopBuckets[${i}].id=this.value; saveConfig(); renderAdminInstall(); renderCards();"></td>
-              <td><input type="text" value="${escapeHtml(b.label)}" onchange="CONFIG.countertopBuckets[${i}].label=this.value; saveConfig(); renderCards();"></td>
+              <td><input type="text" value="${escapeHtml(b.id)}" onchange="CONFIG.countertopBuckets[${i}].id=this.value; saveConfig(); renderAdminInstall(); renderFiles();"></td>
+              <td><input type="text" value="${escapeHtml(b.label)}" onchange="CONFIG.countertopBuckets[${i}].label=this.value; saveConfig(); renderFiles();"></td>
               <td><input type="number" step="1" value="${b.maxMm ?? ''}" placeholder="no limit" onchange="CONFIG.countertopBuckets[${i}].maxMm=this.value===''?null:+this.value; saveConfig();"></td>
-              <td><input type="number" step="0.1" value="${b.ratio}" onchange="CONFIG.countertopBuckets[${i}].ratio=+this.value; saveConfig(); recalc(); renderCards();"></td>
+              <td><input type="number" step="0.1" value="${b.ratio}" onchange="CONFIG.countertopBuckets[${i}].ratio=+this.value; saveConfig(); recalc(); renderFiles();"></td>
             </tr>
           `).join('')}
         </tbody>
@@ -2753,8 +3138,7 @@ function applyJsonConfig() {
     saveConfig();
     alert('Config applied.');
     initJob();
-    renderTypePicker();
-    renderCards();
+    renderFiles();
     renderAdmin();
     recalc();
   } catch (e) { alert('Invalid JSON: ' + e.message); }
@@ -2764,8 +3148,7 @@ function resetConfig() {
   CONFIG = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
   saveConfig();
   initJob();
-  renderTypePicker();
-  renderCards();
+  renderFiles();
   renderAdmin();
   recalc();
 }
@@ -2783,19 +3166,17 @@ function escapeAttr(str) { return String(str ?? '').replace(/"/g, '&quot;'); }
 // INIT
 // ============================================================================
 
-initJob();
-renderTypePicker();
-renderCards();
+loadJob();
+renderFiles();
 recalc();
 
-document.getElementById('file-name').addEventListener('input', e => {
-  JOB.fileName = e.target.value;
+document.getElementById('order-name').addEventListener('input', e => {
+  JOB.orderName = e.target.value;
+  saveJob();
   recalc();
 });
-document.getElementById('floor-input').addEventListener('input', e => {
-  JOB.floor = parseInt(e.target.value) || 0;
-  recalc();
-});
+// Set order name input from loaded state
+document.getElementById('order-name').value = JOB.orderName || '';
 </script>
 
 </body>

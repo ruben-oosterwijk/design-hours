@@ -122,8 +122,120 @@ input, select, textarea { font-family: inherit; }
 .num-input:disabled { background: var(--cutr-n-200); color: var(--cutr-n-600); cursor: not-allowed; }
 .input-hint { font-size: 11px; color: var(--cutr-text-secondary); margin-top: 3px; }
 
-/* Item cards */
-.item-card { border: 1px solid var(--cutr-border); margin-bottom: 12px; background: white; }
+/* ── File blocks ── */
+.file-block {
+  border: 1px solid var(--cutr-border);
+  margin-bottom: 20px;
+  background: white;
+}
+.file-block:last-child { margin-bottom: 4px; }
+
+.file-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 14px; background: var(--cutr-n-100);
+  border-bottom: 1px solid var(--cutr-border);
+}
+.file-header.is-duplicate {
+  background: var(--cutr-amber-100);
+  border-bottom-color: var(--cutr-amber-300);
+}
+.file-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; flex-shrink: 0;
+  background: var(--cutr-n-700); color: white;
+  font-size: 11px; font-weight: 700; border-radius: 3px;
+}
+.file-header.is-duplicate .file-num { background: var(--cutr-amber-600); }
+
+.file-name-input {
+  flex: 1; font-size: 14px; font-weight: 600; padding: 3px 7px;
+  border: 1px solid transparent; border-radius: 2px; background: transparent;
+  min-width: 0;
+}
+.file-name-input:hover { border-color: var(--cutr-rule); background: white; }
+.file-name-input:focus { outline: none; border-color: var(--cutr-brand); background: white; }
+.file-header.is-duplicate .file-name-input:hover { border-color: var(--cutr-amber-300); }
+.file-header.is-duplicate .file-name-input:focus { border-color: var(--cutr-amber-600); box-shadow: 0 0 0 3px var(--cutr-amber-100); }
+
+.file-dupe-group {
+  display: flex; align-items: center; gap: 6px; flex-shrink: 0;
+}
+.dupe-group-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--cutr-text-secondary); white-space: nowrap;
+}
+.dupe-select {
+  font-size: 12px; padding: 3px 7px; border: 1px solid var(--cutr-rule);
+  border-radius: 2px; background: white; cursor: pointer;
+  max-width: 200px; color: var(--cutr-text);
+}
+.dupe-select:focus { outline: none; border-color: var(--cutr-brand); }
+
+.file-header-actions { display: flex; gap: 4px; margin-left: auto; flex-shrink: 0; align-items: center; }
+
+/* Duplicate notice */
+.dupe-notice {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  padding: 8px 14px; background: var(--cutr-amber-100);
+  border-bottom: 1px solid var(--cutr-amber-300); font-size: 12px;
+}
+.dupe-badge {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.1em;
+  background: var(--cutr-amber-600); color: white;
+  padding: 2px 7px; border-radius: 2px; white-space: nowrap;
+}
+.dupe-notice-text { color: var(--cutr-amber-700); flex: 1; }
+.dupe-override-group { display: flex; align-items: center; gap: 6px; }
+.dupe-override-group .field-label { margin: 0; white-space: nowrap; }
+.dupe-override-num {
+  width: 76px; font-family: var(--cutr-font-mono); font-size: 13px;
+  padding: 4px 7px; border: 1px solid var(--cutr-amber-300); border-radius: 2px;
+  text-align: right; background: white;
+}
+.dupe-override-num:focus { outline: none; border-color: var(--cutr-amber-600); box-shadow: 0 0 0 3px var(--cutr-amber-100); }
+.dupe-override-hint { font-size: 11px; color: var(--cutr-amber-700); white-space: nowrap; }
+
+/* File body */
+.file-elements { padding: 14px 14px 4px; }
+.file-add-bar {
+  display: flex; align-items: center; gap: 8px; padding: 8px 14px 12px;
+  flex-wrap: wrap;
+}
+.file-add-bar .bar-label { font-size: 12px; color: var(--cutr-text-secondary); white-space: nowrap; }
+
+/* File subtotal */
+.file-subtotal {
+  border-top: 1px solid var(--cutr-border);
+  padding: 10px 14px;
+  display: flex; align-items: center; gap: 16px;
+  background: var(--cutr-n-100);
+}
+.file-subtotal.is-duplicate { background: var(--cutr-amber-100); border-top-color: var(--cutr-amber-300); }
+.file-sub-total {
+  font-family: var(--cutr-font-mono); font-size: 15px; font-weight: 700;
+  color: var(--cutr-brand); white-space: nowrap;
+}
+.file-sub-total-label {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--cutr-amber-700); margin-bottom: 1px;
+}
+.file-sub-breakdown {
+  font-size: 11.5px; font-family: var(--cutr-font-mono);
+  color: var(--cutr-n-700); display: flex; gap: 10px; flex-wrap: wrap;
+}
+.file-sub-breakdown span { white-space: nowrap; }
+.file-sub-sep { color: var(--cutr-n-400); }
+.file-sub-dupe {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 12px; color: var(--cutr-amber-700); flex: 1;
+}
+.file-sub-dupe-hours {
+  font-family: var(--cutr-font-mono); font-weight: 700; font-size: 14px;
+  margin-left: auto;
+}
+
+/* Element cards (same as old item cards) */
+.element-card { border: 1px solid var(--cutr-border); margin-bottom: 10px; background: white; }
 .card-header {
   display: flex; align-items: center; gap: 10px;
   padding: 11px 14px; background: var(--cutr-n-100);
@@ -170,7 +282,7 @@ input, select, textarea { font-family: inherit; }
 .result-cell.rc-total .rc-label { color: var(--cutr-brand); }
 .result-cell.rc-total .rc-value { font-size: 16px; font-weight: 700; color: var(--cutr-brand); }
 
-/* Quick-add bar */
+/* Quick-add bar (shared by file sections and old items) */
 .add-item-bar { display: flex; align-items: center; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
 .add-item-bar .bar-label { font-size: 12px; color: var(--cutr-text-secondary); white-space: nowrap; }
 .type-pill {
@@ -204,19 +316,29 @@ input, select, textarea { font-family: inherit; }
 .bc-value { font-family: var(--cutr-font-mono); font-size: 22px; font-weight: 600; }
 .bc-desc { font-size: 11px; color: var(--cutr-text-secondary); margin-top: 2px; }
 
-.result-per-item { padding: 16px 20px; border-bottom: 1px solid var(--cutr-border); }
-.result-per-item h3 {
+/* Per-file result breakdown */
+.result-per-file { padding: 16px 20px; border-bottom: 1px solid var(--cutr-border); }
+.result-per-file h3 {
   font-size: 11px; font-weight: 600; text-transform: uppercase;
   letter-spacing: 0.08em; color: var(--cutr-text-secondary); margin-bottom: 10px;
 }
-.per-item-row {
+.file-result-block { margin-bottom: 12px; }
+.file-result-block:last-child { margin-bottom: 0; }
+.file-result-row {
   display: flex; justify-content: space-between; align-items: baseline;
   padding: 5px 0; border-bottom: 1px solid var(--cutr-n-200); font-size: 13px;
 }
-.per-item-row:last-child { border-bottom: none; }
-.per-item-name { font-weight: 500; }
-.per-item-type { font-size: 11px; color: var(--cutr-text-secondary); margin-left: 6px; }
-.per-item-hours { font-family: var(--cutr-font-mono); font-weight: 600; }
+.file-result-row:last-child { border-bottom: none; }
+.file-result-name { font-weight: 600; }
+.file-result-hours { font-family: var(--cutr-font-mono); font-weight: 700; }
+.file-result-dupe { font-size: 11px; color: var(--cutr-amber-700); margin-left: 6px; }
+.elem-result-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 3px 0 3px 14px; font-size: 12px;
+}
+.elem-result-name { color: var(--cutr-n-700); }
+.elem-result-type { font-size: 11px; color: var(--cutr-text-secondary); margin-left: 5px; }
+.elem-result-hours { font-family: var(--cutr-font-mono); color: var(--cutr-n-700); }
 
 /* Backtrace */
 .backtrace-section { padding: 16px 20px; }
@@ -298,12 +420,62 @@ input, select, textarea { font-family: inherit; }
   font-family: var(--cutr-font-mono); font-size: 11px;
   background: var(--cutr-n-200); padding: 1px 4px; border-radius: 2px;
 }
+
+/* ── Import panel ── */
+.import-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35);
+  z-index: 30; align-items: center; justify-content: center;
+}
+.import-overlay.open { display: flex; }
+.import-modal {
+  background: white; border: 1px solid var(--cutr-rule);
+  width: 560px; max-width: calc(100vw - 48px); max-height: calc(100vh - 80px);
+  display: flex; flex-direction: column; border-radius: 3px; overflow: hidden;
+}
+.import-modal-header {
+  padding: 16px 20px; border-bottom: 1px solid var(--cutr-rule);
+  display: flex; align-items: center; justify-content: space-between; flex-shrink: 0;
+}
+.import-modal-header h3 { font-size: 15px; font-weight: 600; }
+.import-modal-body { padding: 18px 20px; overflow-y: auto; flex: 1; }
+.import-modal-footer {
+  padding: 14px 20px; border-top: 1px solid var(--cutr-rule);
+  display: flex; gap: 8px; align-items: center; flex-shrink: 0;
+}
+.import-hint { font-size: 12px; color: var(--cutr-text-secondary); margin-bottom: 10px; }
+.import-textarea {
+  width: 100%; height: 140px; font-family: var(--cutr-font-mono); font-size: 12px;
+  padding: 10px 12px; border: 1px solid var(--cutr-rule); border-radius: 2px;
+  resize: vertical; line-height: 1.6;
+}
+.import-textarea:focus { outline: none; border-color: var(--cutr-brand); box-shadow: 0 0 0 3px var(--cutr-amber-100); }
+.import-preview { margin-top: 14px; }
+.import-preview-label {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--cutr-text-secondary); margin-bottom: 8px;
+}
+.import-preview-list { border: 1px solid var(--cutr-border); border-radius: 2px; }
+.import-preview-row {
+  padding: 8px 12px; font-size: 13px; border-bottom: 1px solid var(--cutr-border);
+  display: flex; align-items: center; gap: 10px;
+}
+.import-preview-row:last-child { border-bottom: none; }
+.import-preview-num {
+  font-family: var(--cutr-font-mono); font-size: 11px; font-weight: 700;
+  color: white; background: var(--cutr-n-700); padding: 2px 6px; border-radius: 2px;
+  white-space: nowrap;
+}
+.import-preview-name { font-size: 12px; color: var(--cutr-n-700); }
+.import-empty-hint { font-size: 12px; color: var(--cutr-text-secondary); padding: 10px 0; }
+.import-count-label { font-size: 13px; color: var(--cutr-text-secondary); margin-left: auto; }
 </style>
 </head>
 <body>
 
+<!-- Admin overlay -->
 <div class="admin-overlay" id="admin-overlay" onclick="closeAdmin()"></div>
 
+<!-- Admin panel -->
 <div class="admin-panel" id="admin-panel">
   <div class="admin-header">
     <h2>Admin settings</h2>
@@ -311,12 +483,35 @@ input, select, textarea { font-family: inherit; }
   </div>
   <div class="admin-tabs">
     <button class="admin-tab active" data-tab="params" onclick="showAdminTab('params')">Parameters</button>
-    <button class="admin-tab" data-tab="types" onclick="showAdminTab('types')">Item types</button>
+    <button class="admin-tab" data-tab="types" onclick="showAdminTab('types')">Element types</button>
     <button class="admin-tab" data-tab="json" onclick="showAdminTab('json')">JSON</button>
   </div>
   <div class="admin-scroll" id="admin-content"></div>
 </div>
 
+<!-- Import overlay -->
+<div class="import-overlay" id="import-overlay" onclick="onImportOverlayClick(event)">
+  <div class="import-modal" id="import-modal">
+    <div class="import-modal-header">
+      <h3>Import files from quote</h3>
+      <button class="btn-icon" onclick="closeImport()">✕</button>
+    </div>
+    <div class="import-modal-body">
+      <p class="import-hint">Paste file headers from your quote. The tool detects file numbers (F-XX) and the following line as the file name. Element configuration within each file stays manual.</p>
+      <textarea class="import-textarea" id="import-textarea"
+        placeholder="F-73&#10;VI-18 - B - Restaurant Keuken v2026 (Blad).stp&#10;F-77&#10;VI-18 - B - Restaurant Blok v2026 (M2).stp"
+        oninput="updateImportPreview()"></textarea>
+      <div class="import-preview" id="import-preview"></div>
+    </div>
+    <div class="import-modal-footer">
+      <button class="btn btn-primary btn-sm" id="import-confirm-btn" onclick="doImport()">Import</button>
+      <button class="btn btn-sm" onclick="closeImport()">Cancel</button>
+      <span class="import-count-label" id="import-count-label"></span>
+    </div>
+  </div>
+</div>
+
+<!-- Header -->
 <div class="header">
   <div class="header-left">
     <div class="brand">cutr<span class="dot">.</span></div>
@@ -330,36 +525,35 @@ input, select, textarea { font-family: inherit; }
 
 <div class="page">
   <h1>Design hours calculator</h1>
-  <p class="subtitle">Estimate design &amp; engineering time per item based on type, element count, repetition, and bend complexity.</p>
+  <p class="subtitle">Estimate design &amp; engineering time per order. Add files, then add elements within each file.</p>
 
-  <!-- Step 1: Project -->
+  <!-- Step 1: Order -->
   <div class="section">
     <div class="section-header">
-      <h2><span class="step-num">1</span>Project</h2>
+      <h2><span class="step-num">1</span>Order</h2>
     </div>
     <div class="section-body">
-      <div class="field-label">Project name</div>
-      <input type="text" class="text-input" id="project-name"
-        placeholder="e.g. The Hoxton Amsterdam — Lobby furniture"
-        oninput="JOB.projectName = this.value; saveJob(); updateBacktrace();" />
+      <div class="field-label">Order name</div>
+      <input type="text" class="text-input" id="order-name"
+        placeholder="e.g. VI-18-B Restaurant Keuken"
+        oninput="JOB.orderName = this.value; saveJob(); updateBacktrace();" />
     </div>
   </div>
 
-  <!-- Step 2: Items -->
+  <!-- Step 2: Files -->
   <div class="section">
     <div class="section-header">
-      <h2><span class="step-num">2</span>Items</h2>
-      <button class="btn btn-sm btn-primary" onclick="addItem()">+ Add item</button>
+      <h2><span class="step-num">2</span>Files</h2>
+      <div style="display:flex;gap:8px;align-items:center">
+        <button class="btn btn-sm" onclick="openImport()">Paste from quote</button>
+        <button class="btn btn-sm btn-primary" onclick="addFile()">+ Add file</button>
+      </div>
     </div>
     <div class="section-body">
-      <p style="font-size:13px;color:var(--cutr-text-secondary);margin-bottom:14px;">
-        Add one card per item to be designed. For items with repeated corpus units (e.g. 8 identical modules in a run), enter the repeating count — only unique elements are charged at the full design rate.
+      <p style="font-size:13px;color:var(--cutr-text-secondary);margin-bottom:16px;">
+        Add one file per design file in the order. Within each file, add an element card per product type. Files marked as duplicate contribute 0 hours to the order total by default — use the override to add coordination or site hours.
       </p>
-      <div id="items-list"></div>
-      <div class="add-item-bar">
-        <span class="bar-label">Quick add:</span>
-        <div id="type-pills"></div>
-      </div>
+      <div id="files-list"></div>
     </div>
   </div>
 
@@ -378,26 +572,26 @@ input, select, textarea { font-family: inherit; }
 // ============================================================================
 
 const STORAGE_KEY = 'cutr-design-hours-v1-config';
-const JOB_KEY    = 'cutr-design-hours-v1-job';
+const JOB_KEY     = 'cutr-design-hours-v1-job';
 
 const DEFAULT_CONFIG = {
   params: {
-    D_BASE: 0.5,   // base design time per item (h)
-    D_U:    0.08,  // per unique corpus (h)
-    D_R:    0.02,  // per repeated corpus (h)
-    D_B:    0.25,  // per bent element (h)
-    E_BASE: 0.5,   // base engineering time per item (h)
-    E_U:    0.25,  // per unique corpus — engineering (h)
-    E_B:    0.5,   // per bent element — engineering (h)
-    E_T:    0.1,   // per total corpus — engineering (h)
-    RENDER: 0.5,   // fixed render / visual prep per item (h)
-    SAW:    0.5    // fixed saw list check per item (h)
+    D_BASE: 0.5,
+    D_U:    0.08,
+    D_R:    0.02,
+    D_B:    0.25,
+    E_BASE: 0.5,
+    E_U:    0.25,
+    E_B:    0.5,
+    E_T:    0.1,
+    RENDER: 0.5,
+    SAW:    0.5
   },
   itemTypes: [
     { id: 'podium',            name: 'Podium',            unit: 'per 0.5 m²',    mDesign: 1.5,  mEng: 1.5,  allUnique: false },
     { id: 'bespoke',           name: 'Bespoke',           unit: 'per 0.5 m³',    mDesign: 3.0,  mEng: 3.0,  allUnique: false },
     { id: 'cabinetry',         name: 'Cabinetry',         unit: 'per corpus',    mDesign: 1.0,  mEng: 1.0,  allUnique: false },
-    { id: 'cabinetry-bespoke', name: 'Cabinetry bespoke', unit: 'per corpus',   mDesign: 2.0,  mEng: 3.0,  allUnique: false },
+    { id: 'cabinetry-bespoke', name: 'Cabinetry bespoke', unit: 'per corpus',    mDesign: 2.0,  mEng: 3.0,  allUnique: false },
     { id: 'bench',             name: 'Bench',             unit: 'per m¹ length', mDesign: 1.25, mEng: 2.0,  allUnique: false },
     { id: 'table-desk',        name: 'Table / desk',      unit: 'per 1 m³',      mDesign: 0.25, mEng: 1.0,  allUnique: false },
     { id: 'planter',           name: 'Planter',           unit: 'per m¹ length', mDesign: 2.0,  mEng: 2.5,  allUnique: false }
@@ -425,9 +619,23 @@ function saveConfig() { localStorage.setItem(STORAGE_KEY, JSON.stringify(CONFIG)
 function loadJob() {
   try {
     const raw = localStorage.getItem(JOB_KEY);
-    if (!raw) return { projectName: '', items: [] };
-    return JSON.parse(raw);
-  } catch (e) { return { projectName: '', items: [] }; }
+    if (!raw) return { orderName: '', files: [] };
+    const saved = JSON.parse(raw);
+    // Migration: old single-file format had items[]
+    if (Array.isArray(saved.items)) {
+      return {
+        orderName: saved.projectName || '',
+        files: saved.items.length > 0 ? [{
+          id: 'f_migrated',
+          name: 'File 1',
+          isDuplicateOf: null,
+          overrideHours: null,
+          elements: saved.items
+        }] : []
+      };
+    }
+    return saved;
+  } catch (e) { return { orderName: '', files: [] }; }
 }
 
 function saveJob() { localStorage.setItem(JOB_KEY, JSON.stringify(JOB)); }
@@ -446,9 +654,19 @@ function esc(s) {
   return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-function newItem(typeId) {
+function newFile() {
   return {
-    id: 'i' + Date.now() + Math.floor(Math.random() * 9999),
+    id: 'f' + Date.now() + Math.floor(Math.random() * 9999),
+    name: '',
+    isDuplicateOf: null,
+    overrideHours: null,
+    elements: []
+  };
+}
+
+function newElement(typeId) {
+  return {
+    id: 'e' + Date.now() + Math.floor(Math.random() * 9999),
     name: '',
     typeId: typeId || 'cabinetry',
     total: null,
@@ -469,7 +687,6 @@ function computeItem(item) {
   const E  = parseFloat(item.repeating) || 0;
   const B  = parseFloat(item.bent)      || 0;
 
-  // Unique = total − repeating, unless type is allUnique or no repeating entered
   const U = (it.allUnique || E === 0) ? T : Math.max(T - E, 0);
   const R = Math.max(T - U, 0);
 
@@ -482,75 +699,188 @@ function computeItem(item) {
   return { T, U, R, B, designTime, render, saw, engTime, total, it };
 }
 
-function computeJob() {
+function computeFileTotals(file) {
   let totalDesign = 0, totalRender = 0, totalSaw = 0, totalEng = 0, totalHours = 0;
-  const itemResults = JOB.items.map(item => {
-    if (!(parseFloat(item.total) > 0)) return { item, result: null };
-    const r = computeItem(item);
+  const elementResults = file.elements.map(elem => {
+    if (!(parseFloat(elem.total) > 0)) return { elem, result: null };
+    const r = computeItem(elem);
     totalDesign += r.designTime;
     totalRender += r.render;
     totalSaw    += r.saw;
     totalEng    += r.engTime;
     totalHours  += r.total;
-    return { item, result: r };
+    return { elem, result: r };
   });
-  return { itemResults, totalDesign, totalRender, totalSaw, totalEng, totalHours };
+  return { elementResults, totalDesign, totalRender, totalSaw, totalEng, totalHours };
+}
+
+function computeJob() {
+  let orderDesign = 0, orderRender = 0, orderSaw = 0, orderEng = 0, orderHours = 0;
+  const fileResults = JOB.files.map(file => {
+    const totals = computeFileTotals(file);
+    if (file.isDuplicateOf) {
+      // Duplicate: only override hours contribute to order total
+      const contribution = (parseFloat(file.overrideHours) > 0) ? parseFloat(file.overrideHours) : 0;
+      orderHours += contribution;
+      return { file, totals, isDuplicate: true, contribution };
+    } else {
+      orderDesign += totals.totalDesign;
+      orderRender += totals.totalRender;
+      orderSaw    += totals.totalSaw;
+      orderEng    += totals.totalEng;
+      orderHours  += totals.totalHours;
+      return { file, totals, isDuplicate: false, contribution: totals.totalHours };
+    }
+  });
+  return { fileResults, orderDesign, orderRender, orderSaw, orderEng, orderHours };
 }
 
 // ============================================================================
-// RENDER — ITEMS
+// RENDER — ORDER / FILES
 // ============================================================================
 
 function render() {
-  const pn = document.getElementById('project-name');
-  if (pn) pn.value = JOB.projectName || '';
-  renderTypePills();
-  renderItems();
+  const on = document.getElementById('order-name');
+  if (on) on.value = JOB.orderName || '';
+  renderOrder();
   recalc();
 }
 
-function renderTypePills() {
-  const el = document.getElementById('type-pills');
+function renderOrder() {
+  const el = document.getElementById('files-list');
   if (!el) return;
-  el.innerHTML = CONFIG.itemTypes.map(t =>
-    `<button class="type-pill" onclick="addItem('${t.id}')">${t.name}</button>`
-  ).join('');
-}
-
-function renderItems() {
-  const el = document.getElementById('items-list');
-  if (!el) return;
-  if (JOB.items.length === 0) {
-    el.innerHTML = '<div class="empty-items">No items yet. Use the quick-add buttons below or "＋ Add item" above.</div>';
+  if (JOB.files.length === 0) {
+    el.innerHTML = '<div class="empty-items">No files yet — click "+ Add file" or use "Paste from quote" to import file headers.</div>';
     return;
   }
-  el.innerHTML = JOB.items.map((item, idx) => itemCardHTML(item, idx)).join('');
+  el.innerHTML = JOB.files.map((file, fidx) => fileBlockHTML(file, fidx)).join('');
 }
 
-function itemCardHTML(item, idx) {
-  const it         = getItemType(item.typeId);
-  const hasTotal   = parseFloat(item.total) > 0;
-  const isCollapsed = item.collapsed;
+function fileBlockHTML(file, fidx) {
+  const isDuplicate = !!file.isDuplicateOf;
+  const dupeFile    = isDuplicate ? JOB.files.find(f => f.id === file.isDuplicateOf) : null;
+  const dupeName    = dupeFile ? (dupeFile.name || `File ${JOB.files.indexOf(dupeFile) + 1}`) : '(unknown file)';
+
+  const dupeOptions = JOB.files
+    .filter(f => f.id !== file.id)
+    .map(f => {
+      const label = f.name || `File ${JOB.files.indexOf(f) + 1}`;
+      return `<option value="${esc(f.id)}"${f.id === file.isDuplicateOf ? ' selected' : ''}>${esc(label)}</option>`;
+    }).join('');
+
+  const typePillsHTML = CONFIG.itemTypes.map(t =>
+    `<button class="type-pill" onclick="addElement('${file.id}','${t.id}')">${esc(t.name)}</button>`
+  ).join('');
+
+  const elementsHTML = file.elements.length > 0
+    ? file.elements.map((elem, eidx) => elementCardHTML(elem, eidx, file.id)).join('')
+    : '<div class="empty-items">No elements yet — use the quick-add buttons below or "+ Element".</div>';
+
+  const totals = computeFileTotals(file);
+  const subtotalHTML = fileSubtotalHTML(file, totals);
+
+  return `<div class="file-block" id="file-${file.id}">
+  <div class="file-header${isDuplicate ? ' is-duplicate' : ''}">
+    <div class="file-num">${fidx + 1}</div>
+    <input type="text" class="file-name-input" value="${esc(file.name)}"
+      placeholder="File name…"
+      oninput="onFileNameInput('${file.id}', this.value)" />
+    <div class="file-dupe-group">
+      <span class="dupe-group-label">Duplicate of</span>
+      <select class="dupe-select" onchange="onDuplicateChange('${file.id}', this.value)">
+        <option value="">— none —</option>
+        ${dupeOptions}
+      </select>
+    </div>
+    <div class="file-header-actions">
+      <button class="btn btn-sm" onclick="addElement('${file.id}')">+ Element</button>
+      <button class="btn-icon" onclick="onRemoveFile('${file.id}')" title="Remove file">✕</button>
+    </div>
+  </div>
+  ${isDuplicate ? `<div class="dupe-notice">
+    <span class="dupe-badge">DUPLICATE</span>
+    <span class="dupe-notice-text">Duplicate of <strong>${esc(dupeName)}</strong> — design hours default to 0. Use override below to add site or coordination hours.</span>
+    <div class="dupe-override-group">
+      <span class="field-label">Override hours</span>
+      <input type="number" class="dupe-override-num" min="0" step="0.5"
+        value="${file.overrideHours !== null && file.overrideHours !== undefined ? file.overrideHours : ''}"
+        placeholder="0"
+        oninput="onOverrideHours('${file.id}', this.value)" />
+      <span class="dupe-override-hint">h added to order total</span>
+    </div>
+  </div>` : ''}
+  <div class="file-elements" id="elements-${file.id}">
+    ${elementsHTML}
+  </div>
+  <div class="file-add-bar">
+    <span class="bar-label">Quick add element:</span>
+    ${typePillsHTML}
+  </div>
+  <div id="file-subtotal-${file.id}">${subtotalHTML}</div>
+</div>`;
+}
+
+function fileSubtotalHTML(file, totals) {
+  if (file.isDuplicateOf) {
+    const dupeFile  = JOB.files.find(f => f.id === file.isDuplicateOf);
+    const dupeName  = dupeFile ? (dupeFile.name || `File ${JOB.files.indexOf(dupeFile) + 1}`) : '(unknown)';
+    const contribution = (parseFloat(file.overrideHours) > 0) ? parseFloat(file.overrideHours) : 0;
+    const hasElems = totals.totalHours > 0;
+    return `<div class="file-subtotal is-duplicate">
+  <div class="file-sub-dupe">
+    <span class="dupe-badge">DUPLICATE</span>
+    <span>of ${esc(dupeName)}</span>
+    ${hasElems ? `<span style="color:var(--cutr-amber-700);font-size:11px;">(elements total: ${fmtH(totals.totalHours)}h — not counted)</span>` : ''}
+  </div>
+  <span class="file-sub-total" style="color:${contribution > 0 ? 'var(--cutr-amber-600)' : 'var(--cutr-n-600)'}">
+    ${fmtH(contribution)}h${contribution > 0 ? ' override' : ' contributed'}
+  </span>
+</div>`;
+  }
+
+  if (totals.totalHours === 0) return '';
+
+  return `<div class="file-subtotal">
+  <div>
+    <div class="file-sub-total-label">File total</div>
+    <div class="file-sub-total">${fmtH(totals.totalHours)}h</div>
+  </div>
+  <div class="file-sub-breakdown">
+    <span>Design ${fmtH(totals.totalDesign)}h</span>
+    <span class="file-sub-sep">·</span>
+    <span>Render ${fmtH(totals.totalRender)}h</span>
+    <span class="file-sub-sep">·</span>
+    <span>Saw list ${fmtH(totals.totalSaw)}h</span>
+    <span class="file-sub-sep">·</span>
+    <span>Engineering ${fmtH(totals.totalEng)}h</span>
+  </div>
+</div>`;
+}
+
+function elementCardHTML(elem, eidx, fileId) {
+  const it          = getItemType(elem.typeId);
+  const hasTotal    = parseFloat(elem.total) > 0;
+  const isCollapsed = elem.collapsed;
   const isAllUnique = it.allUnique;
 
   const typeOptions = CONFIG.itemTypes.map(t =>
-    `<option value="${t.id}"${t.id === item.typeId ? ' selected' : ''}>${esc(t.name)} (${esc(t.unit)})</option>`
+    `<option value="${t.id}"${t.id === elem.typeId ? ' selected' : ''}>${esc(t.name)} (${esc(t.unit)})</option>`
   ).join('');
 
-  const stripHTML = hasTotal && !isCollapsed ? cardStripHTML(computeItem(item)) : '';
+  const stripHTML = hasTotal && !isCollapsed ? cardStripHTML(computeItem(elem)) : '';
 
-  return `<div class="item-card" id="card-${item.id}">
+  return `<div class="element-card" id="card-${elem.id}">
   <div class="card-header${isCollapsed ? ' is-collapsed' : ''}">
-    <div class="card-badge">${idx + 1}</div>
-    <input type="text" class="card-name-input" value="${esc(item.name)}"
-      placeholder="Item name…"
-      oninput="onNameInput('${item.id}', this.value)" />
-    <select class="card-type-select" onchange="onTypeChange('${item.id}', this.value)">
+    <div class="card-badge">${eidx + 1}</div>
+    <input type="text" class="card-name-input" value="${esc(elem.name)}"
+      placeholder="Element name…"
+      oninput="onElementNameInput('${fileId}','${elem.id}', this.value)" />
+    <select class="card-type-select" onchange="onTypeChange('${fileId}','${elem.id}', this.value)">
       ${typeOptions}
     </select>
     <div class="card-header-actions">
-      <button class="btn-icon" onclick="onToggleCollapse('${item.id}')" title="${isCollapsed ? 'Expand' : 'Collapse'}">${isCollapsed ? '▶' : '▼'}</button>
-      <button class="btn-icon" onclick="onRemoveItem('${item.id}')" title="Remove">✕</button>
+      <button class="btn-icon" onclick="onToggleCollapse('${fileId}','${elem.id}')" title="${isCollapsed ? 'Expand' : 'Collapse'}">${isCollapsed ? '▶' : '▼'}</button>
+      <button class="btn-icon" onclick="onRemoveElement('${fileId}','${elem.id}')" title="Remove">✕</button>
     </div>
   </div>
   ${isCollapsed ? '' : `<div class="card-body">
@@ -558,27 +888,27 @@ function itemCardHTML(item, idx) {
       <div class="input-group">
         <div class="field-label">Total count (T)</div>
         <input type="number" class="num-input" min="0" step="0.5"
-          value="${item.total !== null ? item.total : ''}" placeholder="0"
-          oninput="onNumInput('${item.id}', 'total', this.value)" />
+          value="${elem.total !== null ? elem.total : ''}" placeholder="0"
+          oninput="onNumInput('${fileId}','${elem.id}','total', this.value)" />
         <div class="input-hint">${esc(it.unit)}</div>
       </div>
       <div class="input-group">
         <div class="field-label">Repeating count (R)</div>
         <input type="number" class="num-input" min="0" step="0.5"
-          value="${item.repeating !== null ? item.repeating : ''}" placeholder="0"
+          value="${elem.repeating !== null ? elem.repeating : ''}" placeholder="0"
           ${isAllUnique ? 'disabled' : ''}
-          oninput="onNumInput('${item.id}', 'repeating', this.value)" />
-        <div class="input-hint">${isAllUnique ? 'Not applicable — all unique' : 'Number of identical corpus units'}</div>
+          oninput="onNumInput('${fileId}','${elem.id}','repeating', this.value)" />
+        <div class="input-hint">${isAllUnique ? 'Not applicable — all unique' : 'Identical corpus units'}</div>
       </div>
       <div class="input-group">
         <div class="field-label">Bent elements (B)</div>
         <input type="number" class="num-input" min="0" step="1"
-          value="${item.bent !== null ? item.bent : ''}" placeholder="0"
-          oninput="onNumInput('${item.id}', 'bent', this.value)" />
+          value="${elem.bent !== null ? elem.bent : ''}" placeholder="0"
+          oninput="onNumInput('${fileId}','${elem.id}','bent', this.value)" />
         <div class="input-hint">Curved / bent corpus elements</div>
       </div>
     </div>
-    <div id="strip-${item.id}">${stripHTML}</div>
+    <div id="strip-${elem.id}">${stripHTML}</div>
   </div>`}
 </div>`;
 }
@@ -598,50 +928,78 @@ function cardStripHTML(r) {
 // ============================================================================
 
 function recalc() {
-  const job = computeJob();
-  renderResult(job);
+  renderResult(computeJob());
 }
 
 function renderResult(job) {
   const el = document.getElementById('result-area');
   if (!el) return;
 
-  const hasData = job.itemResults.some(r => r.result);
+  const hasData = job.fileResults.some(fr =>
+    !fr.isDuplicate
+      ? fr.totals.elementResults.some(er => er.result)
+      : (parseFloat(fr.file.overrideHours) > 0)
+  );
 
   if (!hasData) {
-    el.innerHTML = '<div class="empty-result">Enter item counts above to see the total design hours.</div>';
+    el.innerHTML = '<div class="empty-result">Enter element counts in the files above to see the total design hours.</div>';
     return;
   }
 
-  const perItemRows = job.itemResults.filter(r => r.result).map(r => {
-    const name = r.item.name || `Item ${JOB.items.indexOf(r.item) + 1}`;
-    const it   = getItemType(r.item.typeId);
-    return `<div class="per-item-row">
-  <span><span class="per-item-name">${esc(name)}</span><span class="per-item-type">${esc(it.name)}</span></span>
-  <span class="per-item-hours">${fmtH(r.result.total)}h</span>
+  // Per-file breakdown
+  const perFileHTML = job.fileResults.map((fr, fidx) => {
+    const fileName = fr.file.name || `File ${fidx + 1}`;
+    if (fr.isDuplicate) {
+      const dupeFile = JOB.files.find(f => f.id === fr.file.isDuplicateOf);
+      const dupeName = dupeFile ? (dupeFile.name || `File ${JOB.files.indexOf(dupeFile) + 1}`) : '?';
+      return `<div class="file-result-block">
+  <div class="file-result-row">
+    <span><span class="file-result-name">${esc(fileName)}</span><span class="file-result-dupe">duplicate of ${esc(dupeName)}</span></span>
+    <span class="file-result-hours" style="color:var(--cutr-n-600)">${fmtH(fr.contribution)}h</span>
+  </div>
+</div>`;
+    }
+
+    const elemRows = fr.totals.elementResults.filter(er => er.result).map((er, eidx) => {
+      const eName = er.elem.name || `Element ${eidx + 1}`;
+      const it = getItemType(er.elem.typeId);
+      return `<div class="elem-result-row">
+  <span><span class="elem-result-name">${esc(eName)}</span><span class="elem-result-type">${esc(it.name)}</span></span>
+  <span class="elem-result-hours">${fmtH(er.result.total)}h</span>
+</div>`;
+    }).join('');
+
+    if (!elemRows) return '';
+
+    return `<div class="file-result-block">
+  <div class="file-result-row">
+    <span class="file-result-name">${esc(fileName)}</span>
+    <span class="file-result-hours">${fmtH(fr.totals.totalHours)}h</span>
+  </div>
+  ${elemRows}
 </div>`;
   }).join('');
 
   el.innerHTML = `
 <div class="result-hero">
-  <div class="result-total-label">Total design hours</div>
-  <span class="result-total-value">${fmtH(job.totalHours)}</span><span class="result-total-unit">h</span>
+  <div class="result-total-label">Order total — design hours</div>
+  <span class="result-total-value">${fmtH(job.orderHours)}</span><span class="result-total-unit">h</span>
 </div>
 <div class="result-breakdown">
-  <div><div class="bc-label">Design</div><div class="bc-value">${fmtH(job.totalDesign)}h</div><div class="bc-desc">Drawing &amp; modelling</div></div>
-  <div><div class="bc-label">Render</div><div class="bc-value">${fmtH(job.totalRender)}h</div><div class="bc-desc">Visual / render prep</div></div>
-  <div><div class="bc-label">Saw list</div><div class="bc-value">${fmtH(job.totalSaw)}h</div><div class="bc-desc">Cut list check</div></div>
-  <div><div class="bc-label">Engineering</div><div class="bc-value">${fmtH(job.totalEng)}h</div><div class="bc-desc">Technical drawings</div></div>
+  <div><div class="bc-label">Design</div><div class="bc-value">${fmtH(job.orderDesign)}h</div><div class="bc-desc">Drawing &amp; modelling</div></div>
+  <div><div class="bc-label">Render</div><div class="bc-value">${fmtH(job.orderRender)}h</div><div class="bc-desc">Visual / render prep</div></div>
+  <div><div class="bc-label">Saw list</div><div class="bc-value">${fmtH(job.orderSaw)}h</div><div class="bc-desc">Cut list check</div></div>
+  <div><div class="bc-label">Engineering</div><div class="bc-value">${fmtH(job.orderEng)}h</div><div class="bc-desc">Technical drawings</div></div>
 </div>
-<div class="result-per-item">
-  <h3>Per item</h3>
-  ${perItemRows}
+<div class="result-per-file">
+  <h3>Per file</h3>
+  ${perFileHTML}
 </div>
 <div class="backtrace-section">
   <div class="backtrace-actions">
     <button class="btn btn-sm" onclick="copyBacktrace(this)">Copy backtrace</button>
     <span class="copy-notice" id="copy-notice">Copied!</span>
-    <button class="btn btn-sm" onclick="clearJob()" style="margin-left:auto">Clear all</button>
+    <button class="btn btn-sm" onclick="clearJob()" style="margin-left:auto">Clear order</button>
   </div>
   <div class="backtrace-block" id="backtrace-block"></div>
 </div>`;
@@ -662,44 +1020,58 @@ function buildBacktrace(job) {
     'Cutr Design Hours Calculator',
     'Generated: ' + now,
   ];
-  if (JOB.projectName) lines.push('Project: ' + JOB.projectName);
+  if (JOB.orderName) lines.push('Order: ' + JOB.orderName);
   lines.push('');
   lines.push('Parameters:');
   lines.push(`  Design:      D_BASE=${P.D_BASE}  D_U=${P.D_U}/unique  D_R=${P.D_R}/repeat  D_B=${P.D_B}/bent`);
   lines.push(`  Engineering: E_BASE=${P.E_BASE}  E_U=${P.E_U}/unique  E_B=${P.E_B}/bent  E_T=${P.E_T}/total`);
   lines.push(`  Fixed:       Render=${P.RENDER}h  Saw list=${P.SAW}h`);
   lines.push('');
-  lines.push('Items:');
 
-  job.itemResults.forEach((r, idx) => {
-    const label = r.item.name || ('Item ' + (idx + 1));
-    const it    = getItemType(r.item.typeId);
-    if (!r.result) {
-      lines.push(`  ${idx + 1}. ${label} (${it.name}) — no count entered`);
+  job.fileResults.forEach((fr, fidx) => {
+    const fileName = fr.file.name || `File ${fidx + 1}`;
+    lines.push(`File ${fidx + 1}: ${fileName}`);
+
+    if (fr.isDuplicate) {
+      const dupeFile = JOB.files.find(f => f.id === fr.file.isDuplicateOf);
+      const dupeName = dupeFile ? (dupeFile.name || `File ${JOB.files.indexOf(dupeFile) + 1}`) : '(unknown)';
+      lines.push(`  [DUPLICATE of ${dupeName}]`);
+      lines.push(`  Contribution: ${fr.contribution > 0 ? fmtH(fr.contribution) + 'h (override)' : '0h'}`);
+      lines.push('');
       return;
     }
-    const res = r.result;
-    lines.push(`  ${idx + 1}. ${label} (${it.name})`);
-    lines.push(`     T=${res.T}  unique=${res.U}  repeats=${res.R}  bent=${res.B}`);
-    lines.push(`     M_design=${it.mDesign}  M_eng=${it.mEng}${it.allUnique ? '  [all unique]' : ''}`);
-    lines.push(`     Design:      ${P.D_BASE} + ${it.mDesign}×(${P.D_U}×${res.U} + ${P.D_R}×${res.R} + ${P.D_B}×${res.B}) = ${fmtH(res.designTime)}h`);
-    lines.push(`     Render:      ${fmtH(res.render)}h (fixed)`);
-    lines.push(`     Saw list:    ${fmtH(res.saw)}h (fixed)`);
-    lines.push(`     Engineering: ${P.E_BASE} + ${it.mEng}×(${P.E_U}×${res.U} + ${P.E_B}×${res.B}) + ${P.E_T}×${res.T} = ${fmtH(res.engTime)}h`);
-    lines.push(`     Total:       ${fmtH(res.total)}h`);
+
+    fr.totals.elementResults.forEach((er, eidx) => {
+      const label = er.elem.name || `Element ${eidx + 1}`;
+      const it    = getItemType(er.elem.typeId);
+      if (!er.result) {
+        lines.push(`  ${eidx + 1}. ${label} (${it.name}) — no count entered`);
+        return;
+      }
+      const res = er.result;
+      lines.push(`  ${eidx + 1}. ${label} (${it.name})`);
+      lines.push(`     T=${res.T}  unique=${res.U}  repeats=${res.R}  bent=${res.B}`);
+      lines.push(`     M_design=${it.mDesign}  M_eng=${it.mEng}${it.allUnique ? '  [all unique]' : ''}`);
+      lines.push(`     Design:      ${P.D_BASE} + ${it.mDesign}×(${P.D_U}×${res.U} + ${P.D_R}×${res.R} + ${P.D_B}×${res.B}) = ${fmtH(res.designTime)}h`);
+      lines.push(`     Render:      ${fmtH(res.render)}h (fixed)`);
+      lines.push(`     Saw list:    ${fmtH(res.saw)}h (fixed)`);
+      lines.push(`     Engineering: ${P.E_BASE} + ${it.mEng}×(${P.E_U}×${res.U} + ${P.E_B}×${res.B}) + ${P.E_T}×${res.T} = ${fmtH(res.engTime)}h`);
+      lines.push(`     Total:       ${fmtH(res.total)}h`);
+    });
+
+    lines.push(`  ── File total: ${fmtH(fr.totals.totalHours)}h`);
     lines.push('');
   });
 
   lines.push('─'.repeat(52));
-  lines.push(`TOTAL: ${fmtH(job.totalHours)}h`);
-  lines.push(`  Design: ${fmtH(job.totalDesign)}h | Render: ${fmtH(job.totalRender)}h | Saw list: ${fmtH(job.totalSaw)}h | Engineering: ${fmtH(job.totalEng)}h`);
+  lines.push(`ORDER TOTAL: ${fmtH(job.orderHours)}h`);
+  lines.push(`  Design: ${fmtH(job.orderDesign)}h | Render: ${fmtH(job.orderRender)}h | Saw list: ${fmtH(job.orderSaw)}h | Engineering: ${fmtH(job.orderEng)}h`);
 
   return lines.join('\n');
 }
 
 function copyBacktrace(btn) {
-  const job  = computeJob();
-  const text = buildBacktrace(job);
+  const text = buildBacktrace(computeJob());
   navigator.clipboard.writeText(text).then(() => {
     const notice = document.getElementById('copy-notice');
     if (notice) { notice.style.display = 'inline'; setTimeout(() => { notice.style.display = 'none'; }, 2000); }
@@ -710,67 +1082,252 @@ function copyBacktrace(btn) {
 }
 
 // ============================================================================
-// STATE MUTATIONS
+// STATE MUTATIONS — FILES
 // ============================================================================
 
-function addItem(typeId) {
-  JOB.items.push(newItem(typeId));
+function addFile() {
+  JOB.files.push(newFile());
   saveJob();
-  renderItems();
+  renderOrder();
   recalc();
 }
 
-function onRemoveItem(id) {
-  JOB.items = JOB.items.filter(i => i.id !== id);
+function onRemoveFile(fileId) {
+  if (!confirm('Remove this file and all its elements?')) return;
+  JOB.files = JOB.files.filter(f => f.id !== fileId);
+  // Clear any duplicate references to this deleted file
+  JOB.files.forEach(f => { if (f.isDuplicateOf === fileId) f.isDuplicateOf = null; });
   saveJob();
-  renderItems();
+  renderOrder();
   recalc();
 }
 
-function onToggleCollapse(id) {
-  const item = JOB.items.find(i => i.id === id);
-  if (!item) return;
-  item.collapsed = !item.collapsed;
+function onFileNameInput(fileId, value) {
+  const file = JOB.files.find(f => f.id === fileId);
+  if (!file) return;
+  file.name = value;
   saveJob();
-  renderItems();
-}
-
-function onNameInput(id, value) {
-  const item = JOB.items.find(i => i.id === id);
-  if (!item) return;
-  item.name = value;
-  saveJob();
+  // Update dupe selects in other files that reference this file
+  document.querySelectorAll('.dupe-select').forEach(sel => {
+    const opt = sel.querySelector(`option[value="${CSS.escape(fileId)}"]`);
+    if (opt) opt.textContent = value || `File ${JOB.files.indexOf(file) + 1}`;
+  });
   updateBacktrace();
 }
 
-function onTypeChange(id, value) {
-  const item = JOB.items.find(i => i.id === id);
-  if (!item) return;
-  item.typeId = value;
+function onDuplicateChange(fileId, targetFileId) {
+  const file = JOB.files.find(f => f.id === fileId);
+  if (!file) return;
+  file.isDuplicateOf = targetFileId || null;
+  if (!file.isDuplicateOf) file.overrideHours = null;
   saveJob();
-  renderItems();
+  // Full re-render needed to show/hide dupe notice and update subtotals
+  renderOrder();
   recalc();
 }
 
-function onNumInput(id, field, rawValue) {
-  const item = JOB.items.find(i => i.id === id);
-  if (!item) return;
-  item[field] = rawValue === '' ? null : parseFloat(rawValue);
+function onOverrideHours(fileId, value) {
+  const file = JOB.files.find(f => f.id === fileId);
+  if (!file) return;
+  file.overrideHours = value === '' ? null : parseFloat(value);
   saveJob();
-  // update this card's strip without re-rendering the full list (preserves focus)
-  const stripEl = document.getElementById('strip-' + id);
-  if (stripEl) {
-    const hasTotal = parseFloat(item.total) > 0;
-    stripEl.innerHTML = hasTotal ? cardStripHTML(computeItem(item)) : '';
+  // Update file subtotal
+  const totals = computeFileTotals(file);
+  const subtotalEl = document.getElementById('file-subtotal-' + fileId);
+  if (subtotalEl) subtotalEl.innerHTML = fileSubtotalHTML(file, totals);
+  recalc();
+}
+
+// ============================================================================
+// STATE MUTATIONS — ELEMENTS
+// ============================================================================
+
+function addElement(fileId, typeId) {
+  const file = JOB.files.find(f => f.id === fileId);
+  if (!file) return;
+  file.elements.push(newElement(typeId));
+  saveJob();
+  // Re-render only the elements container for this file
+  const container = document.getElementById('elements-' + fileId);
+  if (container) {
+    container.innerHTML = file.elements.map((elem, eidx) => elementCardHTML(elem, eidx, fileId)).join('');
   }
   recalc();
 }
 
+function onRemoveElement(fileId, elemId) {
+  const file = JOB.files.find(f => f.id === fileId);
+  if (!file) return;
+  file.elements = file.elements.filter(e => e.id !== elemId);
+  saveJob();
+  const container = document.getElementById('elements-' + fileId);
+  if (container) {
+    container.innerHTML = file.elements.length > 0
+      ? file.elements.map((elem, eidx) => elementCardHTML(elem, eidx, fileId)).join('')
+      : '<div class="empty-items">No elements yet — use the quick-add buttons below or "+ Element".</div>';
+  }
+  const totals = computeFileTotals(file);
+  const subtotalEl = document.getElementById('file-subtotal-' + fileId);
+  if (subtotalEl) subtotalEl.innerHTML = fileSubtotalHTML(file, totals);
+  recalc();
+}
+
+function onToggleCollapse(fileId, elemId) {
+  const file = JOB.files.find(f => f.id === fileId);
+  if (!file) return;
+  const elem = file.elements.find(e => e.id === elemId);
+  if (!elem) return;
+  elem.collapsed = !elem.collapsed;
+  saveJob();
+  const cardEl = document.getElementById('card-' + elemId);
+  if (cardEl) {
+    const idx = file.elements.indexOf(elem);
+    cardEl.outerHTML = elementCardHTML(elem, idx, fileId);
+  }
+}
+
+function onElementNameInput(fileId, elemId, value) {
+  const file = JOB.files.find(f => f.id === fileId);
+  if (!file) return;
+  const elem = file.elements.find(e => e.id === elemId);
+  if (!elem) return;
+  elem.name = value;
+  saveJob();
+  updateBacktrace();
+}
+
+function onTypeChange(fileId, elemId, value) {
+  const file = JOB.files.find(f => f.id === fileId);
+  if (!file) return;
+  const elem = file.elements.find(e => e.id === elemId);
+  if (!elem) return;
+  elem.typeId = value;
+  saveJob();
+  // Full re-render of this file's elements (allUnique flag may change)
+  const container = document.getElementById('elements-' + fileId);
+  if (container) {
+    container.innerHTML = file.elements.map((el, eidx) => elementCardHTML(el, eidx, fileId)).join('');
+  }
+  const totals = computeFileTotals(file);
+  const subtotalEl = document.getElementById('file-subtotal-' + fileId);
+  if (subtotalEl) subtotalEl.innerHTML = fileSubtotalHTML(file, totals);
+  recalc();
+}
+
+function onNumInput(fileId, elemId, field, rawValue) {
+  const file = JOB.files.find(f => f.id === fileId);
+  if (!file) return;
+  const elem = file.elements.find(e => e.id === elemId);
+  if (!elem) return;
+  elem[field] = rawValue === '' ? null : parseFloat(rawValue);
+  saveJob();
+  // Update element strip (preserves focus)
+  const stripEl = document.getElementById('strip-' + elemId);
+  if (stripEl) {
+    const hasTotal = parseFloat(elem.total) > 0;
+    stripEl.innerHTML = hasTotal ? cardStripHTML(computeItem(elem)) : '';
+  }
+  // Update file subtotal
+  const totals = computeFileTotals(file);
+  const subtotalEl = document.getElementById('file-subtotal-' + fileId);
+  if (subtotalEl) subtotalEl.innerHTML = fileSubtotalHTML(file, totals);
+  recalc();
+}
+
 function clearJob() {
-  if (!confirm('Clear all items and start fresh?')) return;
-  JOB = { projectName: JOB.projectName, items: [] };
+  if (!confirm('Clear all files and elements and start a new order?')) return;
+  JOB = { orderName: '', files: [] };
   saveJob();
   render();
+}
+
+// ============================================================================
+// BULK FILE IMPORT
+// ============================================================================
+
+function openImport() {
+  document.getElementById('import-overlay').classList.add('open');
+  const ta = document.getElementById('import-textarea');
+  if (ta) { ta.value = ''; ta.focus(); }
+  updateImportPreview();
+}
+
+function closeImport() {
+  document.getElementById('import-overlay').classList.remove('open');
+}
+
+function onImportOverlayClick(e) {
+  if (e.target === document.getElementById('import-overlay')) closeImport();
+}
+
+function parseFileHeaders(text) {
+  const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+  const files = [];
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    if (/^F-\d+$/i.test(line)) {
+      let name = '';
+      if (i + 1 < lines.length && !/^F-\d+$/i.test(lines[i + 1])) {
+        name = lines[i + 1];
+        i++;
+      }
+      const cleanName = name.replace(/\.stp$/i, '').trim();
+      const displayName = cleanName ? `${line} – ${cleanName}` : line;
+      files.push({ number: line, name: displayName });
+    }
+  }
+  return files;
+}
+
+function updateImportPreview() {
+  const ta = document.getElementById('import-textarea');
+  const preview = document.getElementById('import-preview');
+  const countLabel = document.getElementById('import-count-label');
+  const confirmBtn = document.getElementById('import-confirm-btn');
+  if (!ta || !preview) return;
+
+  const detected = parseFileHeaders(ta.value);
+
+  if (!ta.value.trim()) {
+    preview.innerHTML = '';
+    if (countLabel) countLabel.textContent = '';
+    if (confirmBtn) confirmBtn.disabled = true;
+    return;
+  }
+
+  if (detected.length === 0) {
+    preview.innerHTML = `<div class="import-preview-label">Detected files</div><div class="import-empty-hint">No file numbers detected. File numbers should be on their own line, like <strong>F-73</strong> or <strong>F-77</strong>.</div>`;
+    if (countLabel) countLabel.textContent = '';
+    if (confirmBtn) confirmBtn.disabled = true;
+    return;
+  }
+
+  const rows = detected.map(f => `<div class="import-preview-row">
+  <span class="import-preview-num">${esc(f.number)}</span>
+  <span class="import-preview-name">${esc(f.name.replace(f.number + ' – ', ''))}</span>
+</div>`).join('');
+
+  preview.innerHTML = `<div class="import-preview-label">Detected files</div><div class="import-preview-list">${rows}</div>`;
+  if (countLabel) countLabel.textContent = `${detected.length} file${detected.length !== 1 ? 's' : ''} detected`;
+  if (confirmBtn) confirmBtn.disabled = false;
+}
+
+function doImport() {
+  const ta = document.getElementById('import-textarea');
+  if (!ta) return;
+  const detected = parseFileHeaders(ta.value);
+  if (detected.length === 0) return;
+
+  detected.forEach(f => {
+    const file = newFile();
+    file.name = f.name;
+    JOB.files.push(file);
+  });
+
+  saveJob();
+  closeImport();
+  renderOrder();
+  recalc();
 }
 
 // ============================================================================
@@ -818,7 +1375,7 @@ function renderAdminParams(el) {
 <table class="admin-table">
   <thead><tr><th>Key</th><th>Value (h)</th><th>Description</th></tr></thead>
   <tbody>
-    ${row('D_BASE','Base design time per item')}
+    ${row('D_BASE','Base design time per element')}
     ${row('D_U','Per unique corpus element')}
     ${row('D_R','Per repeated corpus element')}
     ${row('D_B','Per bent / curved element')}
@@ -828,7 +1385,7 @@ function renderAdminParams(el) {
 <table class="admin-table">
   <thead><tr><th>Key</th><th>Value (h)</th><th>Description</th></tr></thead>
   <tbody>
-    ${row('E_BASE','Base engineering time per item')}
+    ${row('E_BASE','Base engineering time per element')}
     ${row('E_U','Per unique corpus element')}
     ${row('E_B','Per bent / curved element')}
     ${row('E_T','Per total corpus element (all)')}
@@ -838,14 +1395,14 @@ function renderAdminParams(el) {
 <table class="admin-table">
   <thead><tr><th>Key</th><th>Value (h)</th><th>Description</th></tr></thead>
   <tbody>
-    ${row('RENDER','Render / visual prep (fixed per item)')}
-    ${row('SAW','Saw list check (fixed per item)')}
+    ${row('RENDER','Render / visual prep (fixed per element)')}
+    ${row('SAW','Saw list check (fixed per element)')}
   </tbody>
 </table>
 <div class="formula-box">
   <strong>Design =</strong> <code>D_BASE + M_design × (D_U × unique + D_R × repeats + D_B × bent)</code><br>
   <strong>Engineering =</strong> <code>E_BASE + M_eng × (E_U × unique + E_B × bent) + E_T × total</code><br>
-  <strong>Total per item =</strong> <code>Design + Render + Saw list + Engineering</code>
+  <strong>Total per element =</strong> <code>Design + Render + Saw list + Engineering</code>
 </div>`;
 }
 
@@ -864,13 +1421,13 @@ function renderAdminTypes(el) {
 </tr>`).join('');
 
   el.innerHTML = `
-<div class="admin-section-title">Item types &amp; multipliers</div>
+<div class="admin-section-title">Element types &amp; multipliers</div>
 <table class="admin-table">
   <thead><tr><th>Name</th><th>Unit</th><th>M design</th><th>M eng</th><th>All unique</th></tr></thead>
   <tbody>${rows}</tbody>
 </table>
 <div class="formula-box" style="margin-top:14px">
-  <strong>M design / M eng</strong> multiply the per-element time components for each item type.<br>
+  <strong>M design / M eng</strong> multiply the per-element time components for each element type.<br>
   <strong>All unique</strong>: when checked, the repeating count is ignored and every element is treated as unique.
 </div>`;
 }
@@ -905,8 +1462,7 @@ function updateTypeField(idx, field, value) {
     CONFIG.itemTypes[idx][field] = value;
   }
   saveConfig();
-  renderItems();
-  renderTypePills();
+  renderOrder();
   recalc();
 }
 
@@ -917,12 +1473,11 @@ function copyJsonExport(btn) {
 }
 
 function resetConfig() {
-  if (!confirm('Reset all parameters and item types to factory defaults?')) return;
+  if (!confirm('Reset all parameters and element types to factory defaults?')) return;
   CONFIG = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
   saveConfig();
   renderAdminContent();
-  renderItems();
-  renderTypePills();
+  renderOrder();
   recalc();
 }
 
@@ -931,12 +1486,11 @@ function importJson() {
   if (!raw || !raw.trim()) return;
   try {
     const data = JSON.parse(raw.trim());
-    if (data.params)    Object.assign(CONFIG.params, data.params);
+    if (data.params) Object.assign(CONFIG.params, data.params);
     if (Array.isArray(data.itemTypes) && data.itemTypes.length) CONFIG.itemTypes = data.itemTypes;
     saveConfig();
     renderAdminContent();
-    renderItems();
-    renderTypePills();
+    renderOrder();
     recalc();
   } catch (e) {
     alert('Invalid JSON: ' + e.message);

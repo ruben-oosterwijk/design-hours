@@ -124,16 +124,19 @@ input, select, textarea { font-family: inherit; }
 
 /* ── File blocks ── */
 .file-block {
-  border: 1px solid var(--cutr-border);
-  margin-bottom: 20px;
+  border: 1px solid var(--cutr-n-400);
+  margin-bottom: 32px;
   background: white;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+  border-radius: 3px;
+  overflow: hidden;
 }
 .file-block:last-child { margin-bottom: 4px; }
 
 .file-header {
   display: flex; align-items: center; gap: 10px;
-  padding: 11px 14px; background: var(--cutr-n-100);
-  border-bottom: 1px solid var(--cutr-border);
+  padding: 12px 14px; background: var(--cutr-n-200);
+  border-bottom: 2px solid var(--cutr-n-400);
 }
 .file-header.is-duplicate {
   background: var(--cutr-amber-100);
@@ -145,7 +148,7 @@ input, select, textarea { font-family: inherit; }
   background: var(--cutr-n-700); color: white;
   font-size: 11px; font-weight: 700; border-radius: 3px;
 }
-.file-header.is-duplicate .file-num { background: var(--cutr-amber-600); }
+
 
 .file-name-input {
   flex: 1; font-size: 14px; font-weight: 600; padding: 3px 7px;
@@ -341,7 +344,12 @@ input, select, textarea { font-family: inherit; }
 .elem-result-hours { font-family: var(--cutr-font-mono); color: var(--cutr-n-700); }
 
 /* Backtrace */
-.backtrace-section { padding: 16px 20px; }
+.backtrace-section { padding: 16px 20px; border-top: 1px solid var(--cutr-border); }
+.backtrace-instruction {
+  font-size: 12px; color: var(--cutr-text-secondary); margin-bottom: 10px;
+  padding: 8px 12px; background: var(--cutr-n-100); border-left: 3px solid var(--cutr-n-400);
+  border-radius: 0 2px 2px 0;
+}
 .backtrace-actions { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; }
 .copy-notice { font-size: 12px; color: var(--cutr-success); display: none; }
 .backtrace-block {
@@ -468,9 +476,271 @@ input, select, textarea { font-family: inherit; }
 .import-preview-name { font-size: 12px; color: var(--cutr-n-700); }
 .import-empty-hint { font-size: 12px; color: var(--cutr-text-secondary); padding: 10px 0; }
 .import-count-label { font-size: 13px; color: var(--cutr-text-secondary); margin-left: auto; }
+
+/* ── Copy fields (per-value click-to-copy, matching countertop pattern) ── */
+.copy-field {
+  display: inline-flex; flex-direction: column;
+  padding: 5px 8px; border: none; background: none;
+  border-radius: 3px; cursor: pointer; text-align: left; min-width: 0;
+  transition: background 0.1s;
+}
+.copy-field:hover { background: var(--cutr-amber-100); }
+.copy-field.flash { background: var(--cutr-amber-100); }
+.cf-label {
+  font-size: 9px; color: var(--cutr-n-400); line-height: 1;
+  margin-bottom: 3px; white-space: nowrap;
+}
+.cf-value {
+  display: flex; align-items: center; gap: 3px;
+  font-size: 12.5px; line-height: 1.3; color: var(--cutr-text);
+}
+.copy-field.flash .cf-value { color: var(--cutr-brand); }
+.cf-text { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.cf-text.mono { font-family: var(--cutr-font-mono); }
+.cf-icon-hover {
+  font-size: 9px; color: var(--cutr-n-300);
+  opacity: 0; transition: opacity 0.1s; flex-shrink: 0;
+}
+.copy-field:hover .cf-icon-hover { opacity: 1; }
+.cf-icon-flash {
+  font-size: 9px; color: var(--cutr-brand); display: none; flex-shrink: 0;
+}
+.copy-field.flash .cf-icon-flash { display: inline; }
+.copy-field.flash .cf-icon-hover { display: none; }
+
+/* ── Quote line items section ── */
+.quote-lines {
+  padding: 18px 20px;
+  border-top: 1px solid var(--cutr-border);
+}
+.quote-lines h3 {
+  font-size: 13px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--cutr-text); margin-bottom: 6px;
+}
+.ql-instruction {
+  font-size: 12px; color: var(--cutr-text-secondary); margin-bottom: 16px; line-height: 1.5;
+}
+.ql-instruction a { color: var(--cutr-brand); text-decoration: none; font-weight: 600; }
+.ql-instruction a:hover { text-decoration: underline; }
+/* Parent header — mirrors platform's DSP - Ontwerp(en) parent row */
+.ql-parent {
+  display: flex; align-items: center; gap: 8px;
+  padding: 8px 4px 10px;
+  font-size: 13px; font-weight: 700; color: var(--cutr-n-900);
+  border-bottom: 2px solid var(--cutr-n-900);
+}
+/* Grid: name | qty | rate | file */
+.ql-thead-row,
+.ql-row {
+  display: grid;
+  grid-template-columns: minmax(0,2fr) 88px 80px minmax(0,1.5fr);
+  align-items: start;
+}
+.ql-thead-row {
+  border-bottom: 1px solid var(--cutr-n-300);
+}
+.ql-th {
+  font-size: 10px; font-weight: 700; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--cutr-text-secondary);
+  padding: 8px 8px 6px; white-space: nowrap;
+}
+.ql-th:first-child { padding-left: 4px; }
+.ql-row { border-bottom: 1px solid var(--cutr-n-100); }
+.ql-row:last-child { border-bottom: none; }
+
+/* ── How it works button ── */
+.how-to-btn {
+  font-size: 13px; font-weight: 600; padding: 6px 14px;
+  border: 1.5px solid var(--cutr-n-400); border-radius: 2px;
+  background: white; cursor: pointer; color: var(--cutr-text);
+  transition: border-color 0.15s, background 0.15s;
+}
+.how-to-btn:hover { border-color: var(--cutr-brand); background: var(--cutr-amber-100); color: var(--cutr-brand); }
+
+/* ── Onboarding overlay ── */
+.onboarding-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(38,38,38,0.65); z-index: 60;
+  align-items: center; justify-content: center; padding: 24px;
+}
+.onboarding-overlay.open { display: flex; }
+.onboarding-panel {
+  background: white; border-radius: 4px; overflow: hidden;
+  width: 680px; max-width: 100%; max-height: calc(100vh - 48px);
+  overflow-y: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+}
+.onboarding-hero {
+  background: var(--cutr-n-900); color: white; padding: 28px 32px;
+}
+.onboarding-hero-top {
+  display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px;
+}
+.onboarding-brand { font-size: 16px; font-weight: 800; letter-spacing: -0.02em; }
+.onboarding-brand .dot { color: var(--cutr-brand); }
+.onboarding-close-btn {
+  background: none; border: none; color: rgba(255,255,255,0.5); cursor: pointer;
+  font-size: 20px; line-height: 1; padding: 2px; transition: color 0.15s;
+}
+.onboarding-close-btn:hover { color: white; }
+.onboarding-title { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
+.onboarding-subtitle { font-size: 14px; color: rgba(255,255,255,0.6); line-height: 1.5; }
+.onboarding-steps {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+  background: var(--cutr-border); border-top: 1px solid var(--cutr-border);
+}
+.onboarding-step {
+  background: white; padding: 22px 24px;
+}
+.onboarding-step-num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--cutr-n-900); color: white;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; margin-bottom: 12px; flex-shrink: 0;
+}
+.onboarding-step:nth-child(4) .onboarding-step-num { background: var(--cutr-brand); }
+.onboarding-step-title { font-size: 14px; font-weight: 700; margin-bottom: 5px; color: var(--cutr-text); }
+.onboarding-step-body { font-size: 13px; color: var(--cutr-text-secondary); line-height: 1.55; }
+.onboarding-footer {
+  padding: 18px 24px; border-top: 1px solid var(--cutr-border);
+  display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+}
+.onboarding-guide-link {
+  font-size: 13px; font-weight: 600; color: var(--cutr-brand);
+  text-decoration: none;
+}
+.onboarding-guide-link:hover { text-decoration: underline; }
+.onboarding-dismiss-btn {
+  font-size: 13px; color: var(--cutr-text-secondary); background: none; border: none;
+  cursor: pointer; padding: 0; text-decoration: underline;
+}
+.onboarding-dismiss-btn:hover { color: var(--cutr-text); }
+.onboarding-cta {
+  margin-left: auto; font-size: 13px; font-weight: 600;
+  padding: 8px 20px; background: var(--cutr-brand); color: var(--cutr-n-900);
+  border: none; border-radius: 2px; cursor: pointer;
+}
+.onboarding-cta:hover { filter: brightness(1.05); }
+
+/* ── Changelog overlay ── */
+.changelog-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(38,38,38,0.65); z-index: 60;
+  align-items: center; justify-content: center; padding: 24px;
+}
+.changelog-overlay.open { display: flex; }
+.changelog-panel {
+  background: white; border-radius: 4px; overflow: hidden;
+  width: 600px; max-width: 100%; max-height: calc(100vh - 48px);
+  overflow-y: auto; box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+  display: flex; flex-direction: column;
+}
+.changelog-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 22px; border-bottom: 1px solid var(--cutr-border); flex-shrink: 0;
+}
+.changelog-header h2 { font-size: 15px; font-weight: 700; }
+.changelog-body { padding: 18px 22px; flex: 1; overflow-y: auto; }
+.cl-release {
+  margin-bottom: 24px;
+}
+.cl-release:last-child { margin-bottom: 0; }
+.cl-release-header {
+  display: flex; align-items: baseline; gap: 10px; margin-bottom: 12px;
+  padding-bottom: 8px; border-bottom: 2px solid var(--cutr-n-900);
+}
+.cl-version {
+  font-size: 14px; font-weight: 800; letter-spacing: -0.01em; color: var(--cutr-n-900);
+}
+.cl-date { font-size: 12px; color: var(--cutr-text-secondary); }
+.cl-tag {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.08em;
+  padding: 2px 7px; border-radius: 2px; margin-left: auto;
+}
+.cl-tag.launch { background: var(--cutr-brand); color: var(--cutr-n-900); }
+.cl-items { list-style: none; padding: 0; margin: 0; }
+.cl-items li {
+  display: flex; gap: 10px; padding: 7px 0;
+  border-bottom: 1px solid var(--cutr-n-100); font-size: 13px; line-height: 1.5;
+}
+.cl-items li:last-child { border-bottom: none; }
+.cl-bullet {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--cutr-brand);
+  flex-shrink: 0; margin-top: 6px;
+}
+.cl-item-text strong { font-weight: 600; color: var(--cutr-n-900); }
+.cl-item-text { color: var(--cutr-n-700); flex: 1; }
 </style>
 </head>
 <body>
+
+<!-- Changelog overlay -->
+<div class="changelog-overlay" id="changelog-overlay" onclick="onChangelogOverlayClick(event)">
+  <div class="changelog-panel" id="changelog-panel">
+    <div class="changelog-header">
+      <h2>Changelog</h2>
+      <button class="btn-icon" onclick="closeChangelog()">✕</button>
+    </div>
+    <div class="changelog-body">
+      <div class="cl-release">
+        <div class="cl-release-header">
+          <span class="cl-version">V1.0</span>
+          <span class="cl-date">June 2026</span>
+          <span class="cl-tag launch">Launch</span>
+        </div>
+        <ul class="cl-items">
+          <li><div class="cl-bullet"></div><div class="cl-item-text"><strong>Order → Files → Elements architecture</strong> — Multi-file calculator. Each order contains files; each file contains element cards per product type. Hours shown per element, per file, and order total.</div></li>
+          <li><div class="cl-bullet"></div><div class="cl-item-text"><strong>Bulk file import</strong> — Paste file headers (F-XX lines) from your Cutr quote to auto-create the file structure. Strips .stp extensions and formats file names automatically.</div></li>
+          <li><div class="cl-bullet"></div><div class="cl-item-text"><strong>Duplicate file logic</strong> — Mark a file as a duplicate of another. Hours default to 0h. Add an override for site or coordination hours only.</div></li>
+          <li><div class="cl-bullet"></div><div class="cl-item-text"><strong>Quote line items</strong> — Click-to-copy panel with <em>DSP - Ontwerp(en)</em> as the fixed line item name, hours from the calculation, €45/hr rate, and file assignment. One row per file, ready for direct entry into the Cutr quoting platform.</div></li>
+          <li><div class="cl-bullet"></div><div class="cl-item-text"><strong>Backtrace</strong> — Full per-element calculation trace. Copy and paste as a comment on the order in the Cutr platform.</div></li>
+          <li><div class="cl-bullet"></div><div class="cl-item-text"><strong>Onboarding overlay</strong> — How it works guide with 4-step walkthrough. Shows on first load. Link to the quoting guide in Notion.</div></li>
+          <li><div class="cl-bullet"></div><div class="cl-item-text"><strong>Formula</strong> — Design time = D_BASE + M_design × (D_U × unique + D_R × repeats + D_B × bent). Engineering time = E_BASE + M_eng × (E_U × unique + E_B × bent) + E_T × total. Validated against Excel benchmark.</div></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Onboarding overlay -->
+<div class="onboarding-overlay" id="onboarding-overlay" onclick="onOnboardingOverlayClick(event)">
+  <div class="onboarding-panel" id="onboarding-panel">
+    <div class="onboarding-hero">
+      <div class="onboarding-hero-top">
+        <div class="onboarding-brand">cutr<span class="dot">.</span></div>
+        <button class="onboarding-close-btn" onclick="closeOnboarding()">✕</button>
+      </div>
+      <div class="onboarding-title">Design hours calculator</div>
+      <div class="onboarding-subtitle">Estimate design &amp; engineering time per order. Four steps to a complete quote breakdown.</div>
+    </div>
+    <div class="onboarding-steps">
+      <div class="onboarding-step">
+        <div class="onboarding-step-num">1</div>
+        <div class="onboarding-step-title">Name the order</div>
+        <div class="onboarding-step-body">Enter the order reference — e.g. <em>VI-18-B Restaurant Keuken</em>. This appears in the backtrace export.</div>
+      </div>
+      <div class="onboarding-step">
+        <div class="onboarding-step-num">2</div>
+        <div class="onboarding-step-title">Add files</div>
+        <div class="onboarding-step-body">Paste file headers from your quote (F-XX lines) to auto-import. Or add files manually. Mark re-issued files as duplicates — they contribute 0h by default, with an optional hour override.</div>
+      </div>
+      <div class="onboarding-step">
+        <div class="onboarding-step-num">3</div>
+        <div class="onboarding-step-title">Add elements per file</div>
+        <div class="onboarding-step-body">One card per product type. Enter total count, repeating elements, and bent elements. The calculator applies design and engineering multipliers per type.</div>
+      </div>
+      <div class="onboarding-step">
+        <div class="onboarding-step-num">4</div>
+        <div class="onboarding-step-title">Copy to the platform</div>
+        <div class="onboarding-step-body">Use the <strong>Quote line items</strong> panel to copy values directly into the quoting platform — one line item per file. Click any value to copy it.</div>
+      </div>
+    </div>
+    <div class="onboarding-footer">
+      <a class="onboarding-guide-link" href="https://www.notion.so/cutr/Design-Hours-Calculator-Quoting-Guide-37a2552c8ff18133a3fcf00a75e5a0af" target="_blank" rel="noopener">View quoting guide →</a>
+      <button class="onboarding-dismiss-btn" onclick="dismissOnboarding()">Don't show again</button>
+      <button class="onboarding-cta" onclick="closeOnboarding()">Start calculating →</button>
+    </div>
+  </div>
+</div>
 
 <!-- Admin overlay -->
 <div class="admin-overlay" id="admin-overlay" onclick="closeAdmin()"></div>
@@ -520,7 +790,11 @@ input, select, textarea { font-family: inherit; }
       <span class="version-pill">V1</span>
     </div>
   </div>
-  <button class="btn btn-sm" onclick="openAdmin()">Admin</button>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="how-to-btn" onclick="openOnboarding()">How it works</button>
+    <button class="how-to-btn" onclick="openChangelog()">Changelog</button>
+    <button class="btn btn-sm" onclick="openAdmin()">Admin</button>
+  </div>
 </div>
 
 <div class="page">
@@ -927,6 +1201,48 @@ function cardStripHTML(r) {
 // RENDER — RESULT
 // ============================================================================
 
+function quoteLineItemsHTML(job) {
+  // Build rows for files that contribute hours to the order total
+  const lineRows = job.fileResults
+    .filter(fr => fr.contribution > 0)
+    .map(fr => {
+      const name = fr.file.name || `File ${JOB.files.indexOf(fr.file) + 1}`;
+      const hrs  = fmtH(fr.contribution);
+      const rate = '45';
+      const dsp  = `Ontwerp(en) - Bestand: ${name}`;
+      const nameEsc = name.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+      const cf = (labelTxt, displayTxt, copyVal, isMono) => {
+        const monoClass = isMono ? ' mono' : '';
+        const copyEsc = copyVal.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+        return `<button class="copy-field" onclick="copyField(this,'${copyEsc}')">
+  <div class="cf-label">${labelTxt}</div>
+  <div class="cf-value"><span class="cf-text${monoClass}">${esc(displayTxt)}</span><span class="cf-icon-flash">✓</span><span class="cf-icon-hover">⎘</span></div>
+</button>`;
+      };
+      return `<div class="ql-row">
+  ${cf('Line item name', dsp, dsp, false)}
+  ${cf('Qty (hours)', hrs, hrs, true)}
+  ${cf('Rate (€/hr)', rate, rate, true)}
+  ${cf('File', name, name, false)}
+</div>`;
+    }).join('');
+
+  if (!lineRows) return '';
+
+  return `<div class="quote-lines">
+  <h3>Quote line items</h3>
+  <p class="ql-instruction">Click any value to copy it directly into the quoting platform. One line item per file. <a href="https://www.notion.so/cutr/Design-Hours-Calculator-Quoting-Guide-37a2552c8ff18133a3fcf00a75e5a0af" target="_blank" rel="noopener">View quoting guide →</a></p>
+  <div class="ql-parent">DSP - Ontwerp(en)</div>
+  <div class="ql-thead-row">
+    <div class="ql-th">Line item name</div>
+    <div class="ql-th">Qty (hours)</div>
+    <div class="ql-th">Rate (€/hr)</div>
+    <div class="ql-th">File</div>
+  </div>
+  ${lineRows}
+</div>`;
+}
+
 function recalc() {
   renderResult(computeJob());
 }
@@ -995,7 +1311,9 @@ function renderResult(job) {
   <h3>Per file</h3>
   ${perFileHTML}
 </div>
+${quoteLineItemsHTML(job)}
 <div class="backtrace-section">
+  <div class="backtrace-instruction">Add this as a comment on the order in the Cutr platform.</div>
   <div class="backtrace-actions">
     <button class="btn btn-sm" onclick="copyBacktrace(this)">Copy backtrace</button>
     <span class="copy-notice" id="copy-notice">Copied!</span>
@@ -1239,6 +1557,72 @@ function clearJob() {
   JOB = { orderName: '', files: [] };
   saveJob();
   render();
+}
+
+// ============================================================================
+// COPY CHIPS
+// ============================================================================
+
+function copyField(el, value) {
+  const text = String(value);
+  const doFlash = () => {
+    el.classList.add('flash');
+    setTimeout(() => el.classList.remove('flash'), 1000);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(doFlash).catch(() => {
+      _copyFallback(text); doFlash();
+    });
+  } else {
+    _copyFallback(text); doFlash();
+  }
+}
+
+function _copyFallback(text) {
+  const ta = document.createElement('textarea');
+  ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); } catch(e) {}
+  document.body.removeChild(ta);
+}
+
+// ============================================================================
+// CHANGELOG
+// ============================================================================
+
+function openChangelog() {
+  document.getElementById('changelog-overlay').classList.add('open');
+}
+
+function closeChangelog() {
+  document.getElementById('changelog-overlay').classList.remove('open');
+}
+
+function onChangelogOverlayClick(e) {
+  if (e.target === document.getElementById('changelog-overlay')) closeChangelog();
+}
+
+// ============================================================================
+// ONBOARDING
+// ============================================================================
+
+const ONBOARDING_KEY = 'cutr_dh_onboarding_seen';
+
+function openOnboarding() {
+  document.getElementById('onboarding-overlay').classList.add('open');
+}
+
+function closeOnboarding() {
+  document.getElementById('onboarding-overlay').classList.remove('open');
+}
+
+function dismissOnboarding() {
+  try { localStorage.setItem(ONBOARDING_KEY, '1'); } catch(e) {}
+  closeOnboarding();
+}
+
+function onOnboardingOverlayClick(e) {
+  if (e.target === document.getElementById('onboarding-overlay')) closeOnboarding();
 }
 
 // ============================================================================
@@ -1502,6 +1886,11 @@ function importJson() {
 // ============================================================================
 
 render();
+
+// Show onboarding on first visit
+try {
+  if (!localStorage.getItem(ONBOARDING_KEY)) openOnboarding();
+} catch(e) {}
 </script>
 </body>
 </html>

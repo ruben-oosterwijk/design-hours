@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cutr · Design Hours</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cutr-amber-100: #FFF8EC;
+  --cutr-amber-300: #FFD98A;
+  --cutr-amber-600: #C06500;
+  --cutr-amber-700: #994E00;
+  --cutr-n-100: #FAFAFA;
+  --cutr-n-200: #F5F5F5;
+  --cutr-n-400: #D9D9D9;
+  --cutr-n-600: #8C8C8C;
+  --cutr-n-700: #595959;
+  --cutr-n-800: #434343;
+  --cutr-n-900: #262626;
+  --cutr-success: #38A106;
+  --cutr-error: #F52228;
+  --cutr-bg: #FFFFFF;
+  --cutr-text: var(--cutr-n-900);
+  --cutr-text-secondary: var(--cutr-n-600);
+  --cutr-border: var(--cutr-n-200);
+  --cutr-rule: var(--cutr-n-400);
+  --cutr-brand: var(--cutr-amber-600);
+  --cutr-font-primary: 'Averta Std', system-ui, -apple-system, "Segoe UI", sans-serif;
+  --cutr-font-mono: 'DM Mono', 'Courier New', monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  font-family: var(--cutr-font-primary);
+  color: var(--cutr-text);
+  background: var(--cutr-bg);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+body { min-height: 100vh; padding-bottom: 90px; }
+button { font-family: inherit; }
+input, select, textarea { font-family: inherit; }
+
+/* Header */
+.header {
+  border-bottom: 1px solid var(--cutr-rule);
+  padding: 16px 32px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: white; position: sticky; top: 0; z-index: 10;
+}
+.header-left { display: flex; align-items: center; gap: 24px; }
+.brand { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+.brand .dot { color: var(--cutr-brand); }
+.header-title {
+  font-size: 11px; font-weight: 600; color: var(--cutr-text-secondary);
+  text-transform: uppercase; letter-spacing: 0.12em;
+}
+.version-pill {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+  background: var(--cutr-amber-100); color: var(--cutr-amber-700);
+  padding: 4px 8px; border-radius: 2px; margin-left: 8px;
+}
+
+/* Buttons */
+.btn {
+  padding: 8px 16px; border: 1px solid var(--cutr-rule); background: white;
+  font-size: 13px; cursor: pointer; border-radius: 2px; color: var(--cutr-text);
+  font-weight: 500;
+}
+.btn:hover { background: var(--cutr-n-100); }
+.btn-primary { background: var(--cutr-n-900); color: white; border-color: var(--cutr-n-900); }
+.btn-primary:hover { background: var(--cutr-n-800); }
+.btn-sm { padding: 6px 12px; font-size: 12px; }
+.btn-icon {
+  padding: 5px 7px; border: none; background: transparent; cursor: pointer;
+  color: var(--cutr-text-secondary); font-size: 13px; border-radius: 2px;
+}
+.btn-icon:hover { background: var(--cutr-n-200); color: var(--cutr-text); }
+
+/* Page */
+.page { max-width: 960px; margin: 0 auto; padding: 28px 32px; }
+.page h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 6px; }
+.page > .subtitle { font-size: 14px; color: var(--cutr-text-secondary); margin-bottom: 24px; }
+
+/* Section */
+.section { border: 1px solid var(--cutr-border); background: white; margin-bottom: 18px; }
+.section-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 14px 20px; border-bottom: 1px solid var(--cutr-border);
+}
+.section-header h2 {
+  font-size: 13px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--cutr-text-secondary);
+}
+.section-header h2 .step-num {
+  display: inline-block; width: 22px; height: 22px;
+  background: var(--cutr-n-900); color: white; border-radius: 50%;
+  text-align: center; line-height: 22px; font-size: 11px;
+  margin-right: 8px; vertical-align: middle;
+}
+.section-body { padding: 18px 20px; }
+
+/* Fields */
+.field-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--cutr-text-secondary); margin-bottom: 6px;
+}
+.text-input {
+  width: 100%; font-size: 15px; padding: 8px 12px;
+  border: 1px solid var(--cutr-rule); border-radius: 2px; background: white;
+}
+.text-input:focus { outline: none; border-color: var(--cutr-brand); box-shadow: 0 0 0 3px var(--cutr-amber-100); }
+.num-input {
+  width: 100%; font-family: var(--cutr-font-mono); font-size: 15px;
+  padding: 6px 10px; border: 1px solid var(--cutr-rule);
+  border-radius: 2px; text-align: right; background: white;
+}
+.num-input:focus { outline: none; border-color: var(--cutr-brand); box-shadow: 0 0 0 3px var(--cutr-amber-100); }
+.num-input:disabled { background: var(--cutr-n-200); color: var(--cutr-n-600); cursor: not-allowed; }
+.input-hint { font-size: 11px; color: var(--cutr-text-secondary); margin-top: 3px; }
+
+/* Item cards */
+.item-card { border: 1px solid var(--cutr-border); margin-bottom: 12px; background: white; }
+.card-header {
+  display: flex; align-items: center; gap: 10px;
+  padding: 11px 14px; background: var(--cutr-n-100);
+  border-bottom: 1px solid var(--cutr-border);
+}
+.card-header.is-collapsed { border-bottom: none; }
+.card-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; flex-shrink: 0;
+  background: var(--cutr-brand); color: white;
+  font-size: 11px; font-weight: 700; border-radius: 3px;
+}
+.card-name-input {
+  flex: 1; font-size: 14px; font-weight: 600; padding: 3px 7px;
+  border: 1px solid transparent; border-radius: 2px; background: transparent;
+  min-width: 0;
+}
+.card-name-input:hover { border-color: var(--cutr-rule); background: white; }
+.card-name-input:focus { outline: none; border-color: var(--cutr-brand); background: white; }
+.card-type-select {
+  font-size: 13px; padding: 4px 8px; border: 1px solid var(--cutr-rule);
+  border-radius: 2px; background: white; cursor: pointer; max-width: 210px;
+}
+.card-header-actions { display: flex; gap: 2px; margin-left: auto; flex-shrink: 0; }
+
+.card-body { padding: 14px 16px; }
+.card-inputs-grid {
+  display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 12px;
+}
+.input-group .field-label { margin-bottom: 4px; }
+
+/* Card result strip */
+.card-result-strip {
+  background: var(--cutr-amber-100); border: 1px solid var(--cutr-amber-300);
+  border-radius: 2px; padding: 10px 14px;
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+}
+.result-cell { text-align: center; }
+.rc-label {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--cutr-amber-700); margin-bottom: 2px;
+}
+.rc-value { font-family: var(--cutr-font-mono); font-size: 14px; color: var(--cutr-n-900); }
+.result-cell.rc-total .rc-label { color: var(--cutr-brand); }
+.result-cell.rc-total .rc-value { font-size: 16px; font-weight: 700; color: var(--cutr-brand); }
+
+/* Quick-add bar */
+.add-item-bar { display: flex; align-items: center; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+.add-item-bar .bar-label { font-size: 12px; color: var(--cutr-text-secondary); white-space: nowrap; }
+.type-pill {
+  padding: 5px 12px; border: 1px solid var(--cutr-rule); background: white;
+  font-size: 12px; border-radius: 20px; cursor: pointer; color: var(--cutr-text);
+}
+.type-pill:hover { border-color: var(--cutr-brand); background: var(--cutr-amber-100); color: var(--cutr-brand); }
+
+/* Result section */
+.result-hero {
+  text-align: center; padding: 28px 20px; border-bottom: 1px solid var(--cutr-border);
+}
+.result-total-label {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.15em; color: var(--cutr-text-secondary); margin-bottom: 6px;
+}
+.result-total-value {
+  font-family: var(--cutr-font-mono); font-size: 52px; font-weight: 700;
+  color: var(--cutr-text); letter-spacing: -0.02em; line-height: 1;
+}
+.result-total-unit { font-family: var(--cutr-font-mono); font-size: 20px; color: var(--cutr-text-secondary); }
+
+.result-breakdown {
+  padding: 18px 20px; border-bottom: 1px solid var(--cutr-border);
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+}
+.bc-label {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--cutr-text-secondary); margin-bottom: 3px;
+}
+.bc-value { font-family: var(--cutr-font-mono); font-size: 22px; font-weight: 600; }
+.bc-desc { font-size: 11px; color: var(--cutr-text-secondary); margin-top: 2px; }
+
+.result-per-item { padding: 16px 20px; border-bottom: 1px solid var(--cutr-border); }
+.result-per-item h3 {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.08em; color: var(--cutr-text-secondary); margin-bottom: 10px;
+}
+.per-item-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 5px 0; border-bottom: 1px solid var(--cutr-n-200); font-size: 13px;
+}
+.per-item-row:last-child { border-bottom: none; }
+.per-item-name { font-weight: 500; }
+.per-item-type { font-size: 11px; color: var(--cutr-text-secondary); margin-left: 6px; }
+.per-item-hours { font-family: var(--cutr-font-mono); font-weight: 600; }
+
+/* Backtrace */
+.backtrace-section { padding: 16px 20px; }
+.backtrace-actions { display: flex; gap: 8px; margin-bottom: 10px; align-items: center; }
+.copy-notice { font-size: 12px; color: var(--cutr-success); display: none; }
+.backtrace-block {
+  background: var(--cutr-n-100); border: 1px solid var(--cutr-border);
+  border-radius: 2px; padding: 12px 14px; font-family: var(--cutr-font-mono);
+  font-size: 11.5px; line-height: 1.65; color: var(--cutr-n-800);
+  white-space: pre-wrap; word-break: break-all; max-height: 380px; overflow-y: auto;
+}
+
+/* Empty states */
+.empty-items {
+  padding: 10px 0 4px; font-size: 13px; color: var(--cutr-text-secondary);
+}
+.empty-result { padding: 32px 20px; text-align: center; color: var(--cutr-text-secondary); font-size: 13px; }
+
+/* Admin panel */
+.admin-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.18); z-index: 19;
+}
+.admin-overlay.open { display: block; }
+.admin-panel {
+  display: none; position: fixed; top: 0; right: 0; bottom: 0;
+  width: 620px; background: white; border-left: 1px solid var(--cutr-rule);
+  z-index: 20; overflow-y: auto; flex-direction: column;
+}
+.admin-panel.open { display: flex; }
+.admin-header {
+  padding: 16px 20px; border-bottom: 1px solid var(--cutr-rule);
+  display: flex; align-items: center; justify-content: space-between;
+  position: sticky; top: 0; background: white; z-index: 1; flex-shrink: 0;
+}
+.admin-header h2 { font-size: 15px; font-weight: 600; }
+.admin-tabs {
+  display: flex; border-bottom: 1px solid var(--cutr-rule);
+  position: sticky; top: 56px; background: white; z-index: 1; flex-shrink: 0;
+}
+.admin-tab {
+  padding: 10px 18px; font-size: 13px; cursor: pointer; border: none;
+  background: transparent; border-bottom: 2px solid transparent;
+  font-weight: 500; color: var(--cutr-text-secondary); transition: none;
+}
+.admin-tab.active { border-bottom-color: var(--cutr-brand); color: var(--cutr-text); }
+.admin-scroll { padding: 20px; overflow-y: auto; flex: 1; }
+
+.admin-section-title {
+  font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.1em; color: var(--cutr-text-secondary);
+  margin: 22px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--cutr-border);
+}
+.admin-section-title:first-child { margin-top: 0; }
+
+.admin-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.admin-table th {
+  text-align: left; font-size: 10px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.07em; color: var(--cutr-text-secondary); padding: 6px 8px;
+  border-bottom: 1px solid var(--cutr-border);
+}
+.admin-table td { padding: 6px 8px; border-bottom: 1px solid var(--cutr-n-200); vertical-align: middle; }
+.admin-table tr:last-child td { border-bottom: none; }
+.admin-num { width: 76px; }
+.admin-input {
+  font-family: var(--cutr-font-mono); font-size: 13px;
+  padding: 4px 7px; border: 1px solid var(--cutr-rule); border-radius: 2px; width: 100%;
+}
+.admin-input:focus { outline: none; border-color: var(--cutr-brand); }
+.admin-text { font-size: 13px; padding: 4px 7px; border: 1px solid var(--cutr-rule); border-radius: 2px; width: 100%; }
+.admin-text:focus { outline: none; border-color: var(--cutr-brand); }
+.param-key { font-family: var(--cutr-font-mono); font-size: 12px; font-weight: 600; }
+.param-desc { font-size: 11px; color: var(--cutr-text-secondary); }
+
+.formula-box {
+  margin-top: 14px; padding: 10px 12px; background: var(--cutr-n-100);
+  border-left: 3px solid var(--cutr-brand); font-size: 12px; line-height: 1.6;
+}
+.formula-box code {
+  font-family: var(--cutr-font-mono); font-size: 11px;
+  background: var(--cutr-n-200); padding: 1px 4px; border-radius: 2px;
+}
+</style>
+</head>
+<body>
+
+<div class="admin-overlay" id="admin-overlay" onclick="closeAdmin()"></div>
+
+<div class="admin-panel" id="admin-panel">
+  <div class="admin-header">
+    <h2>Admin settings</h2>
+    <button class="btn btn-sm" onclick="closeAdmin()">Close</button>
+  </div>
+  <div class="admin-tabs">
+    <button class="admin-tab active" data-tab="params" onclick="showAdminTab('params')">Parameters</button>
+    <button class="admin-tab" data-tab="types" onclick="showAdminTab('types')">Item types</button>
+    <button class="admin-tab" data-tab="json" onclick="showAdminTab('json')">JSON</button>
+  </div>
+  <div class="admin-scroll" id="admin-content"></div>
+</div>
+
+<div class="header">
+  <div class="header-left">
+    <div class="brand">cutr<span class="dot">.</span></div>
+    <div>
+      <span class="header-title">Design Hours</span>
+      <span class="version-pill">V1</span>
+    </div>
+  </div>
+  <button class="btn btn-sm" onclick="openAdmin()">Admin</button>
+</div>
+
+<div class="page">
+  <h1>Design hours calculator</h1>
+  <p class="subtitle">Estimate design &amp; engineering time per item based on type, element count, repetition, and bend complexity.</p>
+
+  <!-- Step 1: Project -->
+  <div class="section">
+    <div class="section-header">
+      <h2><span class="step-num">1</span>Project</h2>
+    </div>
+    <div class="section-body">
+      <div class="field-label">Project name</div>
+      <input type="text" class="text-input" id="project-name"
+        placeholder="e.g. The Hoxton Amsterdam — Lobby furniture"
+        oninput="JOB.projectName = this.value; saveJob(); updateBacktrace();" />
+    </div>
+  </div>
+
+  <!-- Step 2: Items -->
+  <div class="section">
+    <div class="section-header">
+      <h2><span class="step-num">2</span>Items</h2>
+      <button class="btn btn-sm btn-primary" onclick="addItem()">+ Add item</button>
+    </div>
+    <div class="section-body">
+      <p style="font-size:13px;color:var(--cutr-text-secondary);margin-bottom:14px;">
+        Add one card per item to be designed. For items with repeated corpus units (e.g. 8 identical modules in a run), enter the repeating count — only unique elements are charged at the full design rate.
+      </p>
+      <div id="items-list"></div>
+      <div class="add-item-bar">
+        <span class="bar-label">Quick add:</span>
+        <div id="type-pills"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3: Result -->
+  <div class="section">
+    <div class="section-header">
+      <h2><span class="step-num">3</span>Result</h2>
+    </div>
+    <div id="result-area"></div>
+  </div>
+</div>
+
+<script>
+// ============================================================================
+// CONFIG & STORAGE
+// ============================================================================
+
+const STORAGE_KEY = 'cutr-design-hours-v1-config';
+const JOB_KEY    = 'cutr-design-hours-v1-job';
+
+const DEFAULT_CONFIG = {
+  params: {
+    D_BASE: 0.5,   // base design time per item (h)
+    D_U:    0.08,  // per unique corpus (h)
+    D_R:    0.02,  // per repeated corpus (h)
+    D_B:    0.25,  // per bent element (h)
+    E_BASE: 0.5,   // base engineering time per item (h)
+    E_U:    0.25,  // per unique corpus — engineering (h)
+    E_B:    0.5,   // per bent element — engineering (h)
+    E_T:    0.1,   // per total corpus — engineering (h)
+    RENDER: 0.5,   // fixed render / visual prep per item (h)
+    SAW:    0.5    // fixed saw list check per item (h)
+  },
+  itemTypes: [
+    { id: 'podium',            name: 'Podium',            unit: 'per 1 m²',      mDesign: 1.5,  mEng: 1.5,  allUnique: true  },
+    { id: 'bespoke',           name: 'Bespoke',           unit: 'per 0.5 m³',    mDesign: 3.0,  mEng: 3.0,  allUnique: false },
+    { id: 'cabinetry',         name: 'Cabinetry',         unit: 'per corpus',    mDesign: 1.0,  mEng: 1.0,  allUnique: false },
+    { id: 'cabinetry-bespoke', name: 'Cabinetry bespoke', unit: 'per corpus',   mDesign: 2.0,  mEng: 3.0,  allUnique: false },
+    { id: 'bench',             name: 'Bench',             unit: 'per m¹ length', mDesign: 1.25, mEng: 2.0,  allUnique: true  },
+    { id: 'table-desk',        name: 'Table / desk',      unit: 'per 1 m³',      mDesign: 0.25, mEng: 1.0,  allUnique: true  },
+    { id: 'planter',           name: 'Planter',           unit: 'per m¹ length', mDesign: 2.0,  mEng: 2.5,  allUnique: false }
+  ]
+};
+
+let CONFIG = loadConfig();
+let JOB    = loadJob();
+let _adminTab = 'params';
+
+function loadConfig() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+    const saved = JSON.parse(raw);
+    const out = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+    if (saved.params) Object.assign(out.params, saved.params);
+    if (Array.isArray(saved.itemTypes) && saved.itemTypes.length) out.itemTypes = saved.itemTypes;
+    return out;
+  } catch (e) { return JSON.parse(JSON.stringify(DEFAULT_CONFIG)); }
+}
+
+function saveConfig() { localStorage.setItem(STORAGE_KEY, JSON.stringify(CONFIG)); }
+
+function loadJob() {
+  try {
+    const raw = localStorage.getItem(JOB_KEY);
+    if (!raw) return { projectName: '', items: [] };
+    return JSON.parse(raw);
+  } catch (e) { return { projectName: '', items: [] }; }
+}
+
+function saveJob() { localStorage.setItem(JOB_KEY, JSON.stringify(JOB)); }
+
+// ============================================================================
+// HELPERS
+// ============================================================================
+
+function getItemType(id) {
+  return CONFIG.itemTypes.find(t => t.id === id) || CONFIG.itemTypes[0];
+}
+
+function fmtH(h) { return h.toFixed(2); }
+
+function esc(s) {
+  return (s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function newItem(typeId) {
+  return {
+    id: 'i' + Date.now() + Math.floor(Math.random() * 9999),
+    name: '',
+    typeId: typeId || 'cabinetry',
+    total: null,
+    repeating: null,
+    bent: null,
+    collapsed: false
+  };
+}
+
+// ============================================================================
+// CALCULATION
+// ============================================================================
+
+function computeItem(item) {
+  const it = getItemType(item.typeId);
+  const P  = CONFIG.params;
+  const T  = parseFloat(item.total)     || 0;
+  const E  = parseFloat(item.repeating) || 0;
+  const B  = parseFloat(item.bent)      || 0;
+
+  // Unique = total − repeating, unless type is allUnique or no repeating entered
+  const U = (it.allUnique || E === 0) ? T : Math.max(T - E, 0);
+  const R = Math.max(T - U, 0);
+
+  const designTime = P.D_BASE + it.mDesign * (P.D_U * U + P.D_R * R + P.D_B * B);
+  const render     = P.RENDER;
+  const saw        = P.SAW;
+  const engTime    = P.E_BASE + it.mEng * (P.E_U * U + P.E_B * B) + P.E_T * T;
+  const total      = designTime + render + saw + engTime;
+
+  return { T, U, R, B, designTime, render, saw, engTime, total, it };
+}
+
+function computeJob() {
+  let totalDesign = 0, totalRender = 0, totalSaw = 0, totalEng = 0, totalHours = 0;
+  const itemResults = JOB.items.map(item => {
+    if (!(parseFloat(item.total) > 0)) return { item, result: null };
+    const r = computeItem(item);
+    totalDesign += r.designTime;
+    totalRender += r.render;
+    totalSaw    += r.saw;
+    totalEng    += r.engTime;
+    totalHours  += r.total;
+    return { item, result: r };
+  });
+  return { itemResults, totalDesign, totalRender, totalSaw, totalEng, totalHours };
+}
+
+// ============================================================================
+// RENDER — ITEMS
+// ============================================================================
+
+function render() {
+  const pn = document.getElementById('project-name');
+  if (pn) pn.value = JOB.projectName || '';
+  renderTypePills();
+  renderItems();
+  recalc();
+}
+
+function renderTypePills() {
+  const el = document.getElementById('type-pills');
+  if (!el) return;
+  el.innerHTML = CONFIG.itemTypes.map(t =>
+    `<button class="type-pill" onclick="addItem('${t.id}')">${t.name}</button>`
+  ).join('');
+}
+
+function renderItems() {
+  const el = document.getElementById('items-list');
+  if (!el) return;
+  if (JOB.items.length === 0) {
+    el.innerHTML = '<div class="empty-items">No items yet. Use the quick-add buttons below or "＋ Add item" above.</div>';
+    return;
+  }
+  el.innerHTML = JOB.items.map((item, idx) => itemCardHTML(item, idx)).join('');
+}
+
+function itemCardHTML(item, idx) {
+  const it         = getItemType(item.typeId);
+  const hasTotal   = parseFloat(item.total) > 0;
+  const isCollapsed = item.collapsed;
+  const isAllUnique = it.allUnique;
+
+  const typeOptions = CONFIG.itemTypes.map(t =>
+    `<option value="${t.id}"${t.id === item.typeId ? ' selected' : ''}>${esc(t.name)} (${esc(t.unit)})</option>`
+  ).join('');
+
+  const stripHTML = hasTotal && !isCollapsed ? cardStripHTML(computeItem(item)) : '';
+
+  return `<div class="item-card" id="card-${item.id}">
+  <div class="card-header${isCollapsed ? ' is-collapsed' : ''}">
+    <div class="card-badge">${idx + 1}</div>
+    <input type="text" class="card-name-input" value="${esc(item.name)}"
+      placeholder="Item name…"
+      oninput="onNameInput('${item.id}', this.value)" />
+    <select class="card-type-select" onchange="onTypeChange('${item.id}', this.value)">
+      ${typeOptions}
+    </select>
+    <div class="card-header-actions">
+      <button class="btn-icon" onclick="onToggleCollapse('${item.id}')" title="${isCollapsed ? 'Expand' : 'Collapse'}">${isCollapsed ? '▶' : '▼'}</button>
+      <button class="btn-icon" onclick="onRemoveItem('${item.id}')" title="Remove">✕</button>
+    </div>
+  </div>
+  ${isCollapsed ? '' : `<div class="card-body">
+    <div class="card-inputs-grid">
+      <div class="input-group">
+        <div class="field-label">Total count (T)</div>
+        <input type="number" class="num-input" min="0" step="0.5"
+          value="${item.total !== null ? item.total : ''}" placeholder="0"
+          oninput="onNumInput('${item.id}', 'total', this.value)" />
+        <div class="input-hint">${esc(it.unit)}</div>
+      </div>
+      <div class="input-group">
+        <div class="field-label">Repeating count (R)</div>
+        <input type="number" class="num-input" min="0" step="0.5"
+          value="${item.repeating !== null ? item.repeating : ''}" placeholder="0"
+          ${isAllUnique ? 'disabled' : ''}
+          oninput="onNumInput('${item.id}', 'repeating', this.value)" />
+        <div class="input-hint">${isAllUnique ? 'Not applicable — all unique' : 'Number of identical corpus units'}</div>
+      </div>
+      <div class="input-group">
+        <div class="field-label">Bent elements (B)</div>
+        <input type="number" class="num-input" min="0" step="1"
+          value="${item.bent !== null ? item.bent : ''}" placeholder="0"
+          oninput="onNumInput('${item.id}', 'bent', this.value)" />
+        <div class="input-hint">Curved / bent corpus elements</div>
+      </div>
+    </div>
+    <div id="strip-${item.id}">${stripHTML}</div>
+  </div>`}
+</div>`;
+}
+
+function cardStripHTML(r) {
+  return `<div class="card-result-strip">
+  <div class="result-cell"><div class="rc-label">Design</div><div class="rc-value">${fmtH(r.designTime)}h</div></div>
+  <div class="result-cell"><div class="rc-label">Render</div><div class="rc-value">${fmtH(r.render)}h</div></div>
+  <div class="result-cell"><div class="rc-label">Saw list</div><div class="rc-value">${fmtH(r.saw)}h</div></div>
+  <div class="result-cell"><div class="rc-label">Engineering</div><div class="rc-value">${fmtH(r.engTime)}h</div></div>
+  <div class="result-cell rc-total"><div class="rc-label">Total</div><div class="rc-value">${fmtH(r.total)}h</div></div>
+</div>`;
+}
+
+// ============================================================================
+// RENDER — RESULT
+// ============================================================================
+
+function recalc() {
+  const job = computeJob();
+  renderResult(job);
+}
+
+function renderResult(job) {
+  const el = document.getElementById('result-area');
+  if (!el) return;
+
+  const hasData = job.itemResults.some(r => r.result);
+
+  if (!hasData) {
+    el.innerHTML = '<div class="empty-result">Enter item counts above to see the total design hours.</div>';
+    return;
+  }
+
+  const perItemRows = job.itemResults.filter(r => r.result).map(r => {
+    const name = r.item.name || `Item ${JOB.items.indexOf(r.item) + 1}`;
+    const it   = getItemType(r.item.typeId);
+    return `<div class="per-item-row">
+  <span><span class="per-item-name">${esc(name)}</span><span class="per-item-type">${esc(it.name)}</span></span>
+  <span class="per-item-hours">${fmtH(r.result.total)}h</span>
+</div>`;
+  }).join('');
+
+  el.innerHTML = `
+<div class="result-hero">
+  <div class="result-total-label">Total design hours</div>
+  <span class="result-total-value">${fmtH(job.totalHours)}</span><span class="result-total-unit">h</span>
+</div>
+<div class="result-breakdown">
+  <div><div class="bc-label">Design</div><div class="bc-value">${fmtH(job.totalDesign)}h</div><div class="bc-desc">Drawing &amp; modelling</div></div>
+  <div><div class="bc-label">Render</div><div class="bc-value">${fmtH(job.totalRender)}h</div><div class="bc-desc">Visual / render prep</div></div>
+  <div><div class="bc-label">Saw list</div><div class="bc-value">${fmtH(job.totalSaw)}h</div><div class="bc-desc">Cut list check</div></div>
+  <div><div class="bc-label">Engineering</div><div class="bc-value">${fmtH(job.totalEng)}h</div><div class="bc-desc">Technical drawings</div></div>
+</div>
+<div class="result-per-item">
+  <h3>Per item</h3>
+  ${perItemRows}
+</div>
+<div class="backtrace-section">
+  <div class="backtrace-actions">
+    <button class="btn btn-sm" onclick="copyBacktrace(this)">Copy backtrace</button>
+    <span class="copy-notice" id="copy-notice">Copied!</span>
+    <button class="btn btn-sm" onclick="clearJob()" style="margin-left:auto">Clear all</button>
+  </div>
+  <div class="backtrace-block" id="backtrace-block"></div>
+</div>`;
+
+  updateBacktrace();
+}
+
+function updateBacktrace() {
+  const el = document.getElementById('backtrace-block');
+  if (!el) return;
+  el.textContent = buildBacktrace(computeJob());
+}
+
+function buildBacktrace(job) {
+  const P   = CONFIG.params;
+  const now = new Date().toISOString().replace('T', ' ').substring(0, 19) + ' UTC';
+  const lines = [
+    'Cutr Design Hours Calculator',
+    'Generated: ' + now,
+  ];
+  if (JOB.projectName) lines.push('Project: ' + JOB.projectName);
+  lines.push('');
+  lines.push('Parameters:');
+  lines.push(`  Design:      D_BASE=${P.D_BASE}  D_U=${P.D_U}/unique  D_R=${P.D_R}/repeat  D_B=${P.D_B}/bent`);
+  lines.push(`  Engineering: E_BASE=${P.E_BASE}  E_U=${P.E_U}/unique  E_B=${P.E_B}/bent  E_T=${P.E_T}/total`);
+  lines.push(`  Fixed:       Render=${P.RENDER}h  Saw list=${P.SAW}h`);
+  lines.push('');
+  lines.push('Items:');
+
+  job.itemResults.forEach((r, idx) => {
+    const label = r.item.name || ('Item ' + (idx + 1));
+    const it    = getItemType(r.item.typeId);
+    if (!r.result) {
+      lines.push(`  ${idx + 1}. ${label} (${it.name}) — no count entered`);
+      return;
+    }
+    const res = r.result;
+    lines.push(`  ${idx + 1}. ${label} (${it.name})`);
+    lines.push(`     T=${res.T}  unique=${res.U}  repeats=${res.R}  bent=${res.B}`);
+    lines.push(`     M_design=${it.mDesign}  M_eng=${it.mEng}${it.allUnique ? '  [all unique]' : ''}`);
+    lines.push(`     Design:      ${P.D_BASE} + ${it.mDesign}×(${P.D_U}×${res.U} + ${P.D_R}×${res.R} + ${P.D_B}×${res.B}) = ${fmtH(res.designTime)}h`);
+    lines.push(`     Render:      ${fmtH(res.render)}h (fixed)`);
+    lines.push(`     Saw list:    ${fmtH(res.saw)}h (fixed)`);
+    lines.push(`     Engineering: ${P.E_BASE} + ${it.mEng}×(${P.E_U}×${res.U} + ${P.E_B}×${res.B}) + ${P.E_T}×${res.T} = ${fmtH(res.engTime)}h`);
+    lines.push(`     Total:       ${fmtH(res.total)}h`);
+    lines.push('');
+  });
+
+  lines.push('─'.repeat(52));
+  lines.push(`TOTAL: ${fmtH(job.totalHours)}h`);
+  lines.push(`  Design: ${fmtH(job.totalDesign)}h | Render: ${fmtH(job.totalRender)}h | Saw list: ${fmtH(job.totalSaw)}h | Engineering: ${fmtH(job.totalEng)}h`);
+
+  return lines.join('\n');
+}
+
+function copyBacktrace(btn) {
+  const job  = computeJob();
+  const text = buildBacktrace(job);
+  navigator.clipboard.writeText(text).then(() => {
+    const notice = document.getElementById('copy-notice');
+    if (notice) { notice.style.display = 'inline'; setTimeout(() => { notice.style.display = 'none'; }, 2000); }
+  }).catch(() => {
+    const el = document.getElementById('backtrace-block');
+    if (el) { const r = document.createRange(); r.selectNodeContents(el); getSelection().removeAllRanges(); getSelection().addRange(r); }
+  });
+}
+
+// ============================================================================
+// STATE MUTATIONS
+// ============================================================================
+
+function addItem(typeId) {
+  JOB.items.push(newItem(typeId));
+  saveJob();
+  renderItems();
+  recalc();
+}
+
+function onRemoveItem(id) {
+  JOB.items = JOB.items.filter(i => i.id !== id);
+  saveJob();
+  renderItems();
+  recalc();
+}
+
+function onToggleCollapse(id) {
+  const item = JOB.items.find(i => i.id === id);
+  if (!item) return;
+  item.collapsed = !item.collapsed;
+  saveJob();
+  renderItems();
+}
+
+function onNameInput(id, value) {
+  const item = JOB.items.find(i => i.id === id);
+  if (!item) return;
+  item.name = value;
+  saveJob();
+  updateBacktrace();
+}
+
+function onTypeChange(id, value) {
+  const item = JOB.items.find(i => i.id === id);
+  if (!item) return;
+  item.typeId = value;
+  saveJob();
+  renderItems();
+  recalc();
+}
+
+function onNumInput(id, field, rawValue) {
+  const item = JOB.items.find(i => i.id === id);
+  if (!item) return;
+  item[field] = rawValue === '' ? null : parseFloat(rawValue);
+  saveJob();
+  // update this card's strip without re-rendering the full list (preserves focus)
+  const stripEl = document.getElementById('strip-' + id);
+  if (stripEl) {
+    const hasTotal = parseFloat(item.total) > 0;
+    stripEl.innerHTML = hasTotal ? cardStripHTML(computeItem(item)) : '';
+  }
+  recalc();
+}
+
+function clearJob() {
+  if (!confirm('Clear all items and start fresh?')) return;
+  JOB = { projectName: JOB.projectName, items: [] };
+  saveJob();
+  render();
+}
+
+// ============================================================================
+// ADMIN
+// ============================================================================
+
+function openAdmin() {
+  document.getElementById('admin-panel').classList.add('open');
+  document.getElementById('admin-overlay').classList.add('open');
+  renderAdminContent();
+}
+
+function closeAdmin() {
+  document.getElementById('admin-panel').classList.remove('open');
+  document.getElementById('admin-overlay').classList.remove('open');
+}
+
+function showAdminTab(tab) {
+  _adminTab = tab;
+  document.querySelectorAll('.admin-tab').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.tab === tab);
+  });
+  renderAdminContent();
+}
+
+function renderAdminContent() {
+  const el = document.getElementById('admin-content');
+  if (!el) return;
+  if (_adminTab === 'params') renderAdminParams(el);
+  else if (_adminTab === 'types') renderAdminTypes(el);
+  else renderAdminJson(el);
+}
+
+function renderAdminParams(el) {
+  const P = CONFIG.params;
+  const row = (key, desc) => `<tr>
+  <td class="param-key">${key}</td>
+  <td><input type="number" class="admin-input admin-num" value="${P[key]}" step="0.01" min="0"
+    oninput="updateParam('${key}', this.value)" /></td>
+  <td class="param-desc">${desc}</td>
+</tr>`;
+
+  el.innerHTML = `
+<div class="admin-section-title">Design time</div>
+<table class="admin-table">
+  <thead><tr><th>Key</th><th>Value (h)</th><th>Description</th></tr></thead>
+  <tbody>
+    ${row('D_BASE','Base design time per item')}
+    ${row('D_U','Per unique corpus element')}
+    ${row('D_R','Per repeated corpus element')}
+    ${row('D_B','Per bent / curved element')}
+  </tbody>
+</table>
+<div class="admin-section-title">Engineering time</div>
+<table class="admin-table">
+  <thead><tr><th>Key</th><th>Value (h)</th><th>Description</th></tr></thead>
+  <tbody>
+    ${row('E_BASE','Base engineering time per item')}
+    ${row('E_U','Per unique corpus element')}
+    ${row('E_B','Per bent / curved element')}
+    ${row('E_T','Per total corpus element (all)')}
+  </tbody>
+</table>
+<div class="admin-section-title">Fixed times</div>
+<table class="admin-table">
+  <thead><tr><th>Key</th><th>Value (h)</th><th>Description</th></tr></thead>
+  <tbody>
+    ${row('RENDER','Render / visual prep (fixed per item)')}
+    ${row('SAW','Saw list check (fixed per item)')}
+  </tbody>
+</table>
+<div class="formula-box">
+  <strong>Design =</strong> <code>D_BASE + M_design × (D_U × unique + D_R × repeats + D_B × bent)</code><br>
+  <strong>Engineering =</strong> <code>E_BASE + M_eng × (E_U × unique + E_B × bent) + E_T × total</code><br>
+  <strong>Total per item =</strong> <code>Design + Render + Saw list + Engineering</code>
+</div>`;
+}
+
+function renderAdminTypes(el) {
+  const rows = CONFIG.itemTypes.map((t, i) => `<tr>
+  <td><input type="text" class="admin-text" value="${esc(t.name)}"
+    oninput="updateTypeField(${i},'name',this.value)" /></td>
+  <td><input type="text" class="admin-text" style="width:115px" value="${esc(t.unit)}"
+    oninput="updateTypeField(${i},'unit',this.value)" /></td>
+  <td><input type="number" class="admin-input admin-num" value="${t.mDesign}" step="0.05" min="0"
+    oninput="updateTypeField(${i},'mDesign',this.value)" /></td>
+  <td><input type="number" class="admin-input admin-num" value="${t.mEng}" step="0.05" min="0"
+    oninput="updateTypeField(${i},'mEng',this.value)" /></td>
+  <td style="text-align:center"><input type="checkbox"${t.allUnique ? ' checked' : ''}
+    onchange="updateTypeField(${i},'allUnique',this.checked)" /></td>
+</tr>`).join('');
+
+  el.innerHTML = `
+<div class="admin-section-title">Item types &amp; multipliers</div>
+<table class="admin-table">
+  <thead><tr><th>Name</th><th>Unit</th><th>M design</th><th>M eng</th><th>All unique</th></tr></thead>
+  <tbody>${rows}</tbody>
+</table>
+<div class="formula-box" style="margin-top:14px">
+  <strong>M design / M eng</strong> multiply the per-element time components for each item type.<br>
+  <strong>All unique</strong>: when checked, the repeating count is ignored and every element is treated as unique.
+</div>`;
+}
+
+function renderAdminJson(el) {
+  el.innerHTML = `
+<div class="admin-section-title">Export</div>
+<textarea id="json-export" style="width:100%;height:220px;font-family:var(--cutr-font-mono);font-size:11.5px;padding:10px;border:1px solid var(--cutr-rule);border-radius:2px" readonly>${esc(JSON.stringify(CONFIG, null, 2))}</textarea>
+<div style="margin-top:8px;display:flex;gap:8px">
+  <button class="btn btn-sm" onclick="copyJsonExport(this)">Copy JSON</button>
+  <button class="btn btn-sm" onclick="resetConfig()">Reset to defaults</button>
+</div>
+<div class="admin-section-title" style="margin-top:20px">Import</div>
+<textarea id="json-import" style="width:100%;height:120px;font-family:var(--cutr-font-mono);font-size:11.5px;padding:10px;border:1px solid var(--cutr-rule);border-radius:2px" placeholder="Paste JSON config here…"></textarea>
+<div style="margin-top:8px">
+  <button class="btn btn-sm btn-primary" onclick="importJson()">Apply imported config</button>
+</div>`;
+}
+
+function updateParam(key, value) {
+  CONFIG.params[key] = parseFloat(value) || 0;
+  saveConfig();
+  recalc();
+}
+
+function updateTypeField(idx, field, value) {
+  if (field === 'allUnique') {
+    CONFIG.itemTypes[idx][field] = !!value;
+  } else if (field === 'mDesign' || field === 'mEng') {
+    CONFIG.itemTypes[idx][field] = parseFloat(value) || 0;
+  } else {
+    CONFIG.itemTypes[idx][field] = value;
+  }
+  saveConfig();
+  renderItems();
+  renderTypePills();
+  recalc();
+}
+
+function copyJsonExport(btn) {
+  navigator.clipboard.writeText(JSON.stringify(CONFIG, null, 2)).then(() => {
+    btn.textContent = 'Copied!'; setTimeout(() => { btn.textContent = 'Copy JSON'; }, 1500);
+  });
+}
+
+function resetConfig() {
+  if (!confirm('Reset all parameters and item types to factory defaults?')) return;
+  CONFIG = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+  saveConfig();
+  renderAdminContent();
+  renderItems();
+  renderTypePills();
+  recalc();
+}
+
+function importJson() {
+  const raw = (document.getElementById('json-import') || {}).value;
+  if (!raw || !raw.trim()) return;
+  try {
+    const data = JSON.parse(raw.trim());
+    if (data.params)    Object.assign(CONFIG.params, data.params);
+    if (Array.isArray(data.itemTypes) && data.itemTypes.length) CONFIG.itemTypes = data.itemTypes;
+    saveConfig();
+    renderAdminContent();
+    renderItems();
+    renderTypePills();
+    recalc();
+  } catch (e) {
+    alert('Invalid JSON: ' + e.message);
+  }
+}
+
+// ============================================================================
+// INIT
+// ============================================================================
+
+render();
+</script>
+</body>
+</html>
